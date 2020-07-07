@@ -9,6 +9,7 @@ pub struct Evaluation {
     pub end_skill: usize,
     pub comments: String,
     pub date_stamp: NaiveDate,
+    pub micro_evaluations: Vec<MicroEvaluation>,
 }
 
 #[derive(Debug)]
