@@ -12,12 +12,14 @@ pub struct Experience {
     pub time: chrono::Duration,
     pub difficulty: u32,
     pub value: u32,
+    pub tags: Vec<String>,
 }
 
 #[derive(Debug)]
 pub enum Stream {
     Data,
     Design,
+    Disruption,
     AIML,
     DevOps,
     Development,

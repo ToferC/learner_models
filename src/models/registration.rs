@@ -1,6 +1,6 @@
 use chrono::prelude::*;
 
-use super::{Location, Experience, Stream, Verb, Evaluation, Personnel};
+use super::{Location, Experience, Quiz, Verb, Evaluation, MicroEvaluation, Personnel};
 
 #[derive(Debug)]
 pub struct Registration {
@@ -8,44 +8,47 @@ pub struct Registration {
     pub date_stamp: NaiveDate,
     pub offering: Offering,
     pub referral_source: Referral,
-    pub objective: Objective,
-    pub current_skill: usize,
-    pub desired_skill: usize,
+    pub evaluation: Evaluation,
+    pub micro_evaluations: Vec<MicroEvaluation>,
     pub completed: bool,
-}
-
-#[derive(Debug)]
-pub enum Objective {
-    ImproveCurrentSkills,
-    NewJob_Promotional,
-    NewJob_Lateral,
-    CareerChange,
-    PersonalInterest,
-    MandatoryLearning,
-    Other ( String ),
+    pub cancelled: bool,
 }
 
 #[derive(Debug)]
 pub struct Offering {
     pub id: i64,
-    pub learning: LearningObject,
+    pub learning_object: LearningObject,
     pub start_date: NaiveDate,
     pub end_date: NaiveDate,
+    pub cancelled: bool,
     pub completed: bool,
-    pub evaluation: Evaluation,
 }
 
 #[derive(Debug)]
 pub struct LearningObject {
-    code: String,
-    name: String,
-    verb: Vec<Verb>,
-    physicial_infrastructure: Option<PhysicalInfrastructure>,
-    digital_infrastructure: Option<DigitalInfrastructure>,
-    personnel: Option<Vec<Personnel>>,
-    content: ContentType,
-    duration_minutes: u32,
-    experiences: Vec<Experience>,
+    pub id: i64,
+    pub name: String,
+    pub description: String,
+    pub modules: Vec<Module>,
+}
+
+// Need to evaluate each module separately
+#[derive(Debug)]
+pub struct Module {
+    pub id: i64,
+    pub code: String,
+    pub name: String,
+    pub verb: Vec<Verb>,
+    pub content: ContentType,
+    pub duration_minutes: u32,
+    pub experience: Experience,
+    pub quiz: Option<Quiz>,
+
+    // Infrastructure & Resources
+    pub physicial_infrastructure: Option<PhysicalInfrastructure>,
+    pub digital_infrastructure: Option<DigitalInfrastructure>,
+    pub personnel: Option<Vec<Personnel>>,
+    pub completed: bool,
 }
 
 #[derive(Debug)]
