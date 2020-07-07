@@ -1,6 +1,7 @@
 use chrono::prelude::*;
 
 #[derive(Debug)]
+/// Represents a learner's experience
 pub struct Experience {
     pub date_stamp: NaiveDate,
     pub verb: Verb,
