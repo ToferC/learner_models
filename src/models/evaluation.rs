@@ -22,7 +22,7 @@ pub struct MicroEvaluation {
 pub struct RapidResponse {
     pub met_learning_objective: bool,
     pub would_recommend: bool,
-    pub rating: usize,
+    pub rating_1_10: usize,
 
     // Positive
     pub accessible: bool,
