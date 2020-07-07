@@ -1,5 +1,7 @@
 use chrono::prelude::*;
 
+use super::experience::Experience;
+
 #[derive(Debug)]
 pub struct Learner {
     pub id: i64,
@@ -7,6 +9,7 @@ pub struct Learner {
     pub first_name: String,
     pub employment_status: Vec<EmploymentStatus>,
     pub demographics: Vec<DemographicData>,
+    pub experiences: Vec<Experience>,
 }
 
 #[derive(Debug)]
@@ -28,6 +31,29 @@ pub struct DemographicData {
     pub pronous: Pronouns,
     pub transgender: bool,
     pub ethnicicty: Ethnicity,
+}
+
+#[derive(Debug)]
+pub enum Stream {
+    Data,
+    Design,
+    AIML,
+    DevOps,
+    Development,
+    Agile,
+    ProductOwner,
+    Leadership,
+    DigiGov,
+}
+
+#[derive(Debug)]
+pub enum Verb {
+    Read,
+    Write,
+    Listen,
+    Watch,
+    Do,
+    Practice,
 }
 
 #[derive(Debug)]

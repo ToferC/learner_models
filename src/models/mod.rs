@@ -1,4 +1,5 @@
-mod learner;
+pub mod learner;
+pub mod experience;
 
 pub use self::learner::{
     Learner,
@@ -10,4 +11,6 @@ pub use self::learner::{
     Group,
     Language,
     Organization,
-}
+};
+
+pub use self::experience::Experience;

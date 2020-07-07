@@ -8,7 +8,8 @@ fn main() {
         last_name: String::from("Decibel"),
         first_name: String::from("Danielle"),
         demographics: vec!(),
-        employment_status: vec!(), 
+        employment_status: vec!(),
+        experiences: vec!(),
     };
 
     println!("{:?}", l);
