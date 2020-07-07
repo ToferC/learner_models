@@ -1,5 +1,8 @@
 pub mod learner;
 pub mod experience;
+pub mod location;
+pub mod evaluation;
+pub mod registration;
 
 pub use self::learner::{
     Learner,
@@ -13,4 +16,7 @@ pub use self::learner::{
     Organization,
 };
 
-pub use self::experience::Experience;
+pub use self::experience::{Experience, Stream, Verb};
+pub use self::location::Location;
+pub use self::evaluation::Evaluation;
+pub use self::registration::{Registration};
