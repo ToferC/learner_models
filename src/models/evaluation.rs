@@ -16,6 +16,9 @@ pub struct MicroEvaluation {
     pub id: i64,
     pub date_stamp: NaiveDate,
     pub rapid_response: RapidResponse,
+    pub physical_eval: Option<PhysicalEval>,
+    pub digital_eval: Option<DigitalEval>,
+    pub personnel_eval: Option<PersonnelEval>,
 }
 
 #[derive(Debug)]
@@ -38,6 +41,30 @@ pub struct RapidResponse {
     pub too_difficult: bool,
     pub too_long: bool,
     pub too_short: bool,
+}
+
+#[derive(Debug)]
+pub struct PhysicalEval {
+    pub clean: bool,
+    pub pleasant: bool,
+    pub comfortable: bool,
+    pub professional: bool,
+    pub accessible: bool,
+}
+
+#[derive(Debug)]
+pub struct PersonnelEval {
+    pub clean: bool,
+    pub pleasant: bool,
+    pub helpful: bool,
+    pub professional: bool,
+}
+
+#[derive(Debug)]
+pub struct DigitalEval {
+    pub smooth: bool,
+    pub accessible: bool,
+    pub professional: bool,
 }
 
 #[derive(Debug)]
