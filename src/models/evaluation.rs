@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use chrono::prelude::*;
 
 #[derive(Debug)]
@@ -7,6 +9,7 @@ pub struct Evaluation {
     pub current_skill: usize,
     pub desired_skill: usize,
     pub end_skill: usize,
+
     pub comments: String,
     pub date_stamp: NaiveDate,
     pub micro_evaluations: Vec<MicroEvaluation>,
@@ -15,11 +18,23 @@ pub struct Evaluation {
 #[derive(Debug)]
 pub struct MicroEvaluation {
     pub id: i64,
+    pub module: usize,
     pub date_stamp: NaiveDate,
     pub rapid_response: RapidResponse,
+    pub learning_obj_eval: HashMap<String, LearningObjectiveResponse>,
     pub physical_eval: Option<PhysicalEval>,
     pub digital_eval: Option<DigitalEval>,
     pub personnel_eval: Option<PersonnelEval>,
+    pub sent: bool,
+    pub seen: bool,
+    pub completed: bool,
+}
+
+#[derive(Debug)]
+pub enum LearningObjectiveResponse {
+    NotMeet,
+    Meet,
+    Exceeded,
 }
 
 #[derive(Debug)]
@@ -46,6 +61,7 @@ pub struct RapidResponse {
 
 #[derive(Debug)]
 pub struct PhysicalEval {
+    pub module: usize,
     pub clean: bool,
     pub pleasant: bool,
     pub comfortable: bool,
@@ -55,7 +71,7 @@ pub struct PhysicalEval {
 
 #[derive(Debug)]
 pub struct PersonnelEval {
-    pub clean: bool,
+    pub module: usize,
     pub pleasant: bool,
     pub helpful: bool,
     pub professional: bool,

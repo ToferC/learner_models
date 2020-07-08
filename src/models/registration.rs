@@ -9,7 +9,6 @@ pub struct Registration {
     pub offering: Offering,
     pub referral_source: Referral,
     pub evaluation: Evaluation,
-    pub micro_evaluations: Vec<MicroEvaluation>,
     pub completed: bool,
     pub cancelled: bool,
 }
@@ -30,6 +29,7 @@ pub struct LearningObject {
     pub name: String,
     pub description: String,
     pub modules: Vec<Module>,
+    pub communities: Vec<String>,
 }
 
 // Need to evaluate each module separately
@@ -40,6 +40,7 @@ pub struct Module {
     pub name: String,
     pub verb: Vec<Verb>,
     pub content: ContentType,
+    pub learning_objectives: Vec<String>,
     pub duration_minutes: u32,
     pub experience: Experience,
     pub quiz: Option<Quiz>,
