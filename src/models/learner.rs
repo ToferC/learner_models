@@ -16,6 +16,8 @@ pub struct Learner {
 }
 
 #[derive(Debug)]
+// Represents the employement and work status of an employee
+// at a certain point in time. Part of a vector under the learner.
 pub struct EmploymentStatus {
     pub date_stamp: NaiveDate,
     pub group: Group,
@@ -27,6 +29,7 @@ pub struct EmploymentStatus {
 }
 
 #[derive(Debug)]
+// Represents a target audience
 pub enum Audience {
     Employee,
     Manager,
@@ -36,6 +39,7 @@ pub enum Audience {
 }
 
 #[derive(Debug)]
+// Represents the occupational role of a person
 pub enum Role {
     All,
     Science,
@@ -52,13 +56,15 @@ pub enum Role {
     HumanResources,
 }
 
-// secure data
 #[derive(Debug)]
+// Represents additional demographic and preference details about a person
+// This data would be protected B and would be treated as secure data.
 pub struct DemographicData {
     pub date_stamp: NaiveDate,
     pub date_of_birth: NaiveDate,
     pub native_language: Language,
     pub primary_official_language: Language,
+    pub communication_language: Language,
     pub sexuality: Sexuality,
     pub pronous: Pronouns,
     pub transgender: bool,
@@ -66,6 +72,7 @@ pub struct DemographicData {
 }
 
 #[derive(Debug)]
+// Represents the person's statement on their sexuality.
 pub enum Sexuality {
     Heterosexual,
     Homosexual,
@@ -74,6 +81,7 @@ pub enum Sexuality {
 }
 
 #[derive(Debug)]
+// Represents the person's statement on their gender and pronoun preferences.
 pub enum Pronouns {
     HeHim,
     SheHer,
@@ -83,6 +91,7 @@ pub enum Pronouns {
 }
 
 #[derive(Debug)]
+// Represents the person's ethnic identification.
 pub enum Ethnicity {
     Asian,
     Black,
@@ -94,6 +103,7 @@ pub enum Ethnicity {
 }
 
 #[derive(Debug)]
+// Represents a Government of Canada pay group
 pub enum Group {
     EC,
     AS,
@@ -105,6 +115,7 @@ pub enum Group {
 }
 
 #[derive(Debug)]
+// Represents a language.
 pub enum Language {
     English,
     French,
@@ -114,6 +125,7 @@ pub enum Language {
 }
 
 #[derive(Debug)]
+// Represents a GC department or agency
 pub struct Organization {
     pub name: String,
     pub url: String,

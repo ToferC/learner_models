@@ -1,5 +1,3 @@
-use chrono::prelude::*;
-
 #[derive(Debug)]
 pub struct Location {
     pub name: String,
