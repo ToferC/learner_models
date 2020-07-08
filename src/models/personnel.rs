@@ -1,4 +1,5 @@
 use super::learner::Group;
+use super::location::Location;
 
 #[derive(Debug)]
 pub struct Personnel {
@@ -9,6 +10,7 @@ pub struct Personnel {
     group: Group,
     level: usize,
     salary: u32,
+    residence: Location,
 }
 
 #[derive(Debug)]
@@ -17,4 +19,5 @@ pub enum DeliveryRole {
     Producer,
     Speaker,
     Operations,
+    Broadcasting,
 }

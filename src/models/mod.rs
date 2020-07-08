@@ -6,6 +6,7 @@ pub mod registration;
 pub mod personnel;
 pub mod quiz;
 pub mod learning_object;
+pub mod infrastructure;
 
 pub use self::learner::{
     Learner,
@@ -27,5 +28,5 @@ pub use self::evaluation::{Evaluation, MicroEvaluation};
 pub use self::registration::{Registration, Offering, Referral};
 pub use self::personnel::Personnel;
 pub use self::quiz::Quiz;
-pub use self::learning_object::{LearningObject, Module, ContentType, PhysicalInfrastructure,
-    DigitalInfrastructure, };
+pub use self::learning_object::{LearningObject, Module, ContentType};
+pub use self::infrastructure::{PhysicalInfrastructure, DigitalInfrastructure};

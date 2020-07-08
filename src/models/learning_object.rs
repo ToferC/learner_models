@@ -1,7 +1,7 @@
 use chrono::prelude::*;
 
-use super::{Location, Stream, Quiz, Verb, 
-    Personnel, Audience, Role};
+use super::{Stream, Quiz, Verb, 
+    Personnel, Audience, Role, PhysicalInfrastructure, DigitalInfrastructure};
 
 #[derive(Debug)]
 pub struct LearningObject {
@@ -58,25 +58,6 @@ pub enum ContentType {
     Asyncronous,
     Event,
     Conference,
-}
-
-#[derive(Debug)]
-pub struct PhysicalInfrastructure {
-    pub location: Location,
-    pub opening_hours: String,
-    pub closing_hours: String,
-    pub capacity: u32,
-    pub wifi: Option<u32>,
-    pub cost_per_hour: f64,
-    pub map_url: String,
-}
-
-#[derive(Debug)]
-pub struct DigitalInfrastructure {
-    pub storage: u64,
-    pub cost_per_minute: f64,
-    pub capacity: u32,
-    pub url: String,
 }
 
 #[derive(Debug)]

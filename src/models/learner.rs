@@ -12,6 +12,7 @@ pub struct Learner {
     pub employment_status: Vec<EmploymentStatus>,
     pub demographics: Vec<DemographicData>,
     pub experiences: Vec<Experience>,
+    pub location: Location,
 }
 
 #[derive(Debug)]
