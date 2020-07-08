@@ -3,6 +3,8 @@ use std::collections::HashMap;
 use chrono::prelude::*;
 
 #[derive(Debug)]
+/// An over-arching evaluation structure for a LearningObject.
+/// Contains MicroEvaluations.
 pub struct Evaluation {
     pub id: i64,
     pub objective: Objective,
@@ -15,6 +17,8 @@ pub struct Evaluation {
 }
 
 #[derive(Debug)]
+/// Short, focused evaluations for Modules within a LearningObject.
+/// Contains several optional evaluations depending on the specific Module.
 pub struct MicroEvaluation {
     pub id: i64,
     pub module: usize,
@@ -30,6 +34,7 @@ pub struct MicroEvaluation {
 }
 
 #[derive(Debug)]
+/// Learner assessment of whether a Module met a specific LearningObjective.
 pub enum LearningObjectiveResponse {
     NotMeet,
     Meet,
@@ -37,8 +42,9 @@ pub enum LearningObjectiveResponse {
 }
 
 #[derive(Debug)]
+/// Core component of MicroEvaluation with two mandatory and an array of optional 
+/// true or false responses.
 pub struct RapidResponse {
-    pub met_learning_objective: bool,
     pub would_recommend: bool,
     pub rating_1_10: usize,
 
@@ -59,6 +65,7 @@ pub struct RapidResponse {
 }
 
 #[derive(Debug)]
+/// Optional true or false responses for evaluating PhysicalInfrastructure
 pub struct PhysicalEval {
     pub module: usize,
     pub clean: bool,
@@ -69,6 +76,7 @@ pub struct PhysicalEval {
 }
 
 #[derive(Debug)]
+/// Optional true or false responses for evaluating Personnel
 pub struct PersonnelEval {
     pub module: usize,
     pub pleasant: bool,
@@ -77,6 +85,7 @@ pub struct PersonnelEval {
 }
 
 #[derive(Debug)]
+/// Optional true or false responses for evaluating DigitalInfrastructure
 pub struct DigitalEval {
     pub smooth: bool,
     pub accessible: bool,
@@ -84,6 +93,8 @@ pub struct DigitalEval {
 }
 
 #[derive(Debug)]
+/// The Learner's primary reason for seeking learning. Serves as context for
+/// other evaluations.
 pub enum Objective {
     ImproveCurrentSkills,
     NewJobPromotional,

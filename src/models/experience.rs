@@ -18,6 +18,7 @@ pub struct Experience {
 }
 
 #[derive(Debug)]
+/// A broad domain of learning (currently the digital streams)
 pub enum Stream {
     Data,
     Design,
@@ -32,6 +33,8 @@ pub enum Stream {
 }
 
 #[derive(Debug)]
+/// The type of learning that occurred in an experience. May also use this
+/// to identify preferred learning styles for learners.
 pub enum Verb {
     Read,
     Write,
@@ -39,4 +42,6 @@ pub enum Verb {
     Watch,
     Do,
     Practice,
+    Study,
+    Participate,
 }
