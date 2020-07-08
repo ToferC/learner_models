@@ -24,6 +24,8 @@ pub struct MicroEvaluation {
     pub module: usize,
     pub date_stamp: NaiveDate,
     pub rapid_response: RapidResponse,
+
+    // Hashmap of a LearningObjective for a module mapped to an assessment of how the module met that objective
     pub learning_obj_eval: HashMap<String, LearningObjectiveResponse>,
     pub physical_eval: Option<PhysicalEval>,
     pub digital_eval: Option<DigitalEval>,

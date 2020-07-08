@@ -1,4 +1,4 @@
-use super::{Location};
+use super::{Location, WebPage};
 
 #[derive(Debug)]
 /// A physical delivery point for learning content. Optionally attached to a
@@ -20,5 +20,5 @@ pub struct DigitalInfrastructure {
     pub storage: u64,
     pub cost_per_minute: f64,
     pub capacity: u32,
-    pub url: String,
+    pub web_page: WebPage,
 }

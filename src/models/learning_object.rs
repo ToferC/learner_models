@@ -2,12 +2,12 @@ use chrono::prelude::*;
 
 use super::{Stream, Quiz, Verb, 
     Personnel, Audience, Role, 
-    PhysicalInfrastructure, DigitalInfrastructure};
+    PhysicalInfrastructure, DigitalInfrastructure, WebPage};
 
 #[derive(Debug)]
-// Represents a high level learning object such as a course
-// A learning object must contain at least one module, but may contain
-// several.
+/// Represents a high level learning object such as a course
+/// A learning object must contain at least one module, but may contain
+/// several.
 pub struct LearningObject {
     pub id: i64,
     pub name: String,
@@ -15,7 +15,7 @@ pub struct LearningObject {
     pub modules: Vec<Module>,
     pub target_audience: Vec<Audience>,
     pub communities: Vec<Role>,
-    pub url: String,
+    pub web_page: WebPage,
     pub hashtag: String,
     pub status: Status,
 
@@ -25,7 +25,7 @@ pub struct LearningObject {
 }
 
 #[derive(Debug)]
-// A state of preparation and production for a learning object
+/// A state of preparation and production for a learning object
 pub enum Status {
     Ideation,
     Design,
@@ -37,7 +37,7 @@ pub enum Status {
 }
 
 #[derive(Debug)]
-// A learning module that exists within a learning object.
+/// A learning module that exists within a learning object.
 pub struct Module {
     pub id: i64,
     pub code: String,
@@ -48,7 +48,7 @@ pub struct Module {
     pub duration_minutes: u32,
     pub experience: ExperienceTemplate,
     pub quiz: Option<Quiz>,
-    pub url: String,
+    pub web_page: WebPage,
 
     // Infrastructure & Resources
     pub physicial_infrastructure: Option<PhysicalInfrastructure>,
@@ -58,7 +58,7 @@ pub struct Module {
 }
 
 #[derive(Debug)]
-// A content type for a learning module
+/// A content type for a learning module
 pub enum ContentType {
     OnlineFacilitated,
     InPersonFacilitated,
@@ -69,7 +69,7 @@ pub enum ContentType {
 }
 
 #[derive(Debug)]
-/// Represents pre-populated data for a learner's experience
+//// Represents pre-populated data for a learner's experience
 pub struct ExperienceTemplate {
     pub verb: Verb,
     pub stream: Stream,
