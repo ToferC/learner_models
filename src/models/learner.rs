@@ -35,6 +35,9 @@ pub enum Audience {
 
 #[derive(Debug)]
 pub enum Role {
+    All,
+    Science,
+    Audit,
     Policy,
     Operations,
     Legal,
