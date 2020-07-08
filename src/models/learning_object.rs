@@ -1,9 +1,13 @@
 use chrono::prelude::*;
 
 use super::{Stream, Quiz, Verb, 
-    Personnel, Audience, Role, PhysicalInfrastructure, DigitalInfrastructure};
+    Personnel, Audience, Role, 
+    PhysicalInfrastructure, DigitalInfrastructure};
 
 #[derive(Debug)]
+// Represents a high level learning object such as a course
+// A learning object must contain at least one module, but may contain
+// several.
 pub struct LearningObject {
     pub id: i64,
     pub name: String,
@@ -12,6 +16,7 @@ pub struct LearningObject {
     pub target_audience: Vec<Audience>,
     pub communities: Vec<Role>,
     pub url: String,
+    pub hashtag: String,
     pub status: Status,
 
     pub created: NaiveDate,
@@ -20,6 +25,7 @@ pub struct LearningObject {
 }
 
 #[derive(Debug)]
+// A state of preparation and production for a learning object
 pub enum Status {
     Ideation,
     Design,
@@ -30,8 +36,8 @@ pub enum Status {
     Discontinued,
 }
 
-// Need to evaluate each module separately
 #[derive(Debug)]
+// A learning module that exists within a learning object.
 pub struct Module {
     pub id: i64,
     pub code: String,
@@ -52,9 +58,11 @@ pub struct Module {
 }
 
 #[derive(Debug)]
+// A content type for a learning module
 pub enum ContentType {
     OnlineFacilitated,
     InPersonFacilitated,
+    InPersonUnfacilitated,
     Asyncronous,
     Event,
     Conference,

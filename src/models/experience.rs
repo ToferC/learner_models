@@ -1,7 +1,8 @@
 use chrono::prelude::*;
 
 #[derive(Debug)]
-/// Represents a learner's experience
+/// Represents a learner's experience as part of an Xapi or experience
+/// tracking system
 pub struct Experience {
     pub date_stamp: NaiveDate,
     pub module_id: i64,

@@ -1,6 +1,8 @@
 use super::{Location};
 
 #[derive(Debug)]
+/// A physical delivery point for learning content. Optionally attached to a
+/// Module.
 pub struct PhysicalInfrastructure {
     pub location: Location,
     pub opening_hours: String,
@@ -12,6 +14,8 @@ pub struct PhysicalInfrastructure {
 }
 
 #[derive(Debug)]
+/// A digital delivery point for learning content. Optionally attached to a
+/// Module.
 pub struct DigitalInfrastructure {
     pub storage: u64,
     pub cost_per_minute: f64,
