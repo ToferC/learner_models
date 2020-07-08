@@ -1,6 +1,7 @@
 use chrono::prelude::*;
 
-use super::{Location, Experience, Quiz, Verb, Evaluation, MicroEvaluation, Personnel};
+use super::{Location, Experience, Quiz, Verb, Evaluation, 
+    MicroEvaluation, Personnel, Audience};
 
 #[derive(Debug)]
 pub struct Registration {
@@ -28,6 +29,7 @@ pub struct LearningObject {
     pub id: i64,
     pub name: String,
     pub description: String,
+    pub target_audience: Vec<Audience>,
     pub modules: Vec<Module>,
     pub communities: Vec<String>,
 }

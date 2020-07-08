@@ -1,6 +1,7 @@
 use chrono::prelude::*;
 
 use super::experience::Experience;
+use super::location::Location;
 
 #[derive(Debug)]
 pub struct Learner {
@@ -16,8 +17,34 @@ pub struct Learner {
 pub struct EmploymentStatus {
     pub date_stamp: NaiveDate,
     pub group: Group,
+    pub role: Role,
+    pub audience: Audience,
     pub level: usize,
     pub organization: Organization,
+    pub location: Location,
+}
+
+#[derive(Debug)]
+pub enum Audience {
+    Employee,
+    Manager,
+    Specialist,
+    Leader,
+    SeniorLeader,
+}
+
+#[derive(Debug)]
+pub enum Role {
+    Policy,
+    Operations,
+    Legal,
+    Security,
+    ComputerScience,
+    Regulatory,
+    Administrative,
+    Research,
+    Finance,
+    HumanResources,
 }
 
 // secure data
@@ -31,29 +58,6 @@ pub struct DemographicData {
     pub pronous: Pronouns,
     pub transgender: bool,
     pub ethnicicty: Ethnicity,
-}
-
-#[derive(Debug)]
-pub enum Stream {
-    Data,
-    Design,
-    AIML,
-    DevOps,
-    Development,
-    Agile,
-    ProductOwner,
-    Leadership,
-    DigiGov,
-}
-
-#[derive(Debug)]
-pub enum Verb {
-    Read,
-    Write,
-    Listen,
-    Watch,
-    Do,
-    Practice,
 }
 
 #[derive(Debug)]

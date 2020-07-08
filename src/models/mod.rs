@@ -10,6 +10,7 @@ pub use self::learner::{
     Learner,
     EmploymentStatus,
     DemographicData,
+    Audience,
     Sexuality,
     Pronouns,
     Ethnicity,
