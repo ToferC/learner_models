@@ -9,7 +9,6 @@ pub struct Evaluation {
     pub current_skill: usize,
     pub desired_skill: usize,
     pub end_skill: usize,
-
     pub comments: String,
     pub date_stamp: NaiveDate,
     pub micro_evaluations: Vec<MicroEvaluation>,
@@ -87,8 +86,8 @@ pub struct DigitalEval {
 #[derive(Debug)]
 pub enum Objective {
     ImproveCurrentSkills,
-    NewJob_Promotional,
-    NewJob_Lateral,
+    NewJobPromotional,
+    NewJobLateral,
     CareerChange,
     PersonalInterest,
     MandatoryLearning,

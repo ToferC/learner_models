@@ -1,6 +1,6 @@
-mod learner;
+mod models;
 
-use learner::Learner;
+use models::Learner;
 
 fn main() {
     let l = Learner {

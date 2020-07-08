@@ -4,6 +4,7 @@ use super::experience::Experience;
 use super::location::Location;
 
 #[derive(Debug)]
+// Represents a user as learner
 pub struct Learner {
     pub id: i64,
     pub last_name: String,

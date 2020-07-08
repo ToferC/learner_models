@@ -1,7 +1,6 @@
 use chrono::prelude::*;
 
-use super::{Location, Experience, Quiz, Verb, Evaluation, 
-    Personnel, Audience, Role};
+use super::{LearningObject, Evaluation};
 
 #[derive(Debug)]
 pub struct Registration {
@@ -26,8 +25,8 @@ pub struct Offering {
 
 #[derive(Debug)]
 pub enum Referral {
-    email_campaign ( String ),
-    social( String ),
-    newsletter( String ),
-    direct,
+    Email ( String ),
+    Social( String ),
+    Newsletter( String ),
+    Direct,
 }

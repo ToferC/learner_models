@@ -4,6 +4,7 @@ use chrono::prelude::*;
 /// Represents a learner's experience
 pub struct Experience {
     pub date_stamp: NaiveDate,
+    pub module_id: i64,
     pub verb: Verb,
     pub stream: Stream,
     pub practice: String,
