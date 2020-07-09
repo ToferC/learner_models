@@ -9,10 +9,9 @@ use super::user::User;
 pub struct Learner {
     pub user: User,
     pub employment_status: Vec<EmploymentStatus>,
-    pub demographics: Vec<DemographicData>,
+    pub demographics: DemographicData,
     pub experiences: Vec<Experience>,
-    pub location: Location,
-    pub data_access_log: DataAccessLog,
+    pub data_access_log: Vec<DataAccessLog>,
 }
 
 #[derive(Debug)]
@@ -44,6 +43,7 @@ pub struct EmploymentStatus {
     pub date_stamp: NaiveDate,
     pub group: Group,
     pub role: Role,
+    pub community: String,
     pub audience: Audience,
     pub level: usize,
     pub organization: Organization,
@@ -79,8 +79,9 @@ pub enum Role {
 }
 
 #[derive(Debug)]
-/// Represents additional demographic and preference details about a person
-/// This data would be protected B and would be treated as secure data.
+/// Represents additional demographic and preference details about a 
+/// person. This data would be protected B and would be treated 
+/// as secure data.
 pub struct DemographicData {
     pub date_stamp: NaiveDate,
     pub date_of_birth: NaiveDate,
@@ -103,7 +104,8 @@ pub enum Sexuality {
 }
 
 #[derive(Debug)]
-/// Represents the person's statement on their gender and pronoun preferences.
+/// Represents the person's statement on their gender and
+/// pronoun preferences.
 pub enum Pronouns {
     HeHim,
     SheHer,
@@ -145,6 +147,7 @@ pub enum Language {
     Spanish,
     Mandarin,
     Japanese,
+    LotsMore,
 }
 
 #[derive(Debug)]
