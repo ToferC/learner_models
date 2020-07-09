@@ -8,6 +8,7 @@ pub mod quiz;
 pub mod learning_object;
 pub mod infrastructure;
 pub mod web_page;
+pub mod image;
 
 pub use self::learner::{
     Learner,
@@ -32,3 +33,4 @@ pub use self::quiz::Quiz;
 pub use self::learning_object::{LearningObject, Module, ContentType};
 pub use self::infrastructure::{PhysicalInfrastructure, DigitalInfrastructure};
 pub use self::web_page::WebPage;
+pub use self::image::Image;

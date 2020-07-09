@@ -2,7 +2,8 @@ use chrono::prelude::*;
 
 use super::{Stream, Quiz, Verb, 
     Personnel, Audience, Role, 
-    PhysicalInfrastructure, DigitalInfrastructure, WebPage};
+    PhysicalInfrastructure, DigitalInfrastructure,
+    WebPage, Image};
 
 #[derive(Debug)]
 /// Represents a high level learning object such as a course
@@ -12,6 +13,7 @@ pub struct LearningObject {
     pub id: i64,
     pub name: String,
     pub description: String,
+    pub image: Image,
     pub modules: Vec<Module>,
     pub target_audience: Vec<Audience>,
     pub communities: Vec<Role>,
@@ -22,6 +24,8 @@ pub struct LearningObject {
     pub created: NaiveDate,
     pub updated: Vec<NaiveDate>,
     pub shut_down: Option<NaiveDate>,
+    // Questions
+    // Do we have version control built into the Learning Object and Modules?
 }
 
 #[derive(Debug)]
@@ -42,6 +46,8 @@ pub struct Module {
     pub id: i64,
     pub code: String,
     pub name: String,
+    pub description: String,
+    pub image: Image,
     pub verb: Vec<Verb>,
     pub content: ContentType,
     pub learning_objectives: Vec<String>,

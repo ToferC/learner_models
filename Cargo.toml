@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 chrono = "0.4.13"
 fake = "2.2.2"
+reqwest = "0.10.6"
