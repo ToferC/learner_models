@@ -2,17 +2,39 @@ use chrono::prelude::*;
 
 use super::experience::Experience;
 use super::location::Location;
+use super::user::User;
 
 #[derive(Debug)]
 /// Represents a user as learner
 pub struct Learner {
-    pub id: i64,
-    pub last_name: String,
-    pub first_name: String,
+    pub user: User,
     pub employment_status: Vec<EmploymentStatus>,
     pub demographics: Vec<DemographicData>,
     pub experiences: Vec<Experience>,
     pub location: Location,
+    pub data_access_log: DataAccessLog,
+}
+
+#[derive(Debug)]
+/// Log for access of user data for audit and privacy purposes.
+/// Will track each access point and return a JSON String of the
+/// data accessed and rationale.
+pub struct DataAccessLog {
+    accessed_by: User,
+    rationale: AccessRationale,
+    date_stamp: NaiveDateTime,
+    data_accessed: String,
+}
+
+#[derive(Debug)]
+/// Reasons for accessing user data
+pub enum AccessRationale {
+    AggregatedReporting,
+    IdentifiableReporting,
+    AutomatedQuery,
+    CustomQuery,
+    Audit,
+    UserDataRequest,
 }
 
 #[derive(Debug)]

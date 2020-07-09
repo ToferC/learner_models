@@ -1,6 +1,6 @@
 mod models;
 
-use models::{Learner, Location};
+use models::{Learner, Location, User, UserRole};
 
 fn main() {
 
@@ -12,14 +12,21 @@ fn main() {
         timezone_offset: 0,
     };
 
-    let l = Learner {
+    let u = User {
         id: 0001,
         last_name: String::from("Decibel"),
         first_name: String::from("Danielle"),
+        email_address: String::from("dd@email.com"),
+        user_role: UserRole::Client,
+    };
+
+    let l = Learner {
+        user: u,
         location: ott,
         demographics: vec!(),
         employment_status: vec!(),
         experiences: vec!(),
+        data_access_log: vec!(),
     };
 
     println!("{:?}", l);
