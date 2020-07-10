@@ -2,7 +2,7 @@ mod models;
 
 use chrono::prelude::*;
 
-use models::{Learner, Location, User, UserRole};
+use models::{Learner, User, UserRole};
 
 fn main() {
 
@@ -22,7 +22,9 @@ fn main() {
     };
 
     let l = Learner {
+        id: 0100044,
         user: u,
+        badges: vec!(),
         demographics: vec!(),
         employment_status: vec!(),
         experiences: vec!(),

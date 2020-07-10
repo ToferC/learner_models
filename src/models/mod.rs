@@ -8,7 +8,7 @@ pub mod quiz;
 pub mod learning_object;
 pub mod infrastructure;
 pub mod web_page;
-pub mod image;
+pub mod content;
 pub mod user;
 
 pub use self::learner::{
@@ -25,7 +25,7 @@ pub use self::learner::{
     Organization,
 };
 
-pub use self::experience::{Experience, Stream, Verb};
+pub use self::experience::{Experience, Stream, LearningStyle};
 pub use self::location::Location;
 pub use self::evaluation::{Evaluation, MicroEvaluation};
 pub use self::registration::{Registration, Offering, Referral};
@@ -34,5 +34,5 @@ pub use self::quiz::Quiz;
 pub use self::learning_object::{LearningObject, Module, ContentType};
 pub use self::infrastructure::{PhysicalInfrastructure, DigitalInfrastructure};
 pub use self::web_page::WebPage;
-pub use self::image::Image;
+pub use self::content::Image;
 pub use self::user::{User, UserRole};

@@ -1,14 +1,14 @@
 use chrono::prelude::*;
 
-use super::{Stream, Quiz, Verb, 
+use super::{Stream, Quiz, LearningStyle, 
     Personnel, Audience, Role, 
     PhysicalInfrastructure, DigitalInfrastructure,
     WebPage, Image};
 
 #[derive(Debug)]
 /// Represents a high level learning object such as a course
-/// A learning object must contain at least one module, but may contain
-/// several.
+/// A learning object must contain at least one module, but may 
+/// contain several.
 pub struct LearningObject {
     pub id: i64,
     pub name: String,
@@ -19,17 +19,18 @@ pub struct LearningObject {
     pub communities: Vec<Role>,
     pub web_page: WebPage,
     pub hashtag: String,
+    pub business_line: BusinessLine,
     pub status: Status,
 
     pub created: NaiveDate,
     pub updated: Vec<NaiveDate>,
     pub shut_down: Option<NaiveDate>,
-    // Questions
-    // Do we have version control built into the Learning Object and Modules?
+    // Question: Do we have version control built in?
 }
 
 #[derive(Debug)]
-/// A state of preparation and production for a learning object
+/// A state of preparation and production for 
+/// a learning object
 pub enum Status {
     Ideation,
     Design,
@@ -41,6 +42,16 @@ pub enum Status {
 }
 
 #[derive(Debug)]
+/// A line of business in the CSPS
+pub enum BusinessLine {
+    GCSkills,
+    TransferrableSkills,
+    IndigenousLearning,
+    RespectfulInclusiveWorkplace,
+    DigitalAcademy,
+}
+
+#[derive(Debug)]
 /// A learning module that exists within a learning object.
 pub struct Module {
     pub id: i64,
@@ -48,7 +59,7 @@ pub struct Module {
     pub name: String,
     pub description: String,
     pub image: Image,
-    pub verb: Vec<Verb>,
+    pub learning_styles: Vec<LearningStyle>,
     pub content: ContentType,
     pub learning_objectives: Vec<String>,
     pub duration_minutes: u32,
@@ -72,12 +83,16 @@ pub enum ContentType {
     Asyncronous,
     Event,
     Conference,
+    Video,
+    Podcast,
+    LearningAid,
 }
 
 #[derive(Debug)]
-//// Represents pre-populated data for a learner's experience
+//// Represents pre-populated data for a learner's 
+/// experience
 pub struct ExperienceTemplate {
-    pub verb: Verb,
+    pub learning_style: LearningStyle,
     pub stream: Stream,
     pub practice: String,
     pub skill: String,

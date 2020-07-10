@@ -1,17 +1,35 @@
 use chrono::prelude::*;
 
-use super::experience::Experience;
-use super::location::Location;
-use super::user::User;
+use super::{Experience, Image, Location, User};
 
 #[derive(Debug)]
-/// Represents a user as learner
+/// Represents a user as learner. Much of this data should come from OCHRO.
+/// Learner data could be developed as part of a permission-based
+/// system that allowed the learner to have full control over their data
+/// and allow the learning systems to request acccess with specific
+/// use cases.
 pub struct Learner {
+    pub id: i64,
     pub user: User,
-    pub employment_status: Vec<EmploymentStatus>,
+    pub badges: Vec<BadgeAssertion>,
     pub demographics: DemographicData,
+    pub employment_status: Vec<EmploymentStatus>,
     pub experiences: Vec<Experience>,
     pub data_access_log: Vec<DataAccessLog>,
+}
+
+#[derive(Debug)]
+/// Badges based on open-badges
+/// https://github.com/mozilla/openbadges-specification/blob/master/Assertion/latest.md
+pub struct BadgeAssertion {
+    pub id: i64,
+    pub uid: String,
+    pub recipient: Learner,
+    pub badge: String,
+    pub verify: String, // placeholder
+    pub image: Image,
+    pub evidence: String,
+    pub expires: NaiveDate,
 }
 
 #[derive(Debug)]
@@ -47,7 +65,7 @@ pub struct EmploymentStatus {
     pub audience: Audience,
     pub level: usize,
     pub organization: Organization,
-    pub location: Location,
+    pub work_location: Location,
 }
 
 #[derive(Debug)]
@@ -81,7 +99,7 @@ pub enum Role {
 #[derive(Debug)]
 /// Represents additional demographic and preference details about a 
 /// person. This data would be protected B and would be treated 
-/// as secure data.
+/// as secure data. It should come from a central trusted source (OCHRO)
 pub struct DemographicData {
     pub date_stamp: NaiveDate,
     pub date_of_birth: NaiveDate,
@@ -151,7 +169,9 @@ pub enum Language {
 }
 
 #[derive(Debug)]
-/// Represents a GC department or agency
+/// Represents a GC department or agency. Could include PRI or other
+/// data if appropriately secured. Could also include data on org type
+/// (line, policy, granting, etc.)
 pub struct Organization {
     pub name: String,
     pub url: String,

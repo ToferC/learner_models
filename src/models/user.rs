@@ -1,7 +1,8 @@
 use chrono::prelude::*;
 
 #[derive(Debug)]
-/// A user of the system, employee or learner
+/// A user of the system, employee or learner. Should be tied to
+/// an employee profile at the GC level.
 pub struct User {
     pub id: i64,
     pub last_name: String,
