@@ -1,6 +1,8 @@
-#[derive(Debug)]
-// A location that can apply to PhysicalInfrastructure, a Learner
-// or Personnel.
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize, Deserialize, Debug)]
+/// A location that can apply to PhysicalInfrastructure, 
+/// a Learner or Personnel.
 pub struct Location {
     pub name: String,
     pub address: String,

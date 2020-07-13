@@ -1,4 +1,6 @@
-#[derive(Debug)]
+use serde::{Serialize, Deserialize};
+
+#[derive(Serialize, Deserialize, Debug)]
 /// A multiple choice knowledge test
 pub struct Quiz {
     pub id: f64,
@@ -6,7 +8,7 @@ pub struct Quiz {
     pub score: usize,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// A question in a knowledge test
 pub struct Question {
     pub number: u32,

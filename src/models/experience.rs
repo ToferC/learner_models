@@ -1,6 +1,7 @@
 use chrono::prelude::*;
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents a learner's experience as part of an Xapi 
 /// or experience tracking system
 pub struct Experience {
@@ -17,7 +18,7 @@ pub struct Experience {
     pub tags: Vec<String>,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// A broad domain of learning (currently 
 /// the digital streams)
 pub enum Stream {
@@ -37,7 +38,7 @@ pub enum Stream {
     ManyMore,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// The type of learning that occurred in an experience. 
 /// May also use this to identify preferred learning 
 /// styles for learners.

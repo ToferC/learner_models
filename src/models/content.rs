@@ -1,6 +1,7 @@
 use reqwest::Url;
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Struct containing image URL
 pub struct Image {
     pub id: i64,

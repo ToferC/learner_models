@@ -1,8 +1,9 @@
 use super::{Location, WebPage};
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug)]
-/// A physical delivery point for learning content. Optionally attached to a
-/// Module.
+#[derive(Serialize, Deserialize, Debug)]
+/// A physical delivery point for learning content. 
+/// Optionally attached to a Module.
 pub struct PhysicalInfrastructure {
     pub location: Location,
     pub opening_hours: String,
@@ -13,9 +14,9 @@ pub struct PhysicalInfrastructure {
     pub map_url: String,
 }
 
-#[derive(Debug)]
-/// A digital delivery point for learning content. Optionally attached to a
-/// Module.
+#[derive(Serialize, Deserialize, Debug)]
+/// A digital delivery point for learning content. 
+/// Optionally attached to a Module.
 pub struct DigitalInfrastructure {
     pub storage: u64,
     pub cost_per_minute: f64,

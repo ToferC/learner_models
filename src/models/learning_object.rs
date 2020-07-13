@@ -1,11 +1,12 @@
 use chrono::prelude::*;
+use serde::{Serialize, Deserialize};
 
 use super::{Stream, Quiz, LearningStyle, 
     Personnel, Audience, Role, 
     PhysicalInfrastructure, DigitalInfrastructure,
     WebPage, Image};
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents a high level learning object such as a course
 /// A learning object must contain at least one module, but may 
 /// contain several.
@@ -28,7 +29,7 @@ pub struct LearningObject {
     // Question: Do we have version control built in?
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// A state of preparation and production for 
 /// a learning object
 pub enum Status {
@@ -41,7 +42,7 @@ pub enum Status {
     Discontinued,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// A line of business in the CSPS
 pub enum BusinessLine {
     GCSkills,
@@ -51,7 +52,7 @@ pub enum BusinessLine {
     DigitalAcademy,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// A learning module that exists within a learning object.
 pub struct Module {
     pub id: i64,
@@ -74,7 +75,7 @@ pub struct Module {
     pub completed: bool,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// A content type for a learning module
 pub enum ContentType {
     OnlineFacilitated,
@@ -88,7 +89,7 @@ pub enum ContentType {
     LearningAid,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 //// Represents pre-populated data for a learner's 
 /// experience
 pub struct ExperienceTemplate {

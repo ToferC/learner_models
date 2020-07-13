@@ -1,8 +1,9 @@
 use std::collections::HashMap;
 
 use chrono::prelude::*;
+use serde::{Serialize, Deserialize};
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// An over-arching evaluation structure for a LearningObject.
 /// Contains MicroEvaluations.
 pub struct Evaluation {
@@ -20,7 +21,7 @@ pub struct Evaluation {
     pub micro_evaluations: Vec<MicroEvaluation>,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Short, focused evaluations for Modules within a LearningObject.
 /// Contains several optional evaluations depending on the specific 
 /// Module.
@@ -41,7 +42,7 @@ pub struct MicroEvaluation {
     pub completed: bool,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Learner assessment of whether a Module met a specific 
 /// LearningObjective.
 pub enum LearningObjectiveResponse {
@@ -50,7 +51,7 @@ pub enum LearningObjectiveResponse {
     Exceeded,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Core component of MicroEvaluation with two mandatory and 
 /// an array of optional true or false responses.
 pub struct RapidResponse {
@@ -74,7 +75,7 @@ pub struct RapidResponse {
     pub too_short: bool,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Optional true or false responses for evaluating 
 /// PhysicalInfrastructure
 pub struct PhysicalEval {
@@ -86,7 +87,7 @@ pub struct PhysicalEval {
     pub accessible: bool,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Optional true or false responses for evaluating Personnel
 pub struct PersonnelEval {
     pub module: usize,
@@ -95,7 +96,7 @@ pub struct PersonnelEval {
     pub professional: bool,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Optional true or false responses for evaluating 
 /// DigitalInfrastructure
 pub struct DigitalEval {
@@ -104,7 +105,7 @@ pub struct DigitalEval {
     pub professional: bool,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// The Learner's primary reason for seeking learning. 
 /// Serves as context for other evaluations.
 pub enum Objective {

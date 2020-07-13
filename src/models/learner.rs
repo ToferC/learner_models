@@ -1,8 +1,9 @@
 use chrono::prelude::*;
+use serde::{Serialize, Deserialize};
 
 use super::{Experience, Image, Location, User};
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents a user as learner. Much of this data should come from OCHRO.
 /// Learner data could be developed as part of a permission-based
 /// system that allowed the learner to have full control over their data
@@ -18,7 +19,7 @@ pub struct Learner {
     pub data_access_log: Vec<DataAccessLog>,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Badges based on open-badges
 /// https://github.com/mozilla/openbadges-specification/blob/master/Assertion/latest.md
 pub struct BadgeAssertion {
@@ -32,7 +33,7 @@ pub struct BadgeAssertion {
     pub expires: NaiveDate,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Log for access of user data for audit and privacy purposes.
 /// Will track each access point and return a JSON String of the
 /// data accessed and rationale.
@@ -43,7 +44,7 @@ pub struct DataAccessLog {
     data_accessed: String,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Reasons for accessing user data
 pub enum AccessRationale {
     AggregatedReporting,
@@ -54,7 +55,7 @@ pub enum AccessRationale {
     UserDataRequest,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents the employement and work status of an employee
 /// at a certain point in time. Part of a vector under the learner.
 pub struct EmploymentStatus {
@@ -68,7 +69,7 @@ pub struct EmploymentStatus {
     pub work_location: Location,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents a target audience
 pub enum Audience {
     Employee,
@@ -78,7 +79,7 @@ pub enum Audience {
     SeniorLeader,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents the occupational role of a person
 pub enum Role {
     All,
@@ -96,7 +97,7 @@ pub enum Role {
     HumanResources,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents additional demographic and preference details about a 
 /// person. This data would be protected B and would be treated 
 /// as secure data. It should come from a central trusted source (OCHRO)
@@ -112,7 +113,7 @@ pub struct DemographicData {
     pub ethnicicty: Ethnicity,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents the person's statement on their sexuality.
 pub enum Sexuality {
     Heterosexual,
@@ -121,7 +122,7 @@ pub enum Sexuality {
     NoAnswer,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents the person's statement on their gender and
 /// pronoun preferences.
 pub enum Pronouns {
@@ -132,7 +133,7 @@ pub enum Pronouns {
     NoAnswer,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents the person's ethnic identification.
 pub enum Ethnicity {
     Asian,
@@ -144,7 +145,7 @@ pub enum Ethnicity {
     NoAnswer,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents a Government of Canada pay group
 pub enum Group {
     EC,
@@ -157,7 +158,7 @@ pub enum Group {
     LotsMore,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents a language.
 pub enum Language {
     English,
@@ -168,7 +169,7 @@ pub enum Language {
     LotsMore,
 }
 
-#[derive(Debug)]
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents a GC department or agency. Could include PRI or other
 /// data if appropriately secured. Could also include data on org type
 /// (line, policy, granting, etc.)
