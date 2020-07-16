@@ -12,7 +12,7 @@ pub struct Experience {
     pub practice: String,
     pub skill: String,
     pub validated: bool,
-    pub time: chrono::Duration,
+    pub time: String,
     pub difficulty: u32,
     pub value: u32,
     pub tags: Vec<String>,

@@ -1,7 +1,17 @@
 use chrono::prelude::*;
 use serde::{Serialize, Deserialize};
 
-use super::{Experience, Image, Location, User};
+use super::{Experience, Image, Location, User, DemographicData};
+
+use rand::rngs::{StdRng};
+use rand::{SeedableRng, Rng};
+use rand::distributions::{Distribution, Standard};
+
+use fake::{Dummy, Fake, Faker};
+use fake::faker::name::raw::*;
+use fake::faker::phone_number::raw::*;
+use fake::faker::chrono::raw::*;
+use fake::locales::*;
 
 #[derive(Serialize, Deserialize, Debug)]
 /// Represents a user as learner. Much of this data should come from OCHRO.
@@ -70,6 +80,34 @@ pub struct EmploymentStatus {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+/// Represents a Government of Canada pay group
+pub enum Group {
+    EC,
+    AS,
+    PM,
+    FB,
+    CR,
+    PE,
+    IS,
+    LotsMore,
+}
+
+impl Distribution<Group> for Standard {
+    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Group {
+        match rng.gen_range(0, 6) {
+            0 => Group::EC,
+            1 => Group::AS,
+            2 => Group::PM,
+            3 => Group::FB,
+            4 => Group::CR,
+            5 => Group::PE,
+            6 => Group::IS,
+            _ => Group::IS,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
 /// Represents a target audience
 pub enum Audience {
     Employee,
@@ -95,78 +133,6 @@ pub enum Role {
     Research,
     Finance,
     HumanResources,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-/// Represents additional demographic and preference details about a 
-/// person. This data would be protected B and would be treated 
-/// as secure data. It should come from a central trusted source (OCHRO)
-pub struct DemographicData {
-    pub date_stamp: NaiveDate,
-    pub date_of_birth: NaiveDate,
-    pub native_language: Language,
-    pub primary_official_language: Language,
-    pub communication_language: Language,
-    pub sexuality: Sexuality,
-    pub pronous: Pronouns,
-    pub transgender: bool,
-    pub ethnicicty: Ethnicity,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-/// Represents the person's statement on their sexuality.
-pub enum Sexuality {
-    Heterosexual,
-    Homosexual,
-    Bisexual,
-    NoAnswer,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-/// Represents the person's statement on their gender and
-/// pronoun preferences.
-pub enum Pronouns {
-    HeHim,
-    SheHer,
-    TheyThem,
-    Other (String),
-    NoAnswer,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-/// Represents the person's ethnic identification.
-pub enum Ethnicity {
-    Asian,
-    Black,
-    Caucasian,
-    HispanicLatinx,
-    Indigenous,
-    Other(String),
-    NoAnswer,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-/// Represents a Government of Canada pay group
-pub enum Group {
-    EC,
-    AS,
-    PM,
-    FB,
-    CR,
-    PE,
-    IS,
-    LotsMore,
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-/// Represents a language.
-pub enum Language {
-    English,
-    French,
-    Spanish,
-    Mandarin,
-    Japanese,
-    LotsMore,
 }
 
 #[derive(Serialize, Deserialize, Debug)]

@@ -98,5 +98,5 @@ pub struct ExperienceTemplate {
     pub practice: String,
     pub skill: String,
     pub validated: bool,
-    pub time: chrono::Duration,
+    pub time: String,
 }

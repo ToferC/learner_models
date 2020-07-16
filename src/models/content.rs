@@ -5,5 +5,5 @@ use serde::{Serialize, Deserialize};
 /// Struct containing image URL
 pub struct Image {
     pub id: i64,
-    pub path: Url,
+    pub path: String,
 }

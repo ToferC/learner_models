@@ -10,18 +10,13 @@ pub mod infrastructure;
 pub mod web_page;
 pub mod content;
 pub mod user;
+pub mod demographic;
 
 pub use self::learner::{
     Learner,
     EmploymentStatus,
-    DemographicData,
-    Role,
     Audience,
-    Sexuality,
-    Pronouns,
-    Ethnicity,
-    Group,
-    Language,
+    Role,
     Organization,
 };
 
@@ -36,3 +31,9 @@ pub use self::infrastructure::{PhysicalInfrastructure, DigitalInfrastructure};
 pub use self::web_page::WebPage;
 pub use self::content::Image;
 pub use self::user::{User, UserRole};
+pub use self::demographic::{
+    DemographicData,
+    Sexuality,
+    Pronouns,
+    Ethnicity,
+    };
