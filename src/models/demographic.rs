@@ -1,19 +1,17 @@
 use chrono::prelude::*;
 use serde::{Serialize, Deserialize};
 
-use rand::rngs::{StdRng};
-use rand::{SeedableRng, Rng};
+use rand::{Rng};
 use rand::distributions::{Distribution, Standard};
 
 use fake::{Dummy, Fake, Faker};
-use fake::faker::name::raw::*;
-use fake::faker::phone_number::raw::*;
 use fake::faker::chrono::raw::*;
 use fake::locales::*;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Represents additional demographic and preference details about a 
-/// person. This data would be protected B and would be treated 
+/// person. This data is needed to identify potential bias within our 
+/// institutions. It would be protected B and would be treated 
 /// as secure data. It should come from a central trusted source (OCHRO)
 pub struct DemographicData {
     pub date_stamp: NaiveDate,
@@ -27,30 +25,6 @@ pub struct DemographicData {
     pub ethnicicty: Ethnicity,
 }
 
-impl DemographicData {
-    pub fn random() -> Self {
-        let l1: Language = rand::random();
-        let l2: Language = rand::random();
-        let l3 = l2.clone();
-
-        let s: Sexuality = rand::random();
-        let p: Pronouns = rand::random();
-        let e: Ethnicity = rand::random();
-
-        DemographicData {
-            date_stamp: Date(EN).fake(),
-            date_of_birth: Date(EN).fake(),
-            native_language: l1,
-            primary_official_language: l2,
-            communication_language: l3,
-            sexuality: s,
-            pronouns: p,
-            transgender: Faker.fake::<bool>(),
-            ethnicicty: e,
-        }
-    }
-}
-
 #[derive(Serialize, Deserialize, Debug)]
 /// Represents the person's statement on their sexuality.
 pub enum Sexuality {
@@ -60,9 +34,11 @@ pub enum Sexuality {
     NoAnswer,
 }
 
-impl Distribution<Sexuality> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Sexuality {
-        match rng.gen_range(0, 3) {
+impl Dummy<Faker> for Sexuality {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+        let i: u8 = (0..4).fake_with_rng(rng);
+        
+        match i {
             0 => Sexuality::Heterosexual,
             1 => Sexuality::Homosexual,
             2 => Sexuality::Bisexual,
@@ -83,9 +59,11 @@ pub enum Pronouns {
     NoAnswer,
 }
 
-impl Distribution<Pronouns> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Pronouns {
-        match rng.gen_range(0, 3) {
+impl Dummy<Faker> for Pronouns {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+        let i: u8 = (0..4).fake_with_rng(rng);
+        
+        match i {
             0 => Pronouns::HeHim,
             1 => Pronouns::SheHer,
             2 => Pronouns::TheyThem,
@@ -107,9 +85,11 @@ pub enum Ethnicity {
     NoAnswer,
 }
 
-impl Distribution<Ethnicity> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Ethnicity {
-        match rng.gen_range(0, 6) {
+impl Dummy<Faker> for Ethnicity {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+        let i: u8 = (0..7).fake_with_rng(rng);
+        
+        match i {
             0 => Ethnicity::Asian,
             1 => Ethnicity::Black,
             2 => Ethnicity::Caucasian,
@@ -133,9 +113,11 @@ pub enum Language {
     LotsMore,
 }
 
-impl Distribution<Language> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Language {
-        match rng.gen_range(0, 1) {
+impl Dummy<Faker> for Language {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+        let i: u8 = (0..7).fake_with_rng(rng);
+        
+        match i {
             0 => Language::French,
             1 => Language::English,
             _ => Language::English,

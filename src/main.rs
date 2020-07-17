@@ -2,13 +2,15 @@ mod models;
 
 use chrono::prelude::*;
 
+use fake::{Faker, Fake};
+
 use models::{Learner, User, DemographicData};
 
 fn main() {
 
     let u = User::random();
 
-    let d = DemographicData::random();
+    let d:  DemographicData = Faker.fake();
 
     let l = Learner {
 
