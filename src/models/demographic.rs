@@ -2,10 +2,11 @@ use chrono::prelude::*;
 use serde::{Serialize, Deserialize};
 
 use rand::{Rng};
-use rand::distributions::{Distribution, Standard};
 
 use fake::{Dummy, Fake, Faker};
 use fake::faker::chrono::raw::*;
+use chrono::Utc;
+use fake::faker::boolean::en::*;
 use fake::locales::*;
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
@@ -14,13 +15,16 @@ use fake::locales::*;
 /// institutions. It would be protected B and would be treated 
 /// as secure data. It should come from a central trusted source (OCHRO)
 pub struct DemographicData {
-    pub date_stamp: NaiveDate,
+    //#[dummy(faker = "DateBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
+    pub date_stamp: NaiveDateTime,
     pub date_of_birth: NaiveDate,
     pub native_language: Language,
     pub primary_official_language: Language,
     pub communication_language: Language,
     pub sexuality: Sexuality,
     pub pronouns: Pronouns,
+
+    #[dummy(faker = "Boolean(5)")]
     pub transgender: bool,
     pub ethnicicty: Ethnicity,
 }
