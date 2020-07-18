@@ -5,15 +5,16 @@ use super::{Experience, Image, Location, User, DemographicData};
 
 use rand::rngs::{StdRng};
 use rand::{SeedableRng, Rng};
-use rand::distributions::{Distribution, Standard};
 
 use fake::{Dummy, Fake, Faker};
 use fake::faker::name::raw::*;
 use fake::faker::phone_number::raw::*;
 use fake::faker::chrono::raw::*;
+use fake::faker::lorem::raw::*;
+use fake::faker::company::raw::*;
 use fake::locales::*;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Represents a user as learner. Much of this data should come from OCHRO.
 /// Learner data could be developed as part of a permission-based
 /// system that allowed the learner to have full control over their data
@@ -92,9 +93,11 @@ pub enum Group {
     LotsMore,
 }
 
-impl Distribution<Group> for Standard {
-    fn sample<R: Rng + ?Sized>(&self, rng: &mut R) -> Group {
-        match rng.gen_range(0, 6) {
+impl Dummy<Faker> for Group {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+        let i: u8 = (0..7).fake_with_rng(rng);
+        
+        match i {
             0 => Group::EC,
             1 => Group::AS,
             2 => Group::PM,
@@ -117,6 +120,23 @@ pub enum Audience {
     SeniorLeader,
 }
 
+impl Dummy<Faker> for Audience {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+        let i: u8 = (0..7).fake_with_rng(rng);
+        
+        match i {
+            0 => Audience::Employee,
+            1 => Audience::Employee,
+            2 => Audience::Employee,
+            3 => Audience::Employee,
+            4 => Audience::Specialist,
+            5 => Audience::Manager,
+            6 => Audience::Leader,
+            _ => Audience::SeniorLeader,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 /// Represents the occupational role of a person
 pub enum Role {
@@ -135,12 +155,36 @@ pub enum Role {
     HumanResources,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+impl Dummy<Faker> for Role {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+        let i: u8 = (0..12).fake_with_rng(rng);
+        
+        match i {
+            0 => Role::Science,
+            2 => Role::Audit,
+            1 => Role::Policy,
+            3 => Role::Operations,
+            4 => Role::Legal,
+            5 => Role::Security,
+            6 => Role::ComputerScience,
+            7 => Role::Regulatory,
+            8 => Role::Administrative,
+            9 => Role::Research,
+            10 => Role::Finance,
+            11 => Role::HumanResources,
+            _ => Role::All,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Represents a GC department or agency. Could include PRI or other
 /// data if appropriately secured. Could also include data on org type
 /// (line, policy, granting, etc.)
 pub struct Organization {
+    #[dummy(faker = "CompanyName(EN)")]
     pub name: String,
     pub url: String,
+    #[dummy(faker = "Word(EN)")]
     pub acronym: String,
 }

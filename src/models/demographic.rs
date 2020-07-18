@@ -15,9 +15,11 @@ use fake::locales::*;
 /// institutions. It would be protected B and would be treated 
 /// as secure data. It should come from a central trusted source (OCHRO)
 pub struct DemographicData {
-    //#[dummy(faker = "DateBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
-    pub date_stamp: NaiveDateTime,
-    pub date_of_birth: NaiveDate,
+    #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
+    pub date_stamp: String,
+
+    #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(1965, 1, 1).and_hms(9, 10, 11), Utc.ymd(1998,6,12).and_hms(9, 10, 11))")]
+    pub date_of_birth: String,
     pub native_language: Language,
     pub primary_official_language: Language,
     pub communication_language: Language,
