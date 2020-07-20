@@ -3,7 +3,9 @@ use serde::{Serialize, Deserialize};
 use super::learner::Group;
 use super::location::Location;
 
-#[derive(Serialize, Deserialize, Debug)]
+use fake::{Dummy, Fake, Faker};
+
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// An employee working in learning delivery.
 pub struct Personnel {
     id: u32,
@@ -16,7 +18,7 @@ pub struct Personnel {
     work_location: Location,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A delivery role for an employee.
 pub enum DeliveryRole {
     Facilitator,

@@ -20,6 +20,7 @@ pub struct DemographicData {
 
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(1965, 1, 1).and_hms(9, 10, 11), Utc.ymd(1998,6,12).and_hms(9, 10, 11))")]
     pub date_of_birth: String,
+    
     pub native_language: Language,
     pub primary_official_language: Language,
     pub communication_language: Language,
@@ -42,13 +43,17 @@ pub enum Sexuality {
 
 impl Dummy<Faker> for Sexuality {
     fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
-        let i: u8 = (0..4).fake_with_rng(rng);
+        let i: u8 = (0..8).fake_with_rng(rng);
         
         match i {
             0 => Sexuality::Heterosexual,
             1 => Sexuality::Homosexual,
             2 => Sexuality::Bisexual,
             3 => Sexuality::NoAnswer,
+            4 => Sexuality::Heterosexual,
+            5 => Sexuality::Heterosexual,
+            6 => Sexuality::Heterosexual,
+            7 => Sexuality::Heterosexual,
             _ => Sexuality::NoAnswer,
         }
     }

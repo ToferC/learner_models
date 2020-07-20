@@ -1,9 +1,19 @@
 use std::collections::HashMap;
 
 use chrono::prelude::*;
+
+use fake::faker::chrono::raw::*;
+use chrono::Utc;
+use fake::{Dummy, Fake, Faker};
+use fake::faker::name::raw::*;
+use fake::faker::phone_number::raw::*;
+use fake::faker::lorem::raw::*;
+use fake::faker::company::raw::*;
+use fake::locales::*;
+
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// An over-arching evaluation structure for a LearningObject.
 /// Contains MicroEvaluations.
 pub struct Evaluation {
@@ -17,18 +27,25 @@ pub struct Evaluation {
     // After learning
     pub end_skill: usize,
     pub comments: String,
-    pub date_stamp: NaiveDate,
+
+    #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
+    pub date_stamp: String,
+
+    #[dummy(faker = "(Faker, 3)")]
     pub micro_evaluations: Vec<MicroEvaluation>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Short, focused evaluations for Modules within a LearningObject.
 /// Contains several optional evaluations depending on the specific 
 /// Module.
 pub struct MicroEvaluation {
     pub id: i64,
-    pub module: usize,
-    pub date_stamp: NaiveDate,
+    pub module: usize,    
+
+    #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
+    pub date_stamp: String,
+
     pub rapid_response: RapidResponse,
 
     // Hashmap of a LearningObjective for a module mapped to an 
@@ -42,7 +59,7 @@ pub struct MicroEvaluation {
     pub completed: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Learner assessment of whether a Module met a specific 
 /// LearningObjective.
 pub enum LearningObjectiveResponse {
@@ -51,7 +68,7 @@ pub enum LearningObjectiveResponse {
     Exceeded,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Core component of MicroEvaluation with two mandatory and 
 /// an array of optional true or false responses.
 pub struct RapidResponse {
@@ -75,7 +92,7 @@ pub struct RapidResponse {
     pub too_short: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Optional true or false responses for evaluating 
 /// PhysicalInfrastructure
 pub struct PhysicalEval {
@@ -87,7 +104,7 @@ pub struct PhysicalEval {
     pub accessible: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Optional true or false responses for evaluating Personnel
 pub struct PersonnelEval {
     pub module: usize,
@@ -96,7 +113,7 @@ pub struct PersonnelEval {
     pub professional: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Optional true or false responses for evaluating 
 /// DigitalInfrastructure
 pub struct DigitalEval {
@@ -105,7 +122,7 @@ pub struct DigitalEval {
     pub professional: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// The Learner's primary reason for seeking learning. 
 /// Serves as context for other evaluations.
 pub enum Objective {

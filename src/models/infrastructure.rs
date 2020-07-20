@@ -1,7 +1,9 @@
 use super::{Location, WebPage};
 use serde::{Serialize, Deserialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+use fake::{Dummy, Fake, Faker};
+
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A physical delivery point for learning content. 
 /// Optionally attached to a Module.
 pub struct PhysicalInfrastructure {
@@ -14,7 +16,7 @@ pub struct PhysicalInfrastructure {
     pub map_url: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A digital delivery point for learning content. 
 /// Optionally attached to a Module.
 pub struct DigitalInfrastructure {

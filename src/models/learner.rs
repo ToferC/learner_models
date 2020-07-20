@@ -3,8 +3,7 @@ use serde::{Serialize, Deserialize};
 
 use super::{Experience, Image, Location, User, DemographicData};
 
-use rand::rngs::{StdRng};
-use rand::{SeedableRng, Rng};
+use rand::{Rng};
 
 use fake::{Dummy, Fake, Faker};
 use fake::faker::name::raw::*;
@@ -23,14 +22,22 @@ use fake::locales::*;
 pub struct Learner {
     pub id: i64,
     pub user: User,
+
+    #[dummy(faker = "(Faker, 3)")]
     pub badges: Vec<BadgeAssertion>,
     pub demographics: DemographicData,
+
+    #[dummy(faker = "(Faker, 3)")]
     pub employment_status: Vec<EmploymentStatus>,
+
+    #[dummy(faker = "(Faker, 3)")]
     pub experiences: Vec<Experience>,
+
+    #[dummy(faker = "(Faker, 10)")]
     pub data_access_log: Vec<DataAccessLog>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Badges based on open-badges
 /// https://github.com/mozilla/openbadges-specification/blob/master/Assertion/latest.md
 pub struct BadgeAssertion {
@@ -44,7 +51,7 @@ pub struct BadgeAssertion {
     pub expires: NaiveDate,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Log for access of user data for audit and privacy purposes.
 /// Will track each access point and return a JSON String of the
 /// data accessed and rationale.
@@ -66,7 +73,23 @@ pub enum AccessRationale {
     UserDataRequest,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+impl Dummy<Faker> for AccessRationale {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+        let i: u8 = (0..5).fake_with_rng(rng);
+        
+        match i {
+            0 => AccessRationale::AggregatedReporting,
+            1 => AccessRationale::IdentifiableReporting,
+            2 => AccessRationale::AutomatedQuery,
+            3 => AccessRationale::CustomQuery,
+            4 => AccessRationale::Audit,
+            5 => AccessRationale::UserDataRequest,
+            _ => AccessRationale::AggregatedReporting,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Represents the employement and work status of an employee
 /// at a certain point in time. Part of a vector under the learner.
 pub struct EmploymentStatus {

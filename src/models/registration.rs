@@ -1,9 +1,11 @@
 use chrono::prelude::*;
 use serde::{Serialize, Deserialize};
 
+use fake::{Dummy, Fake, Faker};
+
 use super::{LearningObject, Evaluation};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A registration point within our learning management system
 /// Serves as a placeholder for a specific offering of a 
 /// learning object
@@ -16,7 +18,7 @@ pub struct Registration {
     pub cancelled: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A specific offering of a learning object. Also serves as 
 /// the placholder for an overall evaluation of CSPS learning 
 /// content.
@@ -30,7 +32,7 @@ pub struct Offering {
     pub completed: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Referral data for a registration. Contains a String which can
 /// represent a specific promotional campaign.
 pub enum Referral {
