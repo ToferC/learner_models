@@ -19,7 +19,10 @@ pub struct User {
     #[dummy(faker = "Buzzword(EN)")]
     pub user_name: String,
 
+    #[dummy(faker = "(Faker, 2..4)")]
     pub work_email_addresses: Vec<String>,
+
+    #[dummy(faker = "(Faker, 2..4)")]
     pub alternate_email_addresses: Vec<String>,
 
     #[dummy(faker = "CatchPhase(EN)")]

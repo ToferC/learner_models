@@ -82,6 +82,7 @@ pub struct Module {
 
     #[dummy(faker = "(Sentences(EN, 1..3))")]
     pub learning_objectives: Vec<String>,
+
     pub duration_minutes: u32,
     pub experience: ExperienceTemplate,
     pub quiz: Option<Quiz>,
@@ -93,6 +94,7 @@ pub struct Module {
     
     #[dummy(faker = "(Faker, 2..3)")]
     pub personnel: Option<Vec<Personnel>>,
+    
     pub completed: bool,
 }
 

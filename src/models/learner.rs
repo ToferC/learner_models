@@ -3,8 +3,6 @@ use serde::{Serialize, Deserialize};
 
 use super::{Experience, Image, Location, User, DemographicData};
 
-use rand::{Rng};
-
 use fake::{Dummy, Fake, Faker};
 use fake::faker::name::raw::*;
 use fake::faker::phone_number::raw::*;
@@ -23,17 +21,18 @@ pub struct Learner {
     pub id: i64,
     pub user: User,
 
-    #[dummy(faker = "(Faker, 3)")]
+    #[dummy(faker = "(Faker, 3..5)")]
     pub badges: Vec<BadgeAssertion>,
+
     pub demographics: DemographicData,
 
-    #[dummy(faker = "(Faker, 3)")]
+    #[dummy(faker = "(Faker, 3..5)")]
     pub employment_status: Vec<EmploymentStatus>,
 
-    #[dummy(faker = "(Faker, 3)")]
+    #[dummy(faker = "(Faker, 3..5)")]
     pub experiences: Vec<Experience>,
 
-    #[dummy(faker = "(Faker, 10)")]
+    #[dummy(faker = "(Faker, 4..10)")]
     pub data_access_log: Vec<DataAccessLog>,
 }
 
@@ -43,7 +42,6 @@ pub struct Learner {
 pub struct BadgeAssertion {
     pub id: i64,
     pub uid: String,
-    pub recipient: Learner,
     pub badge: String,
     pub verify: String, // placeholder
     pub image: Image,
@@ -62,7 +60,7 @@ pub struct DataAccessLog {
     data_accessed: String,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Reasons for accessing user data
 pub enum AccessRationale {
     AggregatedReporting,
@@ -71,22 +69,6 @@ pub enum AccessRationale {
     CustomQuery,
     Audit,
     UserDataRequest,
-}
-
-impl Dummy<Faker> for AccessRationale {
-    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
-        let i: u8 = (0..5).fake_with_rng(rng);
-        
-        match i {
-            0 => AccessRationale::AggregatedReporting,
-            1 => AccessRationale::IdentifiableReporting,
-            2 => AccessRationale::AutomatedQuery,
-            3 => AccessRationale::CustomQuery,
-            4 => AccessRationale::Audit,
-            5 => AccessRationale::UserDataRequest,
-            _ => AccessRationale::AggregatedReporting,
-        }
-    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
@@ -103,7 +85,7 @@ pub struct EmploymentStatus {
     pub work_location: Location,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Represents a Government of Canada pay group
 pub enum Group {
     EC,
@@ -116,24 +98,7 @@ pub enum Group {
     LotsMore,
 }
 
-impl Dummy<Faker> for Group {
-    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
-        let i: u8 = (0..7).fake_with_rng(rng);
-        
-        match i {
-            0 => Group::EC,
-            1 => Group::AS,
-            2 => Group::PM,
-            3 => Group::FB,
-            4 => Group::CR,
-            5 => Group::PE,
-            6 => Group::IS,
-            _ => Group::IS,
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Represents a target audience
 pub enum Audience {
     Employee,
@@ -143,24 +108,7 @@ pub enum Audience {
     SeniorLeader,
 }
 
-impl Dummy<Faker> for Audience {
-    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
-        let i: u8 = (0..7).fake_with_rng(rng);
-        
-        match i {
-            0 => Audience::Employee,
-            1 => Audience::Employee,
-            2 => Audience::Employee,
-            3 => Audience::Employee,
-            4 => Audience::Specialist,
-            5 => Audience::Manager,
-            6 => Audience::Leader,
-            _ => Audience::SeniorLeader,
-        }
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Represents the occupational role of a person
 pub enum Role {
     All,
@@ -176,28 +124,6 @@ pub enum Role {
     Research,
     Finance,
     HumanResources,
-}
-
-impl Dummy<Faker> for Role {
-    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
-        let i: u8 = (0..12).fake_with_rng(rng);
-        
-        match i {
-            0 => Role::Science,
-            2 => Role::Audit,
-            1 => Role::Policy,
-            3 => Role::Operations,
-            4 => Role::Legal,
-            5 => Role::Security,
-            6 => Role::ComputerScience,
-            7 => Role::Regulatory,
-            8 => Role::Administrative,
-            9 => Role::Research,
-            10 => Role::Finance,
-            11 => Role::HumanResources,
-            _ => Role::All,
-        }
-    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]

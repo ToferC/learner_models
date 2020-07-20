@@ -21,11 +21,17 @@ pub struct Evaluation {
     pub objective: Objective,
 
     // Before learning
+    #[dummy(faker = "1..11")]
     pub current_skill: usize,
+
+    #[dummy(faker = "1..11")]
     pub desired_skill: usize,
 
     // After learning
+    #[dummy(faker = "1..11")]
     pub end_skill: usize,
+
+    #[dummy(faker = "Sentence(EN, 1..3)")]
     pub comments: String,
 
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
@@ -40,7 +46,9 @@ pub struct Evaluation {
 /// Contains several optional evaluations depending on the specific 
 /// Module.
 pub struct MicroEvaluation {
-    pub id: i64,
+    pub id: u32,
+
+    #[dummy(faker = "1..11")]
     pub module: usize,    
 
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
@@ -73,6 +81,8 @@ pub enum LearningObjectiveResponse {
 /// an array of optional true or false responses.
 pub struct RapidResponse {
     pub would_recommend: bool,
+
+    #[dummy(faker = "1..11")]
     pub rating_1_10: usize,
 
     // Positive
@@ -96,6 +106,7 @@ pub struct RapidResponse {
 /// Optional true or false responses for evaluating 
 /// PhysicalInfrastructure
 pub struct PhysicalEval {
+    #[dummy(faker = "1..11")]
     pub module: usize,
     pub clean: bool,
     pub pleasant: bool,
@@ -107,6 +118,7 @@ pub struct PhysicalEval {
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Optional true or false responses for evaluating Personnel
 pub struct PersonnelEval {
+    #[dummy(faker = "1..11")]
     pub module: usize,
     pub pleasant: bool,
     pub helpful: bool,
@@ -117,6 +129,8 @@ pub struct PersonnelEval {
 /// Optional true or false responses for evaluating 
 /// DigitalInfrastructure
 pub struct DigitalEval {
+    #[dummy(faker = "1..11")]
+    pub module: usize,
     pub smooth: bool,
     pub accessible: bool,
     pub professional: bool,

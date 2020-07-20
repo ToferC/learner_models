@@ -4,15 +4,15 @@ use chrono::prelude::*;
 
 use fake::{Faker, Fake};
 
-use models::{Learner, User, DemographicData, Registration};
+use models::{Learner, Registration};
 
 fn main() {
 
-    let l: Learner = Faker.fake();
+    //let l: Learner = Faker.fake();
 
     let r: Registration = Faker.fake();
 
-    println!("{:?}", l);
+    //println!("{:?}", l);
 
     println!("{:?}", r);
 }

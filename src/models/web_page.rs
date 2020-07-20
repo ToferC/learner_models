@@ -7,6 +7,7 @@ use fake::{Dummy, Fake, Faker};
 pub struct WebPage {
     url: String,
     // Vec of AccessConversions
+    #[dummy(faker = "(Faker, 2..4)")]
     access_conversions: Vec<AccessConversion>,
 }
 

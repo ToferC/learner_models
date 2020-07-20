@@ -3,6 +3,11 @@ use serde::{Serialize, Deserialize};
 
 use fake::{Dummy, Fake, Faker};
 
+use fake::faker::chrono::raw::*;
+use chrono::Utc;
+use fake::faker::boolean::en::*;
+use fake::locales::*;
+
 use super::{LearningObject, Evaluation};
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
@@ -10,11 +15,18 @@ use super::{LearningObject, Evaluation};
 /// Serves as a placeholder for a specific offering of a 
 /// learning object
 pub struct Registration {
-    pub id: i64,
-    pub date_stamp: NaiveDate,
+
+    pub id: u32,
+
+    #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
+    pub date_stamp: String,
+
     pub offering: Offering,
     pub referral_source: Referral,
+
+    #[dummy(faker = "Boolean(70)")]
     pub completed: bool,
+    #[dummy(faker = "Boolean(5)")]
     pub cancelled: bool,
 }
 
@@ -23,12 +35,20 @@ pub struct Registration {
 /// the placholder for an overall evaluation of CSPS learning 
 /// content.
 pub struct Offering {
-    pub id: i64,
+    pub id: u32,
     pub learning_object: LearningObject,
     pub evaluation: Evaluation,
-    pub start_date: NaiveDate,
-    pub end_date: NaiveDate,
+
+    #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
+    pub start_date: String,
+
+    //#[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
+    //pub end_date: String,
+
+    #[dummy(faker = "Boolean(5)")]
     pub cancelled: bool,
+
+    #[dummy(faker = "Boolean(80)")]
     pub completed: bool,
 }
 
