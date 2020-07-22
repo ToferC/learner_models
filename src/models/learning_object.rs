@@ -12,7 +12,7 @@ use chrono::Utc;
 use super::{Stream, Quiz, LearningStyle, 
     Personnel, Audience, Role, 
     PhysicalInfrastructure, DigitalInfrastructure,
-    WebPage, Image, TimeStringEarly, TimeStringLate};
+    WebPage, Image, TimeString, TimeStringEarly, TimeStringLate};
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Represents a high level learning object such as a course
@@ -37,7 +37,7 @@ pub struct LearningObject {
     pub business_line: BusinessLine,
     pub status: Status,
 
-    pub created: NaiveDate,
+    pub created: TimeString,
 
     pub updated: Vec<TimeStringEarly>,
 
