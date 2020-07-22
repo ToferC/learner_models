@@ -42,9 +42,14 @@ pub struct Learner {
 pub struct BadgeAssertion {
     pub id: i64,
     pub uid: String,
+
+    #[dummy(faker = "Buzzword(EN)")]
     pub badge: String,
+
     pub verify: String, // placeholder
     pub image: Image,
+
+    #[dummy(faker = "Sentence(EN, 1..3)")]
     pub evidence: String,
     pub expires: NaiveDate,
 }

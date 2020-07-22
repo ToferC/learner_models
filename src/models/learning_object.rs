@@ -18,7 +18,7 @@ use super::{Stream, Quiz, LearningStyle,
 /// A learning object must contain at least one module, but may 
 /// contain several.
 pub struct LearningObject {
-    pub id: i64,
+    pub id: u32,
     pub name: String,
     pub description: String,
     pub image: Image,
@@ -70,7 +70,7 @@ pub enum BusinessLine {
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A learning module that exists within a learning object.
 pub struct Module {
-    pub id: i64,
+    pub id: u32,
     pub code: String,
     pub name: String,
     pub description: String,
@@ -80,8 +80,8 @@ pub struct Module {
     pub learning_styles: Vec<LearningStyle>,
     pub content: ContentType,
 
-    #[dummy(faker = "(Sentences(EN, 1..3))")]
-    pub learning_objectives: Vec<String>,
+    #[dummy(faker = "(Faker, 1..3)")]
+    pub learning_objectives: Vec<LearningObjective>,
 
     pub duration_minutes: u32,
     pub experience: ExperienceTemplate,
@@ -96,6 +96,14 @@ pub struct Module {
     pub personnel: Option<Vec<Personnel>>,
     
     pub completed: bool,
+}
+
+#[derive(Serialize, Deserialize, Debug, Dummy)]
+pub struct LearningObjective {
+    #[dummy(faker = "1..11")]
+    pub weight: usize,
+    #[dummy(faker = "Sentence(EN, 1..3)")]
+    pub statement: String
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]

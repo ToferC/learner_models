@@ -1,14 +1,14 @@
 use chrono::prelude::*;
 use serde::{Serialize, Deserialize};
 
-use fake::{Dummy, Fake, Faker};
+use fake::{Dummy, Fake};
 
 use fake::faker::chrono::raw::*;
 use chrono::Utc;
 use fake::faker::boolean::en::*;
 use fake::locales::*;
 
-use super::{LearningObject, Evaluation};
+use super::{LearningObject, Evaluation, Learner};
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A registration point within our learning management system
@@ -17,6 +17,8 @@ use super::{LearningObject, Evaluation};
 pub struct Registration {
 
     pub id: u32,
+
+    pub learner: Learner,
 
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
     pub date_stamp: String,

@@ -17,7 +17,7 @@ use serde::{Serialize, Deserialize};
 /// An over-arching evaluation structure for a LearningObject.
 /// Contains MicroEvaluations.
 pub struct Evaluation {
-    pub id: i64,
+    pub id: u32,
     pub objective: Objective,
 
     // Before learning
