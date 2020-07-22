@@ -7,6 +7,7 @@ use fake::{Dummy, Fake, Faker};
 /// A physical delivery point for learning content. 
 /// Optionally attached to a Module.
 pub struct PhysicalInfrastructure {
+    pub id: u32,
     pub location: Location,
     pub opening_hours: String,
     pub closing_hours: String,
@@ -20,6 +21,7 @@ pub struct PhysicalInfrastructure {
 /// A digital delivery point for learning content. 
 /// Optionally attached to a Module.
 pub struct DigitalInfrastructure {
+    pub id: u32,
     pub storage: u64,
     pub cost_per_minute: f64,
     pub capacity: u32,

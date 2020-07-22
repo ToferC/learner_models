@@ -18,7 +18,8 @@ use fake::locales::*;
 /// and allow the learning systems to request acccess with specific
 /// use cases.
 pub struct Learner {
-    pub id: i64,
+    pub id: u32,
+
     pub user: User,
 
     #[dummy(faker = "(Faker, 3..5)")]
@@ -40,10 +41,10 @@ pub struct Learner {
 /// Badges based on open-badges
 /// https://github.com/mozilla/openbadges-specification/blob/master/Assertion/latest.md
 pub struct BadgeAssertion {
-    pub id: i64,
+    pub id: u32,
     pub uid: String,
 
-    #[dummy(faker = "Buzzword(EN)")]
+    #[dummy(faker = "CatchPhase(EN)")]
     pub badge: String,
 
     pub verify: String, // placeholder
@@ -51,7 +52,9 @@ pub struct BadgeAssertion {
 
     #[dummy(faker = "Sentence(EN, 1..3)")]
     pub evidence: String,
-    pub expires: NaiveDate,
+
+    #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2024, 1, 1).and_hms(9, 10, 11), Utc.ymd(2025,6,12).and_hms(9, 10, 11))")]
+    pub expires: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
@@ -59,9 +62,13 @@ pub struct BadgeAssertion {
 /// Will track each access point and return a JSON String of the
 /// data accessed and rationale.
 pub struct DataAccessLog {
-    accessed_by: User,
+
+    // user_id
+    accessed_by_user_id: u32,
     rationale: AccessRationale,
-    date_stamp: NaiveDateTime,
+    
+    #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
+    date_stamp: String,
     data_accessed: String,
 }
 
@@ -81,11 +88,20 @@ pub enum AccessRationale {
 /// at a certain point in time. Part of a vector under the learner.
 pub struct EmploymentStatus {
     pub date_stamp: NaiveDate,
-    pub group: Group,
     pub role: Role,
+    
+    #[dummy(faker = "CatchPhase(EN)")]
     pub community: String,
+    
     pub audience: Audience,
+    
+    pub group: Group,
+
+    #[dummy(faker = "1..7")]
     pub level: usize,
+
+
+
     pub organization: Organization,
     pub work_location: Location,
 }

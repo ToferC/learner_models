@@ -14,7 +14,13 @@ use fake::locales::*;
 /// A user of the system, employee or learner. Should be tied to
 /// an employee profile at the GC level.
 pub struct User {
-    pub id: i64,
+    pub id: u32,
+
+    #[dummy(faker = "FirstName(EN)")]
+    pub first_name: String,
+
+    #[dummy(faker = "LastName(EN)")]
+    pub last_name: String,
 
     #[dummy(faker = "Buzzword(EN)")]
     pub user_name: String,

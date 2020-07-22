@@ -25,7 +25,10 @@ pub struct Quiz {
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A question in a knowledge test
 pub struct Question {
+    #[dummy(faker = "(1..11)")]
     pub number: u32,
+
+    #[dummy(faker = "(Sentence(EN, 1..2))")]
     pub question_text: String,
 
     #[dummy(faker = "(Sentences(EN, 2..3))")]

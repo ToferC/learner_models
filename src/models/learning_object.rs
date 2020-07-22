@@ -2,16 +2,17 @@ use chrono::prelude::*;
 use serde::{Serialize, Deserialize};
 
 use fake::{Dummy, Fake, Faker};
-use fake::faker::name::raw::*;
 use fake::faker::lorem::raw::*;
 use fake::faker::company::raw::*;
 use fake::locales::*;
+use fake::faker::chrono::raw::*;
+use chrono::Utc;
 
 
 use super::{Stream, Quiz, LearningStyle, 
     Personnel, Audience, Role, 
     PhysicalInfrastructure, DigitalInfrastructure,
-    WebPage, Image};
+    WebPage, Image, TimeStringEarly, TimeStringLate};
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Represents a high level learning object such as a course
@@ -38,9 +39,9 @@ pub struct LearningObject {
 
     pub created: NaiveDate,
 
-    #[dummy(faker = "(Faker, 3)")]
-    pub updated: Vec<NaiveDate>,
-    pub shut_down: Option<NaiveDate>,
+    pub updated: Vec<TimeStringEarly>,
+
+    pub shut_down: Option<TimeStringLate>,
     // Question: Do we have version control built in?
 }
 
@@ -70,8 +71,11 @@ pub enum BusinessLine {
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A learning module that exists within a learning object.
 pub struct Module {
+    #[dummy(faker = "1..11")]
     pub id: u32,
     pub code: String,
+
+    #[dummy(faker = "CatchPhase(EN)")]
     pub name: String,
     pub description: String,
     pub image: Image,
@@ -102,7 +106,7 @@ pub struct Module {
 pub struct LearningObjective {
     #[dummy(faker = "1..11")]
     pub weight: usize,
-    #[dummy(faker = "Sentence(EN, 1..3)")]
+    #[dummy(faker = "Sentence(EN, 1..2)")]
     pub statement: String
 }
 

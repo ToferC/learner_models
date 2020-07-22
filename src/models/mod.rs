@@ -29,7 +29,7 @@ pub use self::quiz::Quiz;
 pub use self::learning_object::{LearningObject, Module, ContentType};
 pub use self::infrastructure::{PhysicalInfrastructure, DigitalInfrastructure};
 pub use self::web_page::WebPage;
-pub use self::content::Image;
+pub use self::content::{Image, TimeStringEarly, TimeStringLate, TimeString};
 pub use self::user::{User, UserRole};
 pub use self::demographic::{
     DemographicData,

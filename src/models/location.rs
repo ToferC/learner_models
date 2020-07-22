@@ -13,7 +13,9 @@ use fake::locales::*;
 /// A location that can apply to PhysicalInfrastructure, 
 /// a Learner or Personnel.
 pub struct Location {
-    pub name: String,
+    #[dummy(faker = "(1..1800)")]
+    pub street_number: usize,
+
     #[dummy(faker = "StreetName(EN)")]
     pub address: String,
 

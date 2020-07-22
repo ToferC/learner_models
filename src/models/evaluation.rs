@@ -58,7 +58,7 @@ pub struct MicroEvaluation {
 
     // Hashmap of a LearningObjective for a module mapped to an 
     // assessment of how the module met that objective
-    pub learning_obj_eval: HashMap<String, LearningObjectiveResponse>,
+    pub learning_obj_eval: HashMap<ObjectiveStatement, LearningObjectiveResponse>,
     pub physical_eval: Option<PhysicalEval>,
     pub digital_eval: Option<DigitalEval>,
     pub personnel_eval: Option<PersonnelEval>,
@@ -66,6 +66,9 @@ pub struct MicroEvaluation {
     pub seen: bool,
     pub completed: bool,
 }
+
+#[derive(Serialize, Deserialize, Debug, Dummy, Hash, Eq, PartialEq)]
+pub struct ObjectiveStatement(#[dummy(faker = "Sentence(EN, 1..4)")] String);
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Learner assessment of whether a Module met a specific 

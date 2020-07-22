@@ -12,6 +12,8 @@ use fake::locales::*;
 /// Represents a learner's experience as part of an Xapi 
 /// or experience tracking system
 pub struct Experience {
+    pub id: u32,
+
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
     pub date_stamp: String,
 
