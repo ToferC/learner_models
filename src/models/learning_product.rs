@@ -18,7 +18,7 @@ use super::{Stream, Quiz, LearningStyle,
 /// Represents a high level learning object such as a course
 /// A learning object must contain at least one module, but may 
 /// contain several.
-pub struct LearningObject {
+pub struct LearningProduct {
     pub id: u32,
     pub name: String,
     pub description: String,
@@ -85,12 +85,15 @@ pub struct Module {
     pub content: ContentType,
 
     #[dummy(faker = "(Faker, 1..3)")]
-    pub learning_objectives: Vec<LearningObjective>,
+    pub learning_productives: Vec<LearningProductive>,
 
     pub duration_minutes: u32,
     pub experience: ExperienceTemplate,
     pub quiz: Option<Quiz>,
     pub web_page: WebPage,
+
+    #[dummy(faker = "1..11")]
+    pub mock_quality: usize,
 
     // Infrastructure & Resources
     pub physicial_infrastructure: Option<PhysicalInfrastructure>,
@@ -103,7 +106,7 @@ pub struct Module {
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
-pub struct LearningObjective {
+pub struct LearningProductive {
     #[dummy(faker = "1..11")]
     pub weight: usize,
     #[dummy(faker = "Sentence(EN, 1..2)")]

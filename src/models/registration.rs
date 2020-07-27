@@ -8,7 +8,7 @@ use chrono::Utc;
 use fake::faker::boolean::en::*;
 use fake::locales::*;
 
-use super::{LearningObject, Evaluation, Learner};
+use super::{LearningProduct, Evaluation, Learner};
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A registration point within our learning management system
@@ -38,7 +38,7 @@ pub struct Registration {
 /// content.
 pub struct Offering {
     pub id: u32,
-    pub learning_object: LearningObject,
+    pub learning_product: LearningProduct,
     pub evaluation: Evaluation,
 
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]

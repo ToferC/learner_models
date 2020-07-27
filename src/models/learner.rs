@@ -33,6 +33,14 @@ pub struct Learner {
     #[dummy(faker = "(Faker, 3..5)")]
     pub experiences: Vec<Experience>,
 
+    /// simulates the learner's openess and appreciation for the 
+    /// learning products used as well as overall politeness and
+    /// attitude. A low alignment represents a learner that will 
+    /// not like anything, a high alignment learner will like 
+    /// almost any experience.
+    #[dummy(faker = "1..11")]
+    mock_learner_alignment: usize,
+
     #[dummy(faker = "(Faker, 4..10)")]
     pub data_access_log: Vec<DataAccessLog>,
 }

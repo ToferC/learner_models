@@ -14,7 +14,7 @@ use fake::locales::*;
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
-/// An over-arching evaluation structure for a LearningObject.
+/// An over-arching evaluation structure for a LearningProduct.
 /// Contains MicroEvaluations.
 pub struct Evaluation {
     pub id: u32,
@@ -42,7 +42,7 @@ pub struct Evaluation {
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
-/// Short, focused evaluations for Modules within a LearningObject.
+/// Short, focused evaluations for Modules within a LearningProduct.
 /// Contains several optional evaluations depending on the specific 
 /// Module.
 pub struct MicroEvaluation {
@@ -56,9 +56,9 @@ pub struct MicroEvaluation {
 
     pub rapid_response: RapidResponse,
 
-    // Hashmap of a LearningObjective for a module mapped to an 
+    // Hashmap of a LearningProductive for a module mapped to an 
     // assessment of how the module met that objective
-    pub learning_obj_eval: HashMap<ObjectiveStatement, LearningObjectiveResponse>,
+    pub learning_obj_eval: HashMap<ObjectiveStatement, LearningProductiveResponse>,
     pub physical_eval: Option<PhysicalEval>,
     pub digital_eval: Option<DigitalEval>,
     pub personnel_eval: Option<PersonnelEval>,
@@ -72,8 +72,8 @@ pub struct ObjectiveStatement(#[dummy(faker = "Sentence(EN, 1..4)")] String);
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Learner assessment of whether a Module met a specific 
-/// LearningObjective.
-pub enum LearningObjectiveResponse {
+/// LearningProductive.
+pub enum LearningProductiveResponse {
     NotMeet,
     Meet,
     Exceeded,
