@@ -11,6 +11,7 @@ pub mod web_page;
 pub mod content;
 pub mod user;
 pub mod demographic;
+pub mod utilities;
 
 pub use self::learner::{
     Learner,
@@ -37,3 +38,4 @@ pub use self::demographic::{
     Pronouns,
     Ethnicity,
     };
+pub use self::utilities::random_gen_quality;

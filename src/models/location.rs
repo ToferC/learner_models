@@ -31,3 +31,29 @@ pub struct Location {
     #[dummy(faker = "(-3..3)")]
     pub timezone_offset: i32,
 }
+
+impl Default for Location {
+    fn default() -> Self {
+        Location {
+            id: 300,
+            street_number: 186,
+            address: String::from("Place du Portage"),
+            city: String::from("Gatineau"),
+            province: String::from("Quebec"),
+            timezone_offset: 0,
+        }
+    }
+}
+
+impl Location {
+    pub fn new(id: u32, street_no: usize, address: String, city: String, prov: String, tz: i32) -> Self {
+        Location {
+            id: id,
+            street_number: street_no,
+            address: address,
+            city: city,
+            province: prov,
+            timezone_offset: tz,
+        }
+    }
+}

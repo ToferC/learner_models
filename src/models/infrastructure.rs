@@ -1,6 +1,8 @@
 use std::rc::Rc;
 
 use super::{Location, WebPage};
+
+use super::utilities::random_gen_quality;
 use serde::{Serialize, Deserialize};
 
 use fake::{Dummy, Fake, Faker};
@@ -11,6 +13,7 @@ use fake::{Dummy, Fake, Faker};
 pub struct PhysicalInfrastructure {
     pub id: u32,
     pub location_id: u32,
+    pub name: String,
     pub opening_hours: String,
     pub closing_hours: String,
     pub capacity: u32,
@@ -36,6 +39,52 @@ pub struct PhysicalInfrastructure {
 
     pub cost_per_hour: f64,
     pub map_url: String,
+}
+
+impl Default for PhysicalInfrastructure {
+    fn default() -> Self {
+        PhysicalInfrastructure {
+            id: 1000,
+            location_id: 300,
+            name: String::from("Room 300"),
+            opening_hours: String::from("9h00"),
+            closing_hours: String::from("17h00"),
+            capacity: 24,
+            wifi: Some(30),
+            cost_per_hour: 300.0,
+            map_url: String::from("map_url_one"),
+    
+            mock_quality: 0.5,
+            mock_accessible: random_gen_quality(0.3),
+            mock_comfort: random_gen_quality(0.3),
+            mock_cleanliness: random_gen_quality(0.3),
+            mock_pleasant: random_gen_quality(0.3),
+            mock_professional: random_gen_quality(0.3),
+        }
+    }
+}
+
+impl PhysicalInfrastructure {
+    pub fn new(id: u32, location_id: u32, name: String, capacity: u32, quality: f64) -> Self {
+        PhysicalInfrastructure {
+            id: id,
+            location_id: location_id,
+            name: name,
+            opening_hours: String::from("9h00"),
+            closing_hours: String::from("17h00"),
+            capacity: capacity,
+            wifi: Some(30),
+            cost_per_hour: 300.0,
+            map_url: String::from("map_url_one"),
+    
+            mock_quality: quality,
+            mock_accessible: random_gen_quality(quality),
+            mock_comfort: random_gen_quality(quality),
+            mock_cleanliness: random_gen_quality(quality),
+            mock_pleasant: random_gen_quality(quality),
+            mock_professional: random_gen_quality(quality),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]

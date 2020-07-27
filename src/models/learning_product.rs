@@ -85,7 +85,7 @@ pub struct Module {
     pub content: ContentType,
 
     #[dummy(faker = "(Faker, 1..3)")]
-    pub learning_productives: Vec<LearningProductive>,
+    pub learning_objectives: Vec<LearningObjective>,
 
     pub duration_minutes: u32,
     pub experience: ExperienceTemplate,
@@ -106,12 +106,39 @@ pub struct Module {
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
-pub struct LearningProductive {
+/// A learning objective
+pub struct LearningObjective {
     #[dummy(faker = "1..11")]
     pub weight: usize,
-    #[dummy(faker = "Sentence(EN, 1..2)")]
-    pub statement: String
+    pub statement: Statement,
 }
+
+#[derive(Serialize, Deserialize, Debug, Dummy)]
+/// A learning objective stated as "A learner can {verb} {noun}."
+pub struct Statement {
+    verb: Verb,
+
+    #[dummy(faker = "BsNoun(EN)")]
+    noun: String,
+
+    #[dummy(faker = "1..11")]
+    difficulty: usize,
+}
+
+#[derive(Serialize, Deserialize, Debug, Dummy)]
+/// Verb element of a statement for a learning objective
+pub enum Verb {
+    Understand,
+    Describe,
+    Explain,
+    Perform,
+    Design,
+    Build,
+    Teach,
+    WorkWith,
+    ManyMore,
+}
+
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A content type for a learning module
