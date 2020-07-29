@@ -2,6 +2,7 @@ use serde::{Serialize, Deserialize};
 
 use super::learner::Group;
 use super::location::Location;
+use super::utilities::random_gen_quality;
 
 use fake::{Dummy, Fake, Faker};
 use fake::faker::name::raw::*;
@@ -54,4 +55,45 @@ pub enum DeliveryRole {
     Operations,
     Broadcasting,
     Other ( String ),
+}
+
+impl Default for Personnel {
+    fn default() -> Self {
+        Personnel {
+            id: 100,
+            first_name: String::from("Default"),
+            last_name: String::from("Facilitator"),
+            mock_quality: random_gen_quality(0.5),
+            mock_professionalism: random_gen_quality(0.5),
+            mock_pleasant: random_gen_quality(0.5),
+            mock_helpful: random_gen_quality(0.5),
+            error_chance: random_gen_quality(0.5),
+            role: DeliveryRole::Facilitator,
+            group: Group::EC,
+            level: 06,
+            salary: 100_000,
+            work_location_id: 0,
+        }
+    }
+}
+
+impl Personnel {
+    pub fn new(id: u32, fname: String, lname: String, quality: f64, role: DeliveryRole,
+    group: Group, level: usize, salary: u32, work_loc: u32) -> Self {
+        Personnel {
+            id: id,
+            first_name: fname,
+            last_name: lname,
+            mock_quality: quality,
+            mock_professionalism: random_gen_quality(quality),
+            mock_pleasant: random_gen_quality(quality),
+            mock_helpful: random_gen_quality(quality),
+            error_chance: random_gen_quality(quality),
+            role: role,
+            group: group,
+            level: level,
+            salary: salary,
+            work_location_id: work_loc,
+        }
+    }
 }

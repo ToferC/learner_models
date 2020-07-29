@@ -1,5 +1,3 @@
-use std::rc::Rc;
-
 use super::{Location, WebPage};
 
 use super::utilities::random_gen_quality;
@@ -92,7 +90,8 @@ impl PhysicalInfrastructure {
 /// Optionally attached to a Module.
 pub struct DigitalInfrastructure {
     pub id: u32,
-    pub storage: u64,
+    pub name: String,
+    pub storage: u32,
 
     #[dummy(faker = "0.1..0.99")]
     pub mock_quality: f64,
@@ -109,4 +108,44 @@ pub struct DigitalInfrastructure {
     pub cost_per_minute: f64,
     pub capacity: u32,
     pub web_page: WebPage,
+}
+
+impl Default for DigitalInfrastructure {
+    fn default() -> Self {
+        DigitalInfrastructure {
+            id: 1000,
+            name: String::from("Default"),
+            storage: 10_000,
+            mock_quality: 0.5,
+            mock_professional: random_gen_quality(0.5),
+            mock_smooth: random_gen_quality(0.5),
+            mock_accessible: random_gen_quality(0.5),
+            cost_per_minute: 0.034,
+            capacity: 1000,
+            web_page: WebPage {
+                url: String::from("default_url"),
+                access_conversions: Faker.fake()
+            },
+        }
+    }
+}
+
+impl DigitalInfrastructure {
+    pub fn new(id: u32, name: String, cost: f64, capacity: u32, storage: u32, quality: f64) -> Self {
+        DigitalInfrastructure {
+            id: id,
+            name: name,
+            storage: storage,
+            mock_quality: quality,
+            mock_accessible: random_gen_quality(quality),
+            mock_smooth: random_gen_quality(quality),
+            mock_professional: random_gen_quality(quality),
+            cost_per_minute: cost,
+            capacity: capacity,
+            web_page: WebPage {
+                url: String::from("default_url"),
+                access_conversions: Faker.fake()
+            },
+        }
+    }
 }

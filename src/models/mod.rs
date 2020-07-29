@@ -19,13 +19,14 @@ pub use self::learner::{
     Audience,
     Role,
     Organization,
+    Group,
 };
 
 pub use self::experience::{Experience, Stream, LearningStyle};
 pub use self::location::Location;
 pub use self::evaluation::{Evaluation, MicroEvaluation};
 pub use self::registration::{Registration, Offering, Referral};
-pub use self::personnel::Personnel;
+pub use self::personnel::{Personnel, DeliveryRole};
 pub use self::quiz::Quiz;
 pub use self::learning_product::{LearningProduct, Module, ContentType};
 pub use self::infrastructure::{PhysicalInfrastructure, DigitalInfrastructure};
@@ -38,4 +39,4 @@ pub use self::demographic::{
     Pronouns,
     Ethnicity,
     };
-pub use self::utilities::random_gen_quality;
+pub use self::utilities::{random_gen_quality, test_plot};

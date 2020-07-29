@@ -8,10 +8,10 @@ use fake::locales::*;
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 pub struct WebPage {
-    url: String,
+    pub url: String,
     // Vec of AccessConversions
     #[dummy(faker = "(Faker, 2..4)")]
-    access_conversions: Vec<AccessConversion>,
+    pub access_conversions: Vec<AccessConversion>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
