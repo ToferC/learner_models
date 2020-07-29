@@ -45,6 +45,51 @@ pub struct LearningProduct {
     // Question: Do we have version control built in?
 }
 
+impl Default for LearningProduct {
+    fn default() -> Self {
+        LearningProduct {
+            id: 100,
+            name: String::from("Discover Digital"),
+            description: String::from("Discover Digital series 1"),
+            image: Faker.fake(),
+            modules: Vec::new(),
+            target_audience: vec![Audience::Employee, Audience::Manager],
+            communities: vec![Role::All],
+            web_page: Faker.fake(),
+            hashtag: String::from("#DiscoverDigital"),
+            business_line: BusinessLine::DigitalAcademy,
+            status: Status::Pilot,
+            created: Faker.fake(),
+            updated: Vec::new(),
+            shut_down: None,
+        }
+    }
+}
+
+impl LearningProduct {
+    pub fn new(
+        id: u32, name: String, description: String, audience: Audience, community: Role,
+        hashtag: String, business_line: BusinessLine, status: Status
+    ) -> LearningProduct {
+        LearningProduct {
+            id: id,
+            name: name,
+            description: description,
+            image: Faker.fake(),
+            modules: Vec::new(),
+            target_audience: vec![audience,],
+            communities: vec![community,],
+            web_page: Faker.fake(),
+            hashtag: hashtag,
+            business_line: business_line,
+            status: status,
+            created: Faker.fake(),
+            updated: Vec::new(),
+            shut_down: None,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A state of preparation and production for 
 /// a learning object
@@ -114,7 +159,8 @@ pub struct LearningObjective {
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
-/// A learning objective stated as "A learner can {verb} {noun}."
+/// A learning objective of a module describing intended outcomes.
+/// Expressed as "A learner can {verb} {noun}."
 pub struct Statement {
     verb: Verb,
 
