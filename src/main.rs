@@ -10,7 +10,9 @@ use fake::{Faker, Fake};
 
 use models::{Learner, Registration, Location, 
     PhysicalInfrastructure, test_plot,
-    DigitalInfrastructure, Personnel, Group, DeliveryRole};
+    DigitalInfrastructure, Personnel, Group, DeliveryRole,
+    LearningProduct, Module, Audience, Role, BusinessLine,
+    Status};
 
 fn main() {
 
@@ -100,6 +102,31 @@ fn main() {
 
     // Create Learning Products
 
+    let mut lp1 = LearningProduct::new(
+        100, 
+        String::from("Discover Digital"), 
+        String::from("Discover digital is..."), 
+        Audience::Employee, 
+        Role::All, 
+        String::from("#DiscoverDigital"), 
+        BusinessLine::DigitalAcademy, 
+        Status::Pilot,
+    );
+
+    // Add modules
+
+    let mut lp2 = LearningProduct::new(
+        100, 
+        String::from("Intro to Security"), 
+        String::from("Security is everyone's business..."), 
+        Audience::Employee, 
+        Role::All, 
+        String::from("#P901"), 
+        BusinessLine::GCSkills, 
+        Status::Production,
+    );
+
+    // Add modules
 
     // Create learner loop
 

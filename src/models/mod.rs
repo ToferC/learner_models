@@ -28,7 +28,8 @@ pub use self::evaluation::{Evaluation, MicroEvaluation};
 pub use self::registration::{Registration, Offering, Referral};
 pub use self::personnel::{Personnel, DeliveryRole};
 pub use self::quiz::Quiz;
-pub use self::learning_product::{LearningProduct, Module, ContentType};
+pub use self::learning_product::{LearningProduct, Module, ContentType,
+    BusinessLine, Status};
 pub use self::infrastructure::{PhysicalInfrastructure, DigitalInfrastructure};
 pub use self::web_page::WebPage;
 pub use self::content::{Image, TimeStringEarly, TimeStringLate, TimeString};
