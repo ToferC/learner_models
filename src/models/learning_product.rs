@@ -20,6 +20,7 @@ use super::{Stream, Quiz, LearningStyle,
 /// contain several.
 pub struct LearningProduct {
     pub id: u32,
+    pub code: String,
     pub name: String,
     pub description: String,
     pub image: Image,
@@ -49,6 +50,7 @@ impl Default for LearningProduct {
     fn default() -> Self {
         LearningProduct {
             id: 100,
+            code: String::from("I501"),
             name: String::from("Discover Digital"),
             description: String::from("Discover Digital series 1"),
             image: Faker.fake(),
@@ -68,12 +70,13 @@ impl Default for LearningProduct {
 
 impl LearningProduct {
     pub fn new(
-        id: u32, name: String, description: String, audience: Audience, community: Role,
+        id: u32, name: String, code: String, description: String, audience: Audience, community: Role,
         hashtag: String, business_line: BusinessLine, status: Status
     ) -> LearningProduct {
         LearningProduct {
             id: id,
             name: name,
+            code: code,
             description: description,
             image: Faker.fake(),
             modules: Vec::new(),
@@ -137,38 +140,134 @@ pub struct Module {
     pub quiz: Option<Quiz>,
     pub web_page: WebPage,
 
-    #[dummy(faker = "1..11")]
-    pub mock_quality: usize,
+    #[dummy(faker = "0.3..0.99")]
+    pub mock_quality: f64,
 
     // Infrastructure & Resources
-    pub physicial_infrastructure: Option<PhysicalInfrastructure>,
-    pub digital_infrastructure: Option<DigitalInfrastructure>,
+    pub physicial_infrastructure_id: Option<u32>,
+    pub digital_infrastructure_id: Option<u32>,
     
     #[dummy(faker = "(Faker, 2..3)")]
-    pub personnel: Option<Vec<Personnel>>,
-    
-    pub completed: bool,
+    pub personnel_ids: Option<Vec<u32>>,
+    }
+
+impl Default for Module {
+    fn default() -> Self {
+        Module {
+            id: 100,
+            code: String::from("I501"),
+            name: String::from("Discover Data"),
+            description: String::from("Data is transforming our world..."),
+            image: Faker.fake(),
+            learning_styles: vec![LearningStyle::Study,],
+            content: ContentType::OnlineFacilitated,
+            learning_objectives: Faker.fake(),
+            duration_minutes: 90,
+            experience: Faker.fake(),
+            quiz: None,
+            web_page: Faker.fake(),
+            mock_quality: 0.5,
+            physicial_infrastructure_id: None,
+            digital_infrastructure_id: None,
+            personnel_ids: None,
+        }
+    }
+}
+
+impl Module {
+    pub fn new(
+        id: u32,
+        code: String,
+        name: String,
+        description: String,
+        learning_styles: Vec<LearningStyle>,
+        content: ContentType,
+        learning_obj: Vec<LearningObjective>,
+        duration: u32,
+        quality: f64,
+    ) -> Self {
+        Module {
+            id: id,
+            code: code,
+            name: name,
+            description: description,
+            image: Faker.fake(),
+            learning_styles: learning_styles,
+            content: content,
+            learning_objectives: learning_obj,
+            duration_minutes: duration,
+            experience: Faker.fake(),
+            quiz: None,
+            web_page: Faker.fake(),
+            mock_quality: quality,
+            physicial_infrastructure_id: None,
+            digital_infrastructure_id: None,
+            personnel_ids: None,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A learning objective
 pub struct LearningObjective {
-    #[dummy(faker = "1..11")]
-    pub weight: usize,
+    #[dummy(faker = "0.1..0.99")]
+    pub weight: f64,
     pub statement: Statement,
+}
+
+impl Default for LearningObjective {
+    fn default() -> Self {
+        LearningObjective {
+            weight: 0.5,
+            statement: Statement::default(),
+        }
+    }
+}
+
+impl LearningObjective {
+    pub fn new(weight: f64, statement: Statement) -> Self {
+        LearningObjective {
+            weight: weight,
+            statement: statement,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A learning objective of a module describing intended outcomes.
 /// Expressed as "A learner can {verb} {noun}."
 pub struct Statement {
-    verb: Verb,
+    pub verb: Verb,
 
     #[dummy(faker = "BsNoun(EN)")]
-    noun: String,
+    pub noun: String,
 
-    #[dummy(faker = "1..11")]
-    difficulty: usize,
+    #[dummy(faker = "0.1..0.99")]
+    pub difficulty: f64,
+}
+
+impl Default for Statement {
+    fn default() -> Self {
+        Statement {
+            verb: Verb::Understand,
+            noun: String::from("Concept"),
+            difficulty: 0.5,
+        }
+    }
+}
+
+impl Statement {
+    pub fn new(
+        verb: Verb,
+        noun: String,
+        diff: f64,
+    ) -> Self {
+        Statement {
+            verb: Verb::Understand,
+            noun: String::from("Concept"),
+            difficulty: 0.5,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]

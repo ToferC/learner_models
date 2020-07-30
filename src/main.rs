@@ -12,7 +12,8 @@ use models::{Learner, Registration, Location,
     PhysicalInfrastructure, test_plot,
     DigitalInfrastructure, Personnel, Group, DeliveryRole,
     LearningProduct, Module, Audience, Role, BusinessLine,
-    Status};
+    Status, LearningStyle, LearningObjective, ContentType,
+    Statement, Verb};
 
 fn main() {
 
@@ -102,9 +103,12 @@ fn main() {
 
     // Create Learning Products
 
+    // Product 1 - online learning
+
     let mut lp1 = LearningProduct::new(
         100, 
-        String::from("Discover Digital"), 
+        String::from("Discover Digital"),
+        String::from("I501"),
         String::from("Discover digital is..."), 
         Audience::Employee, 
         Role::All, 
@@ -115,9 +119,66 @@ fn main() {
 
     // Add modules
 
+    let mut lp1_m1 = Module::new(
+        101, 
+        String::from("I501-1"), 
+        String::from("Digital Standards"), 
+        String::from("The Digital Standards are..."), 
+        vec![
+            LearningStyle::Watch,
+            ], 
+        ContentType::Asyncronous, 
+        vec![
+            LearningObjective::new(0.5, Statement::new(
+                Verb::Understand,
+                String::from("Digital Standards"),
+                0.3)
+            ),
+            LearningObjective::new(0.5, Statement::new(
+                Verb::Understand,
+                String::from("Applications of standards in the GC"),
+                0.3)
+            ),
+            ], 
+        90, 
+        0.7,
+    );
+
+    lp1_m1.digital_infrastructure_id = Some(101);
+
+    let mut lp1_m2 = Module::new(
+        102, 
+        String::from("I501-2"), 
+        String::from("Your Organization"), 
+        String::from("Each department has its own strengths and..."), 
+        vec![
+            LearningStyle::Discuss,
+            ], 
+        ContentType::OnlineFacilitated, 
+        vec![
+            LearningObjective::new(0.5, Statement::new(
+                Verb::Describe,
+                String::from("Examples of the digital standards in use"),
+                0.3)
+            ),
+            LearningObjective::new(0.5, Statement::new(
+                Verb::Explain,
+                String::from("Why applications of the standards make things better."),
+                0.3)
+            ),
+            ], 
+        45, 
+        0.8,
+    );
+
+    lp1_m2.digital_infrastructure_id = Some(102);
+
+    // Product 2 - in-person learning
+
     let mut lp2 = LearningProduct::new(
-        100, 
-        String::from("Intro to Security"), 
+        200, 
+        String::from("Intro to Security"),
+        String::from("P901"),
         String::from("Security is everyone's business..."), 
         Audience::Employee, 
         Role::All, 
@@ -128,7 +189,21 @@ fn main() {
 
     // Add modules
 
-    // Create learner loop
+    // product 3 - event
+
+    let mut lp3 = LearningProduct::new(
+        300, 
+        String::from("Returning to Work: What you need to know"),
+        String::from("E311"),
+        String::from("Many people have questions..."), 
+        Audience::Employee, 
+        Role::All, 
+        String::from("#ReturnToWork"), 
+        BusinessLine::RespectfulInclusiveWorkplace, 
+        Status::Production,
+    );
+
+    // Create learner creation and registration loop
 
 
     // Push evaluation data into vecs
