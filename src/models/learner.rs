@@ -38,8 +38,8 @@ pub struct Learner {
     /// attitude. A low alignment represents a learner that will 
     /// not like anything, a high alignment learner will like 
     /// almost any experience.
-    #[dummy(faker = "1..11")]
-    mock_learner_alignment: usize,
+    #[dummy(faker = "0.1..0.8")]
+    mock_learner_alignment: f64,
 
     #[dummy(faker = "(Faker, 4..10)")]
     pub data_access_log: Vec<DataAccessLog>,

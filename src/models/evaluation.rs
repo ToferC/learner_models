@@ -11,6 +11,8 @@ use fake::faker::lorem::raw::*;
 use fake::faker::company::raw::*;
 use fake::locales::*;
 
+use super::{LearningObjective, Module, PhysicalInfrastructure, DigitalInfrastructure, Personnel};
+
 use serde::{Serialize, Deserialize};
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
@@ -41,6 +43,8 @@ pub struct Evaluation {
     pub micro_evaluations: Vec<MicroEvaluation>,
 }
 
+
+
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Short, focused evaluations for Modules within a LearningProduct.
 /// Contains several optional evaluations depending on the specific 
@@ -58,7 +62,7 @@ pub struct MicroEvaluation {
 
     // Hashmap of a LearningProductive for a module mapped to an 
     // assessment of how the module met that objective
-    pub learning_obj_eval: HashMap<ObjectiveStatement, LearningProductiveResponse>,
+    pub learning_obj_eval: Vec<(LearningObjective, LearningProductiveResponse)>,
     pub physical_eval: Option<PhysicalEval>,
     pub digital_eval: Option<DigitalEval>,
     pub personnel_eval: Option<PersonnelEval>,
@@ -66,9 +70,6 @@ pub struct MicroEvaluation {
     pub seen: bool,
     pub completed: bool,
 }
-
-#[derive(Serialize, Deserialize, Debug, Dummy, Hash, Eq, PartialEq)]
-pub struct ObjectiveStatement(#[dummy(faker = "Sentence(EN, 1..4)")] String);
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Learner assessment of whether a Module met a specific 
@@ -89,12 +90,10 @@ pub struct RapidResponse {
     pub rating_1_10: usize,
 
     // Positive
-    pub accessible: bool,
     pub clear: bool,
     pub entertaining: bool,
     pub relevant: bool,
     pub informative: bool,
-    pub insightful: bool,
     pub useful: bool,
     pub inclusive: bool,
 
@@ -103,6 +102,17 @@ pub struct RapidResponse {
     pub too_difficult: bool,
     pub too_long: bool,
     pub too_short: bool,
+}
+
+impl RapidResponse {
+    pub fn generate_response(module_qualities: &[f64; 8], learner_openness: f64) -> RapidResponse {
+
+        let [clear, entertaining, relevant, informative, useful, inclusive, difficulty, length] = module_qualities;
+
+        let y = entertaining * relevant;
+
+        RapidResponse{}
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]

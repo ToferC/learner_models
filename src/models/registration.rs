@@ -1,7 +1,7 @@
 use chrono::prelude::*;
 use serde::{Serialize, Deserialize};
 
-use fake::{Dummy, Fake};
+use fake::{Dummy, Fake, Faker};
 
 use fake::faker::chrono::raw::*;
 use chrono::Utc;
@@ -18,12 +18,12 @@ pub struct Registration {
 
     pub id: u32,
 
-    pub learner: Learner,
+    pub learner_id: u32,
 
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
     pub date_stamp: String,
 
-    pub offering: Offering,
+    pub offering_id: u32,
     pub referral_source: Referral,
 
     #[dummy(faker = "Boolean(70)")]
@@ -32,20 +32,45 @@ pub struct Registration {
     pub cancelled: bool,
 }
 
+impl Default for Registration {
+    fn default() -> Self {
+        Registration {
+            id: 100,
+            learner_id: 100,
+            date_stamp: String::from("2020-06-01"),
+            offering_id: 100,
+            referral_source: Faker.fake(),
+            completed: true,
+            cancelled: false,
+        }
+    }
+}
+
+impl Registration {
+    pub fn new(id: u32, learner_id: u32, date_stamp: String, offering_id: u32, completed: bool, cancelled: bool) -> Self {
+        Registration {
+            id: id,
+            learner_id: learner_id,
+            date_stamp: date_stamp,
+            offering_id: offering_id,
+            referral_source: Faker.fake(),
+            completed: completed,
+            cancelled: cancelled,
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// A specific offering of a learning object. Also serves as 
 /// the placholder for an overall evaluation of CSPS learning 
 /// content.
 pub struct Offering {
     pub id: u32,
-    pub learning_product: LearningProduct,
-    pub evaluation: Evaluation,
+    pub learning_product_id: u32,
+    pub evaluation_id: u32,
 
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
     pub start_date: String,
-
-    //#[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
-    //pub end_date: String,
 
     #[dummy(faker = "Boolean(5)")]
     pub cancelled: bool,
@@ -53,6 +78,21 @@ pub struct Offering {
     #[dummy(faker = "Boolean(80)")]
     pub completed: bool,
 }
+
+impl Offering {
+    pub fn new(id: u32, learning_prod_id: u32, eval_id: u32, start_date: String, cancelled: bool, completed: bool) -> Self {
+        Offering {
+            id: id,
+            learning_product_id: learning_prod_id,
+            evaluation_id: eval_id,
+            start_date: start_date,
+            cancelled: cancelled,
+            completed: completed,
+        }
+    }
+}
+
+
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Referral data for a registration. Contains a String which can
@@ -62,4 +102,10 @@ pub enum Referral {
     Social( String ),
     Newsletter( String ),
     Direct,
+}
+
+impl Default for Referral {
+    fn default() -> Self {
+        Referral::Email (String::from("campaign_1"))
+    }
 }

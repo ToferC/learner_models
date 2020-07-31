@@ -12,7 +12,8 @@ use chrono::Utc;
 use super::{Stream, Quiz, LearningStyle, 
     Personnel, Audience, Role, 
     PhysicalInfrastructure, DigitalInfrastructure,
-    WebPage, Image, TimeString, TimeStringEarly, TimeStringLate};
+    WebPage, Image, TimeString, TimeStringEarly, TimeStringLate,
+    random_gen_quality};
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Represents a high level learning object such as a course
@@ -143,6 +144,25 @@ pub struct Module {
     #[dummy(faker = "0.3..0.99")]
     pub mock_quality: f64,
 
+    #[dummy(faker = "0.3..0.99")]
+    pub mock_clear: f64,
+    #[dummy(faker = "0.3..0.99")]
+    pub mock_entertaining: f64,
+    #[dummy(faker = "0.3..0.99")]
+    pub mock_relevant: f64,
+    #[dummy(faker = "0.3..0.99")]
+    pub mock_infomative: f64,
+    #[dummy(faker = "0.3..0.99")]
+    pub mock_useful: f64,
+    #[dummy(faker = "0.3..0.99")]
+    pub mock_inclusive: f64,
+
+    #[dummy(faker = "0.3..0.99")]
+    pub mock_difficulty: f64,
+
+    #[dummy(faker = "0.3..0.99")]
+    pub mock_length: f64,
+
     // Infrastructure & Resources
     pub physicial_infrastructure_id: Option<u32>,
     pub digital_infrastructure_id: Option<u32>,
@@ -167,6 +187,17 @@ impl Default for Module {
             quiz: None,
             web_page: Faker.fake(),
             mock_quality: 0.5,
+            mock_clear: random_gen_quality(0.5),
+            mock_entertaining: random_gen_quality(0.5),
+            mock_relevant: random_gen_quality(0.5),
+            mock_infomative: random_gen_quality(0.5),
+            mock_useful: random_gen_quality(0.5),
+            mock_inclusive: random_gen_quality(0.5),
+
+            mock_difficulty: random_gen_quality(0.5),
+
+            mock_length: random_gen_quality(0.5),
+
             physicial_infrastructure_id: None,
             digital_infrastructure_id: None,
             personnel_ids: None,
@@ -200,6 +231,14 @@ impl Module {
             quiz: None,
             web_page: Faker.fake(),
             mock_quality: quality,
+            mock_clear: random_gen_quality(quality),
+            mock_entertaining: random_gen_quality(quality),
+            mock_relevant: random_gen_quality(quality),
+            mock_infomative: random_gen_quality(quality),
+            mock_useful: random_gen_quality(quality),
+            mock_inclusive: random_gen_quality(quality),
+            mock_difficulty: random_gen_quality(quality),
+            mock_length: random_gen_quality(quality),
             physicial_infrastructure_id: None,
             digital_infrastructure_id: None,
             personnel_ids: None,

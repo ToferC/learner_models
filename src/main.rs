@@ -13,7 +13,7 @@ use models::{Learner, Registration, Location,
     DigitalInfrastructure, Personnel, Group, DeliveryRole,
     LearningProduct, Module, Audience, Role, BusinessLine,
     Status, LearningStyle, LearningObjective, ContentType,
-    Statement, Verb};
+    Statement, Verb, Offering, Evaluation};
 
 fn main() {
 
@@ -82,7 +82,7 @@ fn main() {
 
     let d2 = DigitalInfrastructure::new(
         101,
-        String::from("Discover Data Video 2"),
+        String::from("Discover Data Discussion"),
         0.45,
         1000,
         10_000,
@@ -107,12 +107,12 @@ fn main() {
 
     let mut lp1 = LearningProduct::new(
         100, 
-        String::from("Discover Digital"),
+        String::from("Discover Data"),
         String::from("I501"),
-        String::from("Discover digital is..."), 
+        String::from("Discover data is..."), 
         Audience::Employee, 
         Role::All, 
-        String::from("#DiscoverDigital"), 
+        String::from("#DiscoverData"), 
         BusinessLine::DigitalAcademy, 
         Status::Pilot,
     );
@@ -122,8 +122,8 @@ fn main() {
     let mut lp1_m1 = Module::new(
         101, 
         String::from("I501-1"), 
-        String::from("Digital Standards"), 
-        String::from("The Digital Standards are..."), 
+        String::from("Intro to data"), 
+        String::from("Data is the lifeblood of any organization..."), 
         vec![
             LearningStyle::Watch,
             ], 
@@ -131,12 +131,12 @@ fn main() {
         vec![
             LearningObjective::new(0.5, Statement::new(
                 Verb::Understand,
-                String::from("Digital Standards"),
+                String::from("what data is and how it works"),
                 0.3)
             ),
             LearningObjective::new(0.5, Statement::new(
                 Verb::Understand,
-                String::from("Applications of standards in the GC"),
+                String::from("How data is used in the GC"),
                 0.3)
             ),
             ], 
@@ -144,12 +144,12 @@ fn main() {
         0.7,
     );
 
-    lp1_m1.digital_infrastructure_id = Some(101);
+    lp1_m1.digital_infrastructure_id = Some(0);
 
     let mut lp1_m2 = Module::new(
         102, 
         String::from("I501-2"), 
-        String::from("Your Organization"), 
+        String::from("Data in Your Organization"), 
         String::from("Each department has its own strengths and..."), 
         vec![
             LearningStyle::Discuss,
@@ -171,8 +171,13 @@ fn main() {
         0.8,
     );
 
-    lp1_m2.digital_infrastructure_id = Some(102);
+    // Add digital infrastructure index reference
+    lp1_m2.digital_infrastructure_id = Some(1);
 
+    // Add personnel index reference
+    lp1_m2.personnel_ids = Some(vec![1]);
+
+    /*
     // Product 2 - in-person learning
 
     let mut lp2 = LearningProduct::new(
@@ -203,7 +208,62 @@ fn main() {
         Status::Production,
     );
 
+    */
+
     // Create learner creation and registration loop
+
+    // Create vecs for sim
+    let mut offerings: Vec<Offering> = Vec::new();
+
+    let mut learners: Vec<Learner> = Vec::new();
+
+    let mut registrations: Vec<Registration> = Vec::new();
+
+    let mut evaluations: Vec<Evaluation> = Vec::new();
+
+    // Create offerings
+
+    for i in 1..10 {
+        let o = Offering::new(
+            777 + i, 
+            100,
+            888 + i, 
+            String::from(format!("2020-06-0{}", i)),
+            false, 
+            true,
+        );
+
+        offerings.push(o);
+    }
+
+    // create learners and registrations to offerings
+
+    for (i, o) in offerings.iter().enumerate() {
+
+        for p in 1..500 {
+            // create learners
+            let mut l: Learner = Faker.fake();
+
+            let l_id = i as u32 * 1000 + p;
+            l.id = l_id;
+
+            learners.push(l);
+
+
+            // create registration
+            let mut r = Registration::new(
+                i as u32 * 10_000 + p,
+                l_id, 
+                o.start_date.to_owned(), 
+                o.id, 
+                true, 
+                false);
+
+
+            // create evaluations
+        }
+
+    }
 
 
     // Push evaluation data into vecs
