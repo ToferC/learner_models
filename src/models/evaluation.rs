@@ -1,6 +1,7 @@
 use std::collections::HashMap;
 
 use chrono::prelude::*;
+use rand::prelude::*;
 
 use fake::faker::chrono::raw::*;
 use chrono::Utc;
@@ -11,7 +12,8 @@ use fake::faker::lorem::raw::*;
 use fake::faker::company::raw::*;
 use fake::locales::*;
 
-use super::{LearningObjective, Module, PhysicalInfrastructure, DigitalInfrastructure, Personnel};
+use super::{LearningObjective, Module, PhysicalInfrastructure, DigitalInfrastructure, Personnel,
+    THRESHOLD, random_gen_quality};
 
 use serde::{Serialize, Deserialize};
 
@@ -105,13 +107,15 @@ pub struct RapidResponse {
 }
 
 impl RapidResponse {
-    pub fn generate_response(module_qualities: &[f64; 8], learner_openness: f64) -> RapidResponse {
+    pub fn generate_response(module_qualities: &[f64; 8], learner_openness: f64) {
 
         let [clear, entertaining, relevant, informative, useful, inclusive, difficulty, length] = module_qualities;
 
-        let y = entertaining * relevant;
+        let c = random_gen_quality(*clear); // creates a bell curve around the mock_entertain quality
 
-        RapidResponse{}
+        if c >= learner_openness {
+            println!("True") 
+        }
     }
 }
 

@@ -40,4 +40,4 @@ pub use self::demographic::{
     Pronouns,
     Ethnicity,
     };
-pub use self::utilities::{random_gen_quality, test_plot};
+pub use self::utilities::{random_gen_quality, test_plot, THRESHOLD};

@@ -7,6 +7,8 @@ use rand_xorshift::XorShiftRng;
 
 use plotters::prelude::*;
 
+pub const THRESHOLD: f64 = 0.2;
+
 /// randomly generate floats based on a mean quality ranking
 pub fn random_gen_quality(quality: f64) -> f64 {
 
