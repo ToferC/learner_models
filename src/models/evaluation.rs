@@ -107,14 +107,39 @@ pub struct RapidResponse {
 }
 
 impl RapidResponse {
-    pub fn generate_response(module_qualities: &[f64; 8], learner_openness: f64) {
+    pub fn generate_response(module_qualities: &[f64; 9], learner_openness: f64) -> RapidResponse {
 
-        let [clear, entertaining, relevant, informative, useful, inclusive, difficulty, length] = module_qualities;
+        let mut qual_responses: Vec<bool> = Vec::new();
 
-        let c = random_gen_quality(*clear); // creates a bell curve around the mock_entertain quality
+        let mut rng = rand::thread_rng();
 
-        if c >= learner_openness {
-            println!("True") 
+        for v in module_qualities {
+            // learner openness determines the quality value that
+            // the learner is willing to recognize
+            let x = v * learner_openness;
+
+            if rng.gen_range(0.01, 1.00) < x - THRESHOLD {
+                qual_responses.push(true)
+            } else {
+                qual_responses.push(false)
+            };
+        };
+
+
+
+        RapidResponse {
+            would_recommend: true,
+            rating_1_10: qual_responses.iter().filter(|x| *x == &true).count(),
+            clear: qual_responses[1],
+            entertaining: qual_responses[2],
+            relevant: qual_responses[3],
+            informative: qual_responses[4],
+            useful: qual_responses[5],
+            inclusive: qual_responses[6],
+            too_easy: qual_responses[7],
+            too_difficult: !qual_responses[7],
+            too_long: qual_responses[8],
+            too_short: !qual_responses[8],
         }
     }
 }
@@ -123,8 +148,6 @@ impl RapidResponse {
 /// Optional true or false responses for evaluating 
 /// PhysicalInfrastructure
 pub struct PhysicalEval {
-    #[dummy(faker = "1..11")]
-    pub module: usize,
     pub clean: bool,
     pub pleasant: bool,
     pub comfortable: bool,
@@ -132,25 +155,104 @@ pub struct PhysicalEval {
     pub accessible: bool,
 }
 
+impl PhysicalEval {
+    pub fn generate_response(module_qualities: &[f64; 5], learner_openness: f64) -> PhysicalEval{
+
+        let mut qual_responses: Vec<bool> = Vec::new();
+
+        let mut rng = rand::thread_rng();
+
+        for v in module_qualities {
+            // learner openness determines the quality value that
+            // the learner is willing to recognize
+            let x = v * learner_openness;
+
+            if rng.gen_range(0.01, 1.00) < x {
+                qual_responses.push(true)
+            } else {
+                qual_responses.push(false)
+            };
+        };
+
+        PhysicalEval {
+            clean: qual_responses[0],
+            pleasant: qual_responses[1],
+            comfortable: qual_responses[2],
+            professional: qual_responses[3],
+            accessible: qual_responses[4],
+        }
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Optional true or false responses for evaluating Personnel
 pub struct PersonnelEval {
-    #[dummy(faker = "1..11")]
-    pub module: usize,
     pub pleasant: bool,
     pub helpful: bool,
     pub professional: bool,
+}
+
+impl PersonnelEval {
+    pub fn generate_response(module_qualities: &[f64; 3], learner_openness: f64) -> PersonnelEval {
+
+        let mut qual_responses: Vec<bool> = Vec::new();
+
+        let mut rng = rand::thread_rng();
+
+        for v in module_qualities {
+            // learner openness determines the quality value that
+            // the learner is willing to recognize
+            let x = v * learner_openness;
+
+            if rng.gen_range(0.01, 1.00) < x {
+                qual_responses.push(true)
+            } else {
+                qual_responses.push(false)
+            };
+        };
+
+        PersonnelEval {
+            pleasant: qual_responses[0],
+            helpful: qual_responses[1],
+            professional: qual_responses[2],
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// Optional true or false responses for evaluating 
 /// DigitalInfrastructure
 pub struct DigitalEval {
-    #[dummy(faker = "1..11")]
-    pub module: usize,
     pub smooth: bool,
     pub accessible: bool,
     pub professional: bool,
+}
+
+impl DigitalEval {
+    pub fn generate_response(module_qualities: &[f64; 3], learner_openness: f64) -> DigitalEval{
+
+        let mut qual_responses: Vec<bool> = Vec::new();
+
+        let mut rng = rand::thread_rng();
+
+        for v in module_qualities {
+            // learner openness determines the quality value that
+            // the learner is willing to recognize
+            let x = v * learner_openness;
+
+            if rng.gen_range(0.01, 1.00) < x {
+                qual_responses.push(true)
+            } else {
+                qual_responses.push(false)
+            };
+        };
+
+        DigitalEval {
+            smooth: qual_responses[0],
+            accessible: qual_responses[1],
+            professional: qual_responses[2],
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
