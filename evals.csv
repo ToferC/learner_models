@@ -1,0 +1,11 @@
+id,module,date_stamp,recommend,rating,clear,entertaining,relevant,informative,useful,inclusive,easy,difficult,long,short,lo_1,lo_2
+101,101,2020-06-01,true,7,true,true,false,false,false,true,false,false,false,false,NotMeet,Meet
+102,101,2020-06-01,true,6,true,true,false,false,false,true,false,false,false,false,Meet,Exceeded
+103,101,2020-06-01,false,5,false,false,false,true,false,false,false,false,false,false,Exceeded,NotMeet
+104,101,2020-06-01,true,10,false,true,true,false,false,false,false,false,false,false,Exceeded,Exceeded
+105,101,2020-06-01,false,4,false,false,false,false,false,true,false,false,false,false,Meet,Meet
+106,101,2020-06-01,true,7,false,true,false,true,false,true,false,false,false,false,NotMeet,Meet
+107,101,2020-06-01,true,7,false,false,false,false,false,true,false,false,false,false,Exceeded,Exceeded
+108,101,2020-06-01,true,7,false,false,false,false,false,true,false,false,false,false,NotMeet,Exceeded
+109,101,2020-06-01,true,7,false,false,false,false,false,true,false,false,false,false,Meet,Meet
+110,101,2020-06-01,true,9,false,true,false,true,true,false,false,false,false,false,Exceeded,NotMeet

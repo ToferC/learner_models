@@ -2,6 +2,7 @@ mod models;
 
 use chrono::prelude::*;
 use serde_json::{Result, Value};
+use serde::{Serialize, Deserialize};
 
 use std::fs::File;
 use std::collections::HashMap;
@@ -13,7 +14,8 @@ use models::{Learner, Registration, Location,
     DigitalInfrastructure, Personnel, Group, DeliveryRole,
     LearningProduct, Module, Audience, Role, BusinessLine,
     Status, LearningStyle, LearningObjective, ContentType,
-    Statement, Verb, Offering, Evaluation, MicroEvaluation};
+    Statement, Verb, Offering, Evaluation, MicroEvaluation,
+    random_gen_quality, LearningObjectiveResponse};
 
 fn main() {
 
@@ -268,18 +270,46 @@ fn main() {
 
     println!("EVALUATIONS");
 
-    let mut micro_evals = Vec::new();
+    // let mut micro_evals = Vec::new();
 
-    for _i in 1..11 {
-        let me = MicroEvaluation::generate_micro_eval(100, &lp1_m1, 0.55, String::from("2020-06-01"));
+    // csv of evaluations
+    let mut wtr = csv::Writer::from_path("evals.csv").unwrap();
+    // write headers
+
+    for i in 1..11 {
+        let me = MicroEvaluation::generate_micro_eval(100 + i, &lp1_m1, random_gen_quality(0.65), String::from("2020-06-01"));
     
-        println!("{:?}", &me);
+        //println!("{:?}", &me);
 
-        micro_evals.push(me);
+        //micro_evals.push(me.clone());
+
+        let resp = &me.rapid_response.unwrap();
+
+        let mut learning_obj_eval_results = Vec::new();
+
+        if let Some(lo_eval) = me.learning_obj_eval {
+            for l in lo_eval {
+                learning_obj_eval_results.push(l.1);
+            }
+        };
+
+        let eCSV = EvalCSV::new(
+                me.id, me.module, me.date_stamp.to_owned(), resp.would_recommend, resp.rating_1_10,
+                resp.clear, resp.entertaining, resp.relevant, resp.informative,
+                resp.useful, resp.inclusive, resp.too_easy, resp.too_difficult,
+                resp.too_long, resp.too_short, learning_obj_eval_results[0],
+                learning_obj_eval_results[1],
+        );
+
+        wtr.serialize(&eCSV).unwrap();
+
     }
     
     // Save micro-evals to file for review
-    serde_json::to_writer(&File::create("evals.json").unwrap(), &micro_evals);
+    // serde_json::to_writer(&File::create("evals.json").unwrap(), &micro_evals);
+
+    wtr.flush().unwrap();
+
 
     // Push evaluation data into vecs
 
@@ -302,4 +332,67 @@ fn main() {
         Err(error) => panic!("Problem plotting: {:}", error),
     };
     */
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct EvalCSV {
+    pub id: u32, 
+    pub module: usize, 
+    pub date_stamp: String, 
+    pub recommend: bool, 
+    pub rating: usize, 
+    pub clear: bool, 
+    pub entertaining: bool,
+    pub relevant: bool, 
+    pub informative: bool, 
+    pub useful: bool, 
+    pub inclusive: bool, 
+    pub easy: bool, 
+    pub difficult: bool, 
+    pub long: bool, 
+    pub short: bool, 
+    pub lo_1: LearningObjectiveResponse, 
+    pub lo_2: LearningObjectiveResponse,
+}
+
+impl EvalCSV {
+    pub fn new(
+        id: u32, 
+        module: usize, 
+        date_stamp: String, 
+        recommend: bool, 
+        rating: usize, 
+        clear: bool, 
+        entertaining: bool,
+        relevant: bool, 
+        informative: bool, 
+        useful: bool, 
+        inclusive: bool, 
+        easy: bool, 
+        difficult: bool, 
+        long: bool, 
+        short: bool, 
+        lo_1: LearningObjectiveResponse, 
+        lo_2: LearningObjectiveResponse,
+    ) -> Self {
+        EvalCSV {
+            id: id, 
+            module: module, 
+            date_stamp: date_stamp, 
+            recommend: recommend, 
+            rating: rating, 
+            clear: clear, 
+            entertaining: entertaining,
+            relevant: relevant, 
+            informative: informative, 
+            useful: useful, 
+            inclusive: inclusive, 
+            easy: easy, 
+            difficult: difficult, 
+            long: long, 
+            short: short, 
+            lo_1: lo_1, 
+            lo_2: lo_2,
+        }
+    }
 }

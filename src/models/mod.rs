@@ -24,7 +24,7 @@ pub use self::learner::{
 
 pub use self::experience::{Experience, Stream, LearningStyle};
 pub use self::location::Location;
-pub use self::evaluation::{Evaluation, MicroEvaluation};
+pub use self::evaluation::{Evaluation, MicroEvaluation, LearningObjectiveResponse};
 pub use self::registration::{Registration, Offering, Referral};
 pub use self::personnel::{Personnel, DeliveryRole};
 pub use self::quiz::Quiz;
