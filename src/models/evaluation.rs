@@ -13,9 +13,11 @@ use fake::faker::company::raw::*;
 use fake::locales::*;
 
 use super::{LearningObjective, Module, PhysicalInfrastructure, DigitalInfrastructure, Personnel,
-    THRESHOLD, random_gen_quality};
+    THRESHOLD, random_gen_quality, Statement};
 
 use serde::{Serialize, Deserialize};
+
+const COMPLETION_RATE: f64 = 0.99;
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
 /// An over-arching evaluation structure for a LearningProduct.
@@ -113,7 +115,7 @@ impl MicroEvaluation {
             seen = false;
         };
 
-        if rng.gen_range(0.01, 1.0) < 0.5 {
+        if rng.gen_range(0.01, 1.0) > COMPLETION_RATE {
             completed = false;
         };
 
@@ -197,33 +199,64 @@ impl RapidResponse {
             // the learner is willing to recognize
             let x = v * learner_openness;
 
-            if rng.gen_range(0.01, 1.00) < x - THRESHOLD {
+            // could subtract THRESHOLD from x...
+
+            if rng.gen_range(0.01, 1.00) < x {
                 qual_responses.push(true)
             } else {
                 qual_responses.push(false)
             };
         };
 
-        let rating = qual_responses.iter().filter(|x| *x == &true).count();
+        // rating is based off overall quality, modified by learner openness + 3 with a max of 10
+        // Assumption: people don't like giving bad reviews
+        let mut rating = random_gen_quality(&module_qualities[0] * learner_openness) * 10.0 + 3.0;
+        if rating > 10.0 {
+            rating = 10.0;
+        }
         let mut recommend: bool = false;
 
-        if rating > 6 {
+        if rating > 6.0 {
             recommend = true;
+        };
+
+        // deal with too long / short
+        let mut too_long: bool = false;
+        let mut too_short: bool = false;
+
+        if module_qualities[7] < 0.5 {
+            if rng.gen_range(0.01, 1.0) < 0.5 {
+                too_long = true; 
+            } else {
+                too_short = true;
+            }
+        };
+
+        // deal with too easy / hard
+        let mut too_hard: bool = false;
+        let mut too_easy: bool = false;
+
+        if module_qualities[8] < 0.5 {
+            if rng.gen_range(0.01, 1.0) < 0.5 {
+                too_hard = true; 
+            } else {
+                too_easy = true;
+            }
         };
 
         RapidResponse {
             would_recommend: recommend,
-            rating_1_10: rating,
+            rating_1_10: rating as usize,
             clear: qual_responses[1],
             entertaining: qual_responses[2],
             relevant: qual_responses[3],
             informative: qual_responses[4],
             useful: qual_responses[5],
             inclusive: qual_responses[6],
-            too_easy: qual_responses[7],
-            too_difficult: !qual_responses[7],
-            too_long: qual_responses[8],
-            too_short: !qual_responses[8],
+            too_easy: too_easy,
+            too_difficult: too_hard,
+            too_long: too_long,
+            too_short: too_short,
         }
     }
 }

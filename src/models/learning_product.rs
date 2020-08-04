@@ -302,9 +302,9 @@ impl Statement {
         diff: f64,
     ) -> Self {
         Statement {
-            verb: Verb::Understand,
-            noun: String::from("Concept"),
-            difficulty: 0.5,
+            verb: verb,
+            noun: noun,
+            difficulty: diff,
         }
     }
 }

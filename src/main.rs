@@ -266,12 +266,20 @@ fn main() {
 
     }
 
-    println!("EVALUATION");
+    println!("EVALUATIONS");
+
+    let mut micro_evals = Vec::new();
+
+    for _i in 1..11 {
+        let me = MicroEvaluation::generate_micro_eval(100, &lp1_m1, 0.55, String::from("2020-06-01"));
     
-    let me = MicroEvaluation::generate_micro_eval(100, &lp1_m1, 0.55, String::from("2020-06-01"));
+        println!("{:?}", &me);
 
-    println!("{:?}", me);
-
+        micro_evals.push(me);
+    }
+    
+    // Save micro-evals to file for review
+    serde_json::to_writer(&File::create("evals.json").unwrap(), &micro_evals);
 
     // Push evaluation data into vecs
 
@@ -286,10 +294,12 @@ fn main() {
     //println!("{:?}", serialized);
 
     // Plot results
+    /*
     let p = test_plot();
     
     let p = match p {
         Ok(_plot) => println!("Plot complete"),
         Err(error) => panic!("Problem plotting: {:}", error),
     };
+    */
 }
