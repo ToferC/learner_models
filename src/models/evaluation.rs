@@ -60,11 +60,11 @@ pub struct MicroEvaluation {
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
     pub date_stamp: String,
 
-    pub rapid_response: RapidResponse,
+    pub rapid_response: Option<RapidResponse>,
 
     // Hashmap of a LearningProductive for a module mapped to an 
     // assessment of how the module met that objective
-    pub learning_obj_eval: Vec<(LearningObjective, LearningProductiveResponse)>,
+    pub learning_obj_eval: Option<Vec<(LearningObjective, LearningObjectiveResponse)>>,
     pub physical_eval: Option<PhysicalEval>,
     pub digital_eval: Option<DigitalEval>,
     pub personnel_eval: Option<PersonnelEval>,
@@ -73,13 +73,92 @@ pub struct MicroEvaluation {
     pub completed: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone, Copy)]
 /// Learner assessment of whether a Module met a specific 
 /// LearningProductive.
-pub enum LearningProductiveResponse {
+pub enum LearningObjectiveResponse {
     NotMeet,
     Meet,
     Exceeded,
+}
+
+impl MicroEvaluation {
+    pub fn generate_micro_eval(id: u32, module: &Module, learner_openness: f64, date_stamp: String) -> MicroEvaluation {
+
+        // get mock module qualities
+        
+        let module_qualities = [
+            module.mock_quality,
+            module.mock_clear,
+            module.mock_entertaining,
+            module.mock_relevant,
+            module.mock_infomative,
+            module.mock_useful,
+            module.mock_inclusive,
+            module.mock_difficulty,
+            module.mock_length,
+        ];
+
+        // set Rng
+
+        let mut rng = rand::thread_rng();
+
+        // set basic variables for MicroEvaluation completion
+
+        let sent: bool = true;
+        let mut seen: bool = true;
+        let mut completed: bool = true;
+
+        if rng.gen_range(0.01, 1.0) < 0.2 {
+            seen = false;
+        };
+
+        if rng.gen_range(0.01, 1.0) < 0.5 {
+            completed = false;
+        };
+
+        let mut rr: Option<RapidResponse> = None;
+        
+        if completed {
+            rr = Some(RapidResponse::generate_response(&module_qualities, learner_openness));
+        };
+
+        let mut lo: Option<Vec<(LearningObjective, LearningObjectiveResponse)>> = None;
+        
+        let mut learning_obj: Vec<(LearningObjective, LearningObjectiveResponse)> = Vec::new();
+        
+        for l in &module.learning_objectives {
+            let target = learner_openness * module.mock_quality;
+            
+            let n = rng.gen_range(0.01, 1.0);
+            
+            if n < target {
+                learning_obj.push((l.clone(), LearningObjectiveResponse::Exceeded));
+            } else if n < target + 0.2 {
+                learning_obj.push((l.clone(), LearningObjectiveResponse::Meet));
+            } else {
+                learning_obj.push((l.clone(), LearningObjectiveResponse::NotMeet));
+            };
+        };
+
+        if completed {
+            lo = Some(learning_obj);
+        };
+        
+        MicroEvaluation {
+            id: id,
+            module: module.id as usize,
+            date_stamp: date_stamp,
+            rapid_response: rr,
+            learning_obj_eval: lo,
+            physical_eval: None,
+            digital_eval: None,
+            personnel_eval: None,
+            sent: sent,
+            seen: seen,
+            completed: completed,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy)]
@@ -125,11 +204,16 @@ impl RapidResponse {
             };
         };
 
+        let rating = qual_responses.iter().filter(|x| *x == &true).count();
+        let mut recommend: bool = false;
 
+        if rating > 6 {
+            recommend = true;
+        };
 
         RapidResponse {
-            would_recommend: true,
-            rating_1_10: qual_responses.iter().filter(|x| *x == &true).count(),
+            would_recommend: recommend,
+            rating_1_10: rating,
             clear: qual_responses[1],
             entertaining: qual_responses[2],
             relevant: qual_responses[3],

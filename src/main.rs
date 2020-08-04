@@ -13,7 +13,7 @@ use models::{Learner, Registration, Location,
     DigitalInfrastructure, Personnel, Group, DeliveryRole,
     LearningProduct, Module, Audience, Role, BusinessLine,
     Status, LearningStyle, LearningObjective, ContentType,
-    Statement, Verb, Offering, Evaluation};
+    Statement, Verb, Offering, Evaluation, MicroEvaluation};
 
 fn main() {
 
@@ -259,11 +259,18 @@ fn main() {
                 true, 
                 false);
 
-
             // create evaluations
+            
+
         }
 
     }
+
+    println!("EVALUATION");
+    
+    let me = MicroEvaluation::generate_micro_eval(100, &lp1_m1, 0.55, String::from("2020-06-01"));
+
+    println!("{:?}", me);
 
 
     // Push evaluation data into vecs

@@ -246,7 +246,7 @@ impl Module {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A learning objective
 pub struct LearningObjective {
     #[dummy(faker = "0.1..0.99")]
@@ -272,7 +272,7 @@ impl LearningObjective {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A learning objective of a module describing intended outcomes.
 /// Expressed as "A learner can {verb} {noun}."
 pub struct Statement {
@@ -309,7 +309,7 @@ impl Statement {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone, Copy)]
 /// Verb element of a statement for a learning objective
 pub enum Verb {
     Understand,
