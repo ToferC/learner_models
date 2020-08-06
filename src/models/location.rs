@@ -9,7 +9,7 @@ use fake::faker::lorem::raw::*;
 use fake::faker::company::raw::*;
 use fake::locales::*;
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A location that can apply to PhysicalInfrastructure, 
 /// a Learner or Personnel.
 pub struct Location {

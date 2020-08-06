@@ -6,7 +6,7 @@ use fake::faker::chrono::raw::*;
 use fake::locales::*;
 
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 pub struct WebPage {
     pub url: String,
     // Vec of AccessConversions
@@ -14,7 +14,7 @@ pub struct WebPage {
     pub access_conversions: Vec<AccessConversion>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 pub struct AccessConversion {
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
     access: String,

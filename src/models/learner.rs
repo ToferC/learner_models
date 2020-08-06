@@ -11,7 +11,7 @@ use fake::faker::lorem::raw::*;
 use fake::faker::company::raw::*;
 use fake::locales::*;
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Represents a user as learner. Much of this data should come from OCHRO.
 /// Learner data could be developed as part of a permission-based
 /// system that allowed the learner to have full control over their data
@@ -35,17 +35,17 @@ pub struct Learner {
 
     /// simulates the learner's openess and appreciation for the 
     /// learning products used as well as overall politeness and
-    /// attitude. A low alignment represents a learner that will 
-    /// not like anything, a high alignment learner will like 
+    /// attitude. A low openness represents a learner that will 
+    /// not like anything, a high openness learner will like 
     /// almost any experience.
     #[dummy(faker = "0.1..0.8")]
-    mock_learner_alignment: f64,
+    pub mock_learner_openness: f64,
 
     #[dummy(faker = "(Faker, 4..10)")]
     pub data_access_log: Vec<DataAccessLog>,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Badges based on open-badges
 /// https://github.com/mozilla/openbadges-specification/blob/master/Assertion/latest.md
 pub struct BadgeAssertion {
@@ -65,7 +65,7 @@ pub struct BadgeAssertion {
     pub expires: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Log for access of user data for audit and privacy purposes.
 /// Will track each access point and return a JSON String of the
 /// data accessed and rationale.
@@ -80,7 +80,7 @@ pub struct DataAccessLog {
     data_accessed: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Reasons for accessing user data
 pub enum AccessRationale {
     AggregatedReporting,
@@ -91,7 +91,7 @@ pub enum AccessRationale {
     UserDataRequest,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Represents the employement and work status of an employee
 /// at a certain point in time. Part of a vector under the learner.
 pub struct EmploymentStatus {
@@ -114,7 +114,7 @@ pub struct EmploymentStatus {
     pub work_location: Location,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Represents a Government of Canada pay group
 pub enum Group {
     EC,
@@ -127,7 +127,7 @@ pub enum Group {
     LotsMore,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Represents a target audience
 pub enum Audience {
     Employee,
@@ -137,7 +137,7 @@ pub enum Audience {
     SeniorLeader,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Represents the occupational role of a person
 pub enum Role {
     All,
@@ -155,7 +155,7 @@ pub enum Role {
     HumanResources,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Represents a GC department or agency. Could include PRI or other
 /// data if appropriately secured. Could also include data on org type
 /// (line, policy, granting, etc.)

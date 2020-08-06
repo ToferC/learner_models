@@ -10,7 +10,7 @@ use fake::faker::chrono::raw::*;
 use fake::faker::company::raw::*;
 use fake::locales::*;
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A user of the system, employee or learner. Should be tied to
 /// an employee profile at the GC level.
 pub struct User {
@@ -48,7 +48,7 @@ pub struct User {
     pub deactivated_on: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 /// Role for user
 pub enum UserRole {
     Admin,

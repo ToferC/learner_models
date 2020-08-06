@@ -8,7 +8,7 @@ use fake::faker::name::raw::*;
 use fake::faker::company::raw::*;
 use fake::locales::*;
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Represents a learner's experience as part of an Xapi 
 /// or experience tracking system
 pub struct Experience {
@@ -38,7 +38,7 @@ pub struct Experience {
     pub tag: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A broad domain of learning (currently 
 /// the digital streams)
 pub enum Stream {
@@ -58,7 +58,7 @@ pub enum Stream {
     ManyMore,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// The type of learning that occurred in an experience. 
 /// May also use this to identify preferred learning 
 /// styles for learners.

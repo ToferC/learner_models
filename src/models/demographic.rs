@@ -9,7 +9,7 @@ use chrono::Utc;
 use fake::faker::boolean::en::*;
 use fake::locales::*;
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Represents additional demographic and preference details about a 
 /// person. This data is needed to identify potential bias within our 
 /// institutions. It would be protected B and would be treated 
@@ -32,7 +32,7 @@ pub struct DemographicData {
     pub ethnicicty: Ethnicity,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 /// Represents the person's statement on their sexuality.
 pub enum Sexuality {
     Heterosexual,
@@ -59,7 +59,7 @@ impl Dummy<Faker> for Sexuality {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 /// Represents the person's statement on their gender and
 /// pronoun preferences.
 pub enum Pronouns {
@@ -84,7 +84,7 @@ impl Dummy<Faker> for Pronouns {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 /// Represents the person's ethnic identification.
 pub enum Ethnicity {
     Asian,

@@ -5,7 +5,6 @@ use serde_json::{Result, Value};
 use serde::{Serialize, Deserialize};
 
 use std::fs::File;
-use std::collections::HashMap;
 
 use fake::{Faker, Fake};
 
@@ -15,7 +14,9 @@ use models::{Learner, Registration, Location,
     LearningProduct, Module, Audience, Role, BusinessLine,
     Status, LearningStyle, LearningObjective, ContentType,
     Statement, Verb, Offering, Evaluation, MicroEvaluation,
-    random_gen_quality, LearningObjectiveResponse};
+    random_gen_quality, LearningObjectiveResponse,
+    Objective};
+use models::demographic::{Pronouns, Sexuality, Ethnicity};
 
 fn main() {
 
@@ -179,6 +180,9 @@ fn main() {
     // Add personnel index reference
     lp1_m2.personnel_ids = Some(vec![1]);
 
+    lp1.modules.push(lp1_m1);
+    lp1.modules.push(lp1_m2);
+
     /*
     // Product 2 - in-person learning
 
@@ -239,6 +243,7 @@ fn main() {
     }
 
     // create learners and registrations to offerings
+    let mut wtr = csv::Writer::from_path("evals.csv").unwrap();
 
     for (i, o) in offerings.iter().enumerate() {
 
@@ -248,10 +253,7 @@ fn main() {
 
             let l_id = i as u32 * 1000 + p;
             l.id = l_id;
-
-            learners.push(l);
-
-
+            
             // create registration
             let mut r = Registration::new(
                 i as u32 * 10_000 + p,
@@ -260,55 +262,107 @@ fn main() {
                 o.id, 
                 true, 
                 false);
+                
+            // learners.push(l);
+            // create primary evaluation
 
-            // create evaluations
-            
+            println!("EVALUATIONS");
 
-        }
+            // let mut micro_evals = Vec::new();
 
-    }
+            // csv of evaluations
 
-    println!("EVALUATIONS");
+            let obj: Objective = Faker.fake();
 
-    // let mut micro_evals = Vec::new();
+            // generate learner skills and objectives
 
-    // csv of evaluations
-    let mut wtr = csv::Writer::from_path("evals.csv").unwrap();
-    // write headers
+            let base_skill = random_gen_quality(0.3);
 
-    for i in 1..11 {
-        let me = MicroEvaluation::generate_micro_eval(100 + i, &lp1_m1, random_gen_quality(0.65), String::from("2020-06-01"));
+            let target_skill = random_gen_quality(base_skill).max(&base_skill + 0.2);
+
+            let mut e: Evaluation = Evaluation::new(
+                70000 + i as u32 * 1000 + p as u32, 
+                obj, 
+                (base_skill * 10.0) as usize, 
+                (target_skill * 10.0) as usize, 
+                0, 
+                String::from("Interesting"), 
+                String::from(format!("2020-06-0{}", i)),
+            );
+
+            // track benefit of learning
+            let mut benefit: f64 = 0.0;
+
+            // create micro-eval for each module
+
+            for (n, module) in lp1.modules.iter().enumerate() {
+
+                let me = MicroEvaluation::generate_micro_eval(
+                    100 + n as u32,
+                    &module, 
+                    random_gen_quality(l.mock_learner_openness.to_owned()), 
+                    String::from(format!("2020-06-0{}", i)),
+                );
     
-        //println!("{:?}", &me);
+                //println!("{:?}", &me);
 
-        //micro_evals.push(me.clone());
+                //micro_evals.push(me.clone());
 
-        let resp = &me.rapid_response.unwrap();
+                let resp = &me.rapid_response.unwrap();
 
-        let mut learning_obj_eval_results = Vec::new();
+                benefit += resp.rating_1_10 as f64 / 10.0;
 
-        if let Some(lo_eval) = me.learning_obj_eval {
-            for l in lo_eval {
-                learning_obj_eval_results.push(l.1);
-            }
-        };
+                let mut learning_obj_eval_results = Vec::new();
 
-        let eCSV = EvalCSV::new(
-                me.id, me.module, me.date_stamp.to_owned(), resp.would_recommend, resp.rating_1_10,
-                resp.clear, resp.entertaining, resp.relevant, resp.informative,
-                resp.useful, resp.inclusive, resp.too_easy, resp.too_difficult,
-                resp.too_long, resp.too_short, learning_obj_eval_results[0],
-                learning_obj_eval_results[1],
-        );
+                if let Some(lo_eval) = me.learning_obj_eval {
+                    for l in lo_eval {
+                        learning_obj_eval_results.push(l.1);
+                    }
+                };
 
-        wtr.serialize(&eCSV).unwrap();
+                let eCSV = EvalCSV::new(
+                    e.id,
+                    l.employment_status[0].group.clone(),
+                    l.employment_status[0].level,
+                    l.demographics.pronouns.clone(),
+                    l.demographics.sexuality.clone(),
+                    l.demographics.ethnicicty.clone(),
+                    o.id,
+                    lp1.code.to_owned(),
+                    me.module, 
+                    me.date_stamp.to_owned(),
+                    e.current_skill as u32,
+                    e.desired_skill as u32,
+                    e.current_skill as u32 + benefit as u32,
+                    resp.would_recommend, 
+                    resp.rating_1_10,
+                    resp.clear, 
+                    resp.entertaining, 
+                    resp.relevant, 
+                    resp.informative,
+                    resp.useful, 
+                    resp.inclusive, 
+                    resp.too_easy, 
+                    resp.too_difficult,
+                    resp.too_long, 
+                    resp.too_short, 
+                    learning_obj_eval_results[0],
+                    learning_obj_eval_results[1],
+                );
+
+                wtr.serialize(&eCSV).unwrap();
+            };
+
+            // create data for analysis
+
+            wtr.flush().unwrap();
+        }
 
     }
     
     // Save micro-evals to file for review
     // serde_json::to_writer(&File::create("evals.json").unwrap(), &micro_evals);
 
-    wtr.flush().unwrap();
 
 
     // Push evaluation data into vecs
@@ -316,11 +370,11 @@ fn main() {
 
     //let l: Learner = Faker.fake();
 
-    let r: Registration = Faker.fake();
+    //let r: Registration = Faker.fake();
 
     //println!("{:?}", l);
 
-    serde_json::to_writer(&File::create("test.json").unwrap(), &r);
+    // serde_json::to_writer(&File::create("test.json").unwrap(), &r);
     //println!("{:?}", serialized);
 
     // Plot results
@@ -336,9 +390,27 @@ fn main() {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct EvalCSV {
-    pub id: u32, 
+    pub id: u32,
+
+    // Learner
+    pub group: Group,
+    pub level: usize,
+    pub pronouns: Pronouns,
+    pub sexuality: Sexuality,
+    pub ethnicity: Ethnicity,
+
+    // Product
+    pub offering: u32,
+    pub learning_product: String,
     pub module: usize, 
-    pub date_stamp: String, 
+    pub date_stamp: String,
+
+    // Skill
+    pub current_skill: u32,
+    pub desired_skill: u32,
+    pub final_skill: u32,
+
+    // Evaluation
     pub recommend: bool, 
     pub rating: usize, 
     pub clear: bool, 
@@ -357,9 +429,19 @@ pub struct EvalCSV {
 
 impl EvalCSV {
     pub fn new(
-        id: u32, 
+        id: u32,
+        group: Group,
+        level: usize,
+        pronouns: Pronouns,
+        sexuality: Sexuality,
+        ethnicity: Ethnicity,
+        offering: u32,
+        learning_product: String,
         module: usize, 
-        date_stamp: String, 
+        date_stamp: String,
+        current_skill: u32,
+        desired_skill: u32,
+        final_skill: u32,
         recommend: bool, 
         rating: usize, 
         clear: bool, 
@@ -376,9 +458,19 @@ impl EvalCSV {
         lo_2: LearningObjectiveResponse,
     ) -> Self {
         EvalCSV {
-            id: id, 
+            id: id,
+            group: group,
+            level: level,
+            pronouns: pronouns,
+            sexuality: sexuality,
+            ethnicity: ethnicity,
+            offering: offering,
+            learning_product: learning_product,
             module: module, 
-            date_stamp: date_stamp, 
+            date_stamp: date_stamp,
+            current_skill: current_skill,
+            desired_skill: desired_skill,
+            final_skill: final_skill,
             recommend: recommend, 
             rating: rating, 
             clear: clear, 

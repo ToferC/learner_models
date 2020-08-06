@@ -8,7 +8,7 @@ use chrono::prelude::*;
 use fake::locales::*;
 
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Struct containing image URL
 pub struct Image {
     pub id: u32,

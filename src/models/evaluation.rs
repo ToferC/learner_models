@@ -27,10 +27,10 @@ pub struct Evaluation {
     pub objective: Objective,
 
     // Before learning
-    #[dummy(faker = "1..11")]
+    #[dummy(faker = "1..4")]
     pub current_skill: usize,
 
-    #[dummy(faker = "1..11")]
+    #[dummy(faker = "4..11")]
     pub desired_skill: usize,
 
     // After learning
@@ -45,6 +45,29 @@ pub struct Evaluation {
 
     #[dummy(faker = "(Faker, 3)")]
     pub micro_evaluations: Vec<MicroEvaluation>,
+}
+
+impl Evaluation {
+    pub fn new(
+        id: u32,
+        objective: Objective,
+        current_skill: usize,
+        desired_skill: usize,
+        end_skill: usize,
+        comments: String,
+        date_stamp: String,
+    ) -> Self {
+        Evaluation {
+            id: id,
+            objective: objective,
+            current_skill: current_skill,
+            desired_skill: desired_skill,
+            end_skill: end_skill,
+            comments: comments,
+            date_stamp: date_stamp,
+            micro_evaluations: Vec::new(),
+        }
+    }
 }
 
 
@@ -111,6 +134,7 @@ impl MicroEvaluation {
         let mut seen: bool = true;
         let mut completed: bool = true;
 
+        /*
         if rng.gen_range(0.01, 1.0) < 0.2 {
             seen = false;
         };
@@ -118,6 +142,7 @@ impl MicroEvaluation {
         if rng.gen_range(0.01, 1.0) > COMPLETION_RATE {
             completed = false;
         };
+        */
 
         let mut rr: Option<RapidResponse> = None;
         
