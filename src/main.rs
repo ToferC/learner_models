@@ -15,7 +15,9 @@ use models::{Learner, Registration, Location,
     Status, LearningStyle, LearningObjective, ContentType,
     Statement, Verb, Offering, Evaluation, MicroEvaluation,
     random_gen_quality, LearningObjectiveResponse,
-    Objective};
+    Objective, Organization};
+
+use models::evaluation::{DigitalEval, PhysicalEval, PersonnelEval};
 use models::demographic::{Pronouns, Sexuality, Ethnicity};
 
 fn main() {
@@ -218,6 +220,17 @@ fn main() {
 
     // Create learner creation and registration loop
 
+    // ID schema
+
+    // physical_infrastructure_id: 1001, 1002, 2000
+    // digi_infrastructure_id: 100, 101
+    // personnel_id: 100, 102
+    // learning_product_id: 100
+    // module_id: 101, 102
+    // offering_id: 777, 778
+    // registration_id: 10_001 - 90_500
+    // evaluation_id: 71_001 - 79_500
+
     // Create vecs for sim
     let mut offerings: Vec<Offering> = Vec::new();
 
@@ -227,13 +240,17 @@ fn main() {
 
     let mut evaluations: Vec<Evaluation> = Vec::new();
 
-    // Create offerings
+    let mut digi_eval: Vec<DigitalEval> = Vec::new();
 
+    let mut phys_eval: Vec<PhysicalEval> = Vec::new();
+
+    let mut pers_eval: Vec<PersonnelEval> = Vec::new();
+
+    // Create offerings
     for i in 1..10 {
         let o = Offering::new(
             777 + i, 
             100,
-            888 + i, 
             String::from(format!("2020-06-0{}", i)),
             false, 
             true,
@@ -243,16 +260,21 @@ fn main() {
     }
 
     // create learners and registrations to offerings
-    let mut wtr = csv::Writer::from_path("evals.csv").unwrap();
+    let mut wtr = csv::Writer::from_path("data/evals.csv").unwrap();
 
-    for (i, o) in offerings.iter().enumerate() {
+    println!("generate offerings");
+
+    for (i, o) in offerings.iter_mut().enumerate() {
 
         for p in 1..500 {
             // create learners
+            
             let mut l: Learner = Faker.fake();
-
+            
             let l_id = i as u32 * 1000 + p;
             l.id = l_id;
+
+            println!("generate learner {}", l_id);
             
             // create registration
             let mut r = Registration::new(
@@ -263,12 +285,9 @@ fn main() {
                 true, 
                 false);
                 
-            // learners.push(l);
+            learners.push(l.clone());
+            registrations.push(r.clone());
             // create primary evaluation
-
-            println!("EVALUATIONS");
-
-            // let mut micro_evals = Vec::new();
 
             // csv of evaluations
 
@@ -280,12 +299,16 @@ fn main() {
 
             let target_skill = random_gen_quality(base_skill).max(&base_skill + 0.2);
 
+            let e_id = 70000 + i as u32 * 1000 + p as u32;
+
+            o.evaluation_ids.push(e_id);
+
             let mut e: Evaluation = Evaluation::new(
-                70000 + i as u32 * 1000 + p as u32, 
+                e_id, 
                 obj, 
                 (base_skill * 10.0) as usize, 
                 (target_skill * 10.0) as usize, 
-                0, 
+                (base_skill * 10.0) as usize, 
                 String::from("Interesting"), 
                 String::from(format!("2020-06-0{}", i)),
             );
@@ -304,29 +327,35 @@ fn main() {
                     String::from(format!("2020-06-0{}", i)),
                 );
     
-                //println!("{:?}", &me);
-
-                //micro_evals.push(me.clone());
-
+                // deal with potential uncompleted evaluation
                 let resp = &me.rapid_response.unwrap();
+
+                // Handle code here
+
+                e.micro_evaluations.push(me.clone());
 
                 benefit += resp.rating_1_10 as f64 / 10.0;
 
                 let mut learning_obj_eval_results = Vec::new();
 
-                if let Some(lo_eval) = me.learning_obj_eval {
-                    for l in lo_eval {
-                        learning_obj_eval_results.push(l.1);
+                if let Some(lo_eval) = me.learning_obj_eval.clone() {
+                    for le in lo_eval {
+                        learning_obj_eval_results.push(le.1);
                     }
                 };
 
                 let eCSV = EvalCSV::new(
                     e.id,
+                    l.id,
+                    l.employment_status[0].audience.clone(),
                     l.employment_status[0].group.clone(),
                     l.employment_status[0].level,
+                    l.employment_status[0].role.clone(),
+                    l.employment_status[0].organization.clone(),
                     l.demographics.pronouns.clone(),
                     l.demographics.sexuality.clone(),
                     l.demographics.ethnicicty.clone(),
+                    r.id,
                     o.id,
                     lp1.code.to_owned(),
                     me.module, 
@@ -350,32 +379,42 @@ fn main() {
                     learning_obj_eval_results[1],
                 );
 
+                // write to CSV
                 wtr.serialize(&eCSV).unwrap();
             };
 
+            e.end_skill = (e.end_skill as f64 + benefit) as usize;
+
+            evaluations.push(e);
+
+
             // create data for analysis
 
-            wtr.flush().unwrap();
         }
-
+        
     }
     
+    println!("Close CSV");
+
+    wtr.flush().unwrap();
+
     // Save micro-evals to file for review
-    // serde_json::to_writer(&File::create("evals.json").unwrap(), &micro_evals);
 
-
-
-    // Push evaluation data into vecs
-
-
-    //let l: Learner = Faker.fake();
-
-    //let r: Registration = Faker.fake();
-
-    //println!("{:?}", l);
-
-    // serde_json::to_writer(&File::create("test.json").unwrap(), &r);
-    //println!("{:?}", serialized);
+    /*
+    
+    println!("Write JSON 2");
+    serde_json::to_writer(&File::create("data/offerings.json").unwrap(), &offerings).unwrap();
+    
+    println!("Write JSON 3");
+    serde_json::to_writer(&File::create("data/registrations.json").unwrap(), &registrations).unwrap();
+    
+    println!("Write JSON 4");
+    serde_json::to_writer(&File::create("data/evaluations.json").unwrap(), &evaluations).unwrap();
+        
+    println!("Write JSON 1");
+    serde_json::to_writer(&File::create("data/learners.json").unwrap(), &learners).unwrap();
+    
+    */
 
     // Plot results
     /*
@@ -390,17 +429,22 @@ fn main() {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct EvalCSV {
-    pub id: u32,
+    pub eval_id: u32,
 
     // Learner
+    pub learner_id: u32,
+    pub audience: Audience,
     pub group: Group,
     pub level: usize,
+    pub role: Role,
+    pub organization: Organization,
     pub pronouns: Pronouns,
     pub sexuality: Sexuality,
     pub ethnicity: Ethnicity,
 
     // Product
-    pub offering: u32,
+    pub registration_id: u32,
+    pub offering_id: u32,
     pub learning_product: String,
     pub module: usize, 
     pub date_stamp: String,
@@ -429,13 +473,18 @@ pub struct EvalCSV {
 
 impl EvalCSV {
     pub fn new(
-        id: u32,
+        eval_id: u32,
+        learner_id: u32,
+        audience: Audience,
         group: Group,
         level: usize,
+        role: Role,
+        organization: Organization,
         pronouns: Pronouns,
         sexuality: Sexuality,
         ethnicity: Ethnicity,
-        offering: u32,
+        registration_id: u32,
+        offering_id: u32,
         learning_product: String,
         module: usize, 
         date_stamp: String,
@@ -458,13 +507,18 @@ impl EvalCSV {
         lo_2: LearningObjectiveResponse,
     ) -> Self {
         EvalCSV {
-            id: id,
+            eval_id: eval_id,
+            learner_id: learner_id,
+            audience: audience,
             group: group,
             level: level,
+            role: role,
+            organization: organization,
             pronouns: pronouns,
             sexuality: sexuality,
             ethnicity: ethnicity,
-            offering: offering,
+            registration_id: registration_id,
+            offering_id: offering_id,
             learning_product: learning_product,
             module: module, 
             date_stamp: date_stamp,

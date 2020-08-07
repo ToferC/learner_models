@@ -10,7 +10,7 @@ use fake::locales::*;
 
 use super::{LearningProduct, Evaluation, Learner};
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A registration point within our learning management system
 /// Serves as a placeholder for a specific offering of a 
 /// learning object
@@ -60,14 +60,14 @@ impl Registration {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A specific offering of a learning object. Also serves as 
 /// the placholder for an overall evaluation of CSPS learning 
 /// content.
 pub struct Offering {
     pub id: u32,
     pub learning_product_id: u32,
-    pub evaluation_id: u32,
+    pub evaluation_ids: Vec<u32>,
 
     #[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")]
     pub start_date: String,
@@ -80,11 +80,11 @@ pub struct Offering {
 }
 
 impl Offering {
-    pub fn new(id: u32, learning_prod_id: u32, eval_id: u32, start_date: String, cancelled: bool, completed: bool) -> Self {
+    pub fn new(id: u32, learning_prod_id: u32, start_date: String, cancelled: bool, completed: bool) -> Self {
         Offering {
             id: id,
             learning_product_id: learning_prod_id,
-            evaluation_id: eval_id,
+            evaluation_ids: Vec::new(),
             start_date: start_date,
             cancelled: cancelled,
             completed: completed,
@@ -94,7 +94,7 @@ impl Offering {
 
 
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Referral data for a registration. Contains a String which can
 /// represent a specific promotional campaign.
 pub enum Referral {

@@ -72,7 +72,7 @@ impl Evaluation {
 
 
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Short, focused evaluations for Modules within a LearningProduct.
 /// Contains several optional evaluations depending on the specific 
 /// Module.
@@ -135,6 +135,7 @@ impl MicroEvaluation {
         let mut completed: bool = true;
 
         /*
+        // Determine whether evaluation is completed or not
         if rng.gen_range(0.01, 1.0) < 0.2 {
             seen = false;
         };
@@ -188,7 +189,7 @@ impl MicroEvaluation {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone, Copy)]
 /// Core component of MicroEvaluation with two mandatory and 
 /// an array of optional true or false responses.
 pub struct RapidResponse {
@@ -198,6 +199,7 @@ pub struct RapidResponse {
     pub rating_1_10: usize,
 
     // Positive
+
     pub clear: bool,
     pub entertaining: bool,
     pub relevant: bool,
@@ -286,7 +288,7 @@ impl RapidResponse {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Optional true or false responses for evaluating 
 /// PhysicalInfrastructure
 pub struct PhysicalEval {
@@ -326,7 +328,7 @@ impl PhysicalEval {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Optional true or false responses for evaluating Personnel
 pub struct PersonnelEval {
     pub pleasant: bool,
@@ -361,7 +363,7 @@ impl PersonnelEval {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Optional true or false responses for evaluating 
 /// DigitalInfrastructure
 pub struct DigitalEval {
@@ -397,7 +399,7 @@ impl DigitalEval {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// The Learner's primary reason for seeking learning. 
 /// Serves as context for other evaluations.
 pub enum Objective {

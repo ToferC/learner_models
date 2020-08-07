@@ -159,10 +159,20 @@ pub enum Role {
 /// Represents a GC department or agency. Could include PRI or other
 /// data if appropriately secured. Could also include data on org type
 /// (line, policy, granting, etc.)
-pub struct Organization {
-    #[dummy(faker = "CompanyName(EN)")]
-    pub name: String,
-    pub url: String,
-    #[dummy(faker = "Word(EN)")]
-    pub acronym: String,
+pub enum Organization {
+    CSPS,
+    ESDC,
+    CBSA,
+    TC,
+    ISED,
+    CRA,
+    FIN,
+    TBS,
+    NRCan,
+    StatsCan,
+    DFO,
+    PS,
+    PSC,
+    PSPC,
+    IRCC,
 }
