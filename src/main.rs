@@ -355,6 +355,7 @@ fn main() {
                     l.demographics.pronouns.clone(),
                     l.demographics.sexuality.clone(),
                     l.demographics.ethnicicty.clone(),
+                    l.demographics.person_with_disability,
                     r.id,
                     o.id,
                     lp1.code.to_owned(),
@@ -441,6 +442,7 @@ pub struct EvalCSV {
     pub pronouns: Pronouns,
     pub sexuality: Sexuality,
     pub ethnicity: Ethnicity,
+    pub person_with_disability: bool,
 
     // Product
     pub registration_id: u32,
@@ -483,6 +485,7 @@ impl EvalCSV {
         pronouns: Pronouns,
         sexuality: Sexuality,
         ethnicity: Ethnicity,
+        person_with_disability: bool,
         registration_id: u32,
         offering_id: u32,
         learning_product: String,
@@ -517,6 +520,7 @@ impl EvalCSV {
             pronouns: pronouns,
             sexuality: sexuality,
             ethnicity: ethnicity,
+            person_with_disability: person_with_disability,
             registration_id: registration_id,
             offering_id: offering_id,
             learning_product: learning_product,

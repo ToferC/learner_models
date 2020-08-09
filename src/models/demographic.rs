@@ -30,6 +30,9 @@ pub struct DemographicData {
     #[dummy(faker = "Boolean(5)")]
     pub transgender: bool,
     pub ethnicicty: Ethnicity,
+
+    #[dummy(faker = "Boolean(5)")]
+    pub person_with_disability: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
