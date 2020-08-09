@@ -1,17 +1,14 @@
 use serde::{Serialize, Deserialize};
-use fake::{Dummy, Fake, Faker};
+use fake::{Dummy, Fake};
 
 use fake::faker::chrono::raw::*;
 use chrono::Utc;
-use fake::faker::name::raw::*;
-use fake::faker::address::raw::*;
 use fake::faker::lorem::raw::*;
-use fake::faker::company::raw::*;
 use fake::locales::*;
 
 use chrono::offset::TimeZone;
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A multiple choice knowledge test
 pub struct Quiz {
     pub id: u32,
@@ -22,7 +19,7 @@ pub struct Quiz {
     pub date_time: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A question in a knowledge test
 pub struct Question {
     #[dummy(faker = "(1..11)")]

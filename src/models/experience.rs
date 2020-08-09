@@ -72,4 +72,5 @@ pub enum LearningStyle {
     Study,
     Participate,
     Discuss,
+    Classroom,
 }

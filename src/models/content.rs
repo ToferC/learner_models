@@ -15,11 +15,11 @@ pub struct Image {
     pub path: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, Dummy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, Dummy, PartialEq, Clone)]
 pub struct TimeStringEarly(#[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2018, 1, 1).and_hms(9, 10, 11), Utc.ymd(2019,6,12).and_hms(9, 10, 11))")] String);
 
-#[derive(Serialize, Deserialize, Debug, Eq, Dummy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, Dummy, PartialEq, Clone)]
 pub struct TimeString(#[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2020, 1, 1).and_hms(9, 10, 11), Utc.ymd(2020,6,12).and_hms(9, 10, 11))")] String);
 
-#[derive(Serialize, Deserialize, Debug, Eq, Dummy, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, Dummy, PartialEq, Clone)]
 pub struct TimeStringLate(#[dummy(faker = "DateTimeBetween(EN, Utc.ymd(2021, 1, 1).and_hms(9, 10, 11), Utc.ymd(2022,6,12).and_hms(9, 10, 11))")] String);

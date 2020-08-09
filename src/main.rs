@@ -94,17 +94,29 @@ fn main() {
         0.5,
     );
 
+    let d3 = DigitalInfrastructure::new(
+        311,
+        String::from("Return to work Webcast"),
+        0.45,
+        1000,
+        10_000,
+        0.8,
+    );
+
     digi_inf.push(d1);
     digi_inf.push(d2);
+    digi_inf.push(d3);
 
     // Create vec of personnel
     let mut personnel = Vec::new();
 
     let p1 = Personnel::new(100, String::from("Alpha"), String::from("Alka"), 0.55, DeliveryRole::Facilitator, Group::EC, 6, 90_000, 1);
     let p2 = Personnel::new(102, String::from("Beatrice"), String::from("Beta"), 0.78, DeliveryRole::Operations, Group::AS, 4, 60_000, 2);
+    let p3 = Personnel::new(103, String::from("Dorothy"), String::from("Delta"), 0.90, DeliveryRole::Producer, Group::IS, 6, 95_000, 3);
 
     personnel.push(p1);
     personnel.push(p2);
+    personnel.push(p3);
 
     // Create Learning Products
 
@@ -149,8 +161,9 @@ fn main() {
         0.7,
     );
 
+    
     lp1_m1.digital_infrastructure_id = Some(0);
-
+    
     let mut lp1_m2 = Module::new(
         102, 
         String::from("I501-2"), 
@@ -159,8 +172,8 @@ fn main() {
         vec![
             LearningStyle::Discuss,
             ], 
-        ContentType::OnlineFacilitated, 
-        vec![
+            ContentType::OnlineFacilitated, 
+            vec![
             LearningObjective::new(0.5, Statement::new(
                 Verb::Describe,
                 String::from("Examples of the digital standards in use"),
@@ -172,21 +185,22 @@ fn main() {
                 0.3)
             ),
             ], 
-        45, 
-        0.8,
-    );
-
+            45, 
+            0.8,
+        );
+        
     // Add digital infrastructure index reference
     lp1_m2.digital_infrastructure_id = Some(1);
-
+    
     // Add personnel index reference
     lp1_m2.personnel_ids = Some(vec![1]);
-
+    
     lp1.modules.push(lp1_m1);
     lp1.modules.push(lp1_m2);
-
-    /*
+    
+    
     // Product 2 - in-person learning
+    // In person class
 
     let mut lp2 = LearningProduct::new(
         200, 
@@ -202,6 +216,67 @@ fn main() {
 
     // Add modules
 
+    let mut lp2_m1 = Module::new(
+        101, 
+        String::from("P901-1"), 
+        String::from("Security Policy in the GC"), 
+        String::from("A solid understanding of the GC policy frame..."), 
+        vec![
+            LearningStyle::Classroom,
+            ], 
+        ContentType::InPersonFacilitated, 
+        vec![
+            LearningObjective::new(0.5, Statement::new(
+                Verb::Describe,
+                String::from("The GC policy framwork around security"),
+                0.3)
+            ),
+            LearningObjective::new(0.5, Statement::new(
+                Verb::Understand,
+                String::from("Roles and responsibilities on security"),
+                0.3)
+            ),
+            ], 
+        90, 
+        0.55,
+    );
+
+    let mut lp2_m2 = Module::new(
+        101, 
+        String::from("P901-2"), 
+        String::from("Physical Security Fundameentals"), 
+        String::from("Security is critical in the office env..."), 
+        vec![
+            LearningStyle::Classroom,
+            ], 
+        ContentType::InPersonFacilitated, 
+        vec![
+            LearningObjective::new(0.5, Statement::new(
+                Verb::Describe,
+                String::from("The key threats and mitigators for physical security"),
+                0.3)
+            ),
+            LearningObjective::new(0.5, Statement::new(
+                Verb::Describe,
+                String::from("What to do in the case of an event"),
+                0.3)
+            ),
+            ], 
+        150, 
+        0.9,
+    );
+
+    // Add physical infrastructure
+    lp2_m1.physicial_infrastructure_id = Some(0);
+    lp2_m2.physicial_infrastructure_id = Some(1);
+
+    // add personnel
+    lp2_m1.personnel_ids = Some(vec![0]);
+    lp2_m2.personnel_ids = Some(vec![0]);
+
+    lp2.modules.push(lp2_m1);
+    lp2.modules.push(lp2_m2);
+
     // product 3 - event
 
     let mut lp3 = LearningProduct::new(
@@ -216,7 +291,43 @@ fn main() {
         Status::Production,
     );
 
-    */
+    // Add module
+
+    let mut lp3_m1 = Module::new(
+        101, 
+        String::from("E311-1"), 
+        String::from("Panel Discussion"), 
+        String::from("Returning to work in the age of COVID-19..."), 
+        vec![
+            LearningStyle::Watch,
+            ], 
+        ContentType::Event, 
+        vec![
+            LearningObjective::new(0.5, Statement::new(
+                Verb::Understand,
+                String::from("The GC plan for return to work"),
+                0.3)
+            ),
+            LearningObjective::new(0.5, Statement::new(
+                Verb::Understand,
+                String::from("How to work with colleagues and corporate enablers"),
+                0.3)
+            ),
+            ], 
+        60, 
+        0.90,
+    );
+
+    lp3_m1.digital_infrastructure_id = Some(2);
+    lp3_m1.physicial_infrastructure_id = Some(2);
+    lp3_m1.personnel_ids = Some(vec![2]);
+
+    // Add learning products to vec
+    let mut learning_products: Vec<LearningProduct> = Vec::new();
+
+    learning_products.push(lp1.clone());
+    learning_products.push(lp2.clone());
+    learning_products.push(lp3.clone());
 
     // Create learner creation and registration loop
 

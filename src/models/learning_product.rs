@@ -15,7 +15,7 @@ use super::{Stream, Quiz, LearningStyle,
     WebPage, Image, TimeString, TimeStringEarly, TimeStringLate,
     random_gen_quality};
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// Represents a high level learning object such as a course
 /// A learning object must contain at least one module, but may 
 /// contain several.
@@ -94,7 +94,7 @@ impl LearningProduct {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A state of preparation and production for 
 /// a learning object
 pub enum Status {
@@ -107,7 +107,7 @@ pub enum Status {
     Discontinued,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A line of business in the CSPS
 pub enum BusinessLine {
     GCSkills,
@@ -117,7 +117,7 @@ pub enum BusinessLine {
     DigitalAcademy,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A learning module that exists within a learning object.
 pub struct Module {
     #[dummy(faker = "1..11")]
@@ -324,7 +324,7 @@ pub enum Verb {
 }
 
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A content type for a learning module
 pub enum ContentType {
     OnlineFacilitated,
@@ -338,7 +338,7 @@ pub enum ContentType {
     LearningAid,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 //// Represents pre-populated data for a learner's 
 /// experience
 pub struct ExperienceTemplate {
