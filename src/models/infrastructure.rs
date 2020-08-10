@@ -1,11 +1,11 @@
-use super::{Location, WebPage};
+use super::{WebPage};
 
 use super::utilities::random_gen_quality;
 use serde::{Serialize, Deserialize};
 
 use fake::{Dummy, Fake, Faker};
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A physical delivery point for learning content. 
 /// Optionally attached to a Module.
 pub struct PhysicalInfrastructure {
@@ -85,7 +85,7 @@ impl PhysicalInfrastructure {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A digital delivery point for learning content. 
 /// Optionally attached to a Module.
 pub struct DigitalInfrastructure {

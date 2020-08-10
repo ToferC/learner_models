@@ -8,7 +8,7 @@ use fake::{Dummy, Fake, Faker};
 use fake::faker::name::raw::*;
 use fake::locales::*;
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// An employee working in learning delivery.
 pub struct Personnel {
     id: u32,
@@ -31,6 +31,9 @@ pub struct Personnel {
     #[dummy(faker = "0.1..0.99")]
     pub mock_helpful: f64,
 
+    #[dummy(faker = "0.1..0.99")]
+    pub mock_inclusive: f64,
+
     /// simulates the chance of personnel making a critical error
     /// in learning delivery that alienates learners.
     #[dummy(faker = "0.01..0.2")]
@@ -46,7 +49,7 @@ pub struct Personnel {
     pub work_location_id: u32,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A delivery role for an employee.
 pub enum DeliveryRole {
     Facilitator,
@@ -67,6 +70,7 @@ impl Default for Personnel {
             mock_professionalism: random_gen_quality(0.5),
             mock_pleasant: random_gen_quality(0.5),
             mock_helpful: random_gen_quality(0.5),
+            mock_inclusive: random_gen_quality(0.5),
             error_chance: random_gen_quality(0.5),
             role: DeliveryRole::Facilitator,
             group: Group::EC,
@@ -88,6 +92,7 @@ impl Personnel {
             mock_professionalism: random_gen_quality(quality),
             mock_pleasant: random_gen_quality(quality),
             mock_helpful: random_gen_quality(quality),
+            mock_inclusive: random_gen_quality(quality),
             error_chance: random_gen_quality(quality),
             role: role,
             group: group,

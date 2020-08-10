@@ -20,6 +20,8 @@ use models::{Learner, Registration, Location,
 use models::evaluation::{DigitalEval, PhysicalEval, PersonnelEval};
 use models::demographic::{Pronouns, Sexuality, Ethnicity};
 
+const GENERATE_DATA: bool = false;
+
 fn main() {
 
     // Create vec of potential locations
@@ -130,7 +132,9 @@ fn main() {
         Audience::Employee, 
         Role::All, 
         String::from("#DiscoverData"), 
-        BusinessLine::DigitalAcademy, 
+        BusinessLine::DigitalAcademy,
+        500,
+        9,
         Status::Pilot,
     );
 
@@ -210,14 +214,16 @@ fn main() {
         Audience::Employee, 
         Role::All, 
         String::from("#P901"), 
-        BusinessLine::GCSkills, 
+        BusinessLine::GCSkills,
+        24,
+        9,
         Status::Production,
     );
 
     // Add modules
 
     let mut lp2_m1 = Module::new(
-        101, 
+        201, 
         String::from("P901-1"), 
         String::from("Security Policy in the GC"), 
         String::from("A solid understanding of the GC policy frame..."), 
@@ -242,7 +248,7 @@ fn main() {
     );
 
     let mut lp2_m2 = Module::new(
-        101, 
+        202, 
         String::from("P901-2"), 
         String::from("Physical Security Fundameentals"), 
         String::from("Security is critical in the office env..."), 
@@ -288,13 +294,15 @@ fn main() {
         Role::All, 
         String::from("#ReturnToWork"), 
         BusinessLine::RespectfulInclusiveWorkplace, 
+        3000,
+        2,
         Status::Production,
     );
 
     // Add module
 
     let mut lp3_m1 = Module::new(
-        101, 
+        301, 
         String::from("E311-1"), 
         String::from("Panel Discussion"), 
         String::from("Returning to work in the age of COVID-19..."), 
@@ -318,16 +326,23 @@ fn main() {
         0.90,
     );
 
+    
     lp3_m1.digital_infrastructure_id = Some(2);
     lp3_m1.physicial_infrastructure_id = Some(2);
     lp3_m1.personnel_ids = Some(vec![2]);
-
+    
+    lp3.modules.push(lp3_m1);
+    
     // Add learning products to vec
     let mut learning_products: Vec<LearningProduct> = Vec::new();
 
     learning_products.push(lp1.clone());
     learning_products.push(lp2.clone());
     learning_products.push(lp3.clone());
+
+    for lp in &learning_products {
+        println!("{:?}", lp);
+    };
 
     // Create learner creation and registration loop
 
@@ -351,24 +366,21 @@ fn main() {
 
     let mut evaluations: Vec<Evaluation> = Vec::new();
 
-    let mut digi_eval: Vec<DigitalEval> = Vec::new();
-
-    let mut phys_eval: Vec<PhysicalEval> = Vec::new();
-
-    let mut pers_eval: Vec<PersonnelEval> = Vec::new();
-
     // Create offerings
-    for i in 1..10 {
-        let o = Offering::new(
-            777 + i, 
-            100,
-            String::from(format!("2020-06-0{}", i)),
-            false, 
-            true,
-        );
+    for (index, lp) in learning_products.iter().enumerate() {
 
-        offerings.push(o);
-    }
+        for i in 0..lp.number_of_offerings {
+            let o = Offering::new(
+                777 + lp.id + i as u32,
+                index as u32, // would normally be lp.id, but we are looking for an index here
+                String::from(format!("2020-06-0{}", i)),
+                false, 
+                true,
+            );
+    
+            offerings.push(o);
+        }
+    };
 
     // create learners and registrations to offerings
     let mut wtr = csv::Writer::from_path("data/evals.csv").unwrap();
@@ -377,15 +389,13 @@ fn main() {
 
     for (i, o) in offerings.iter_mut().enumerate() {
 
-        for p in 1..500 {
+        for p in 0..learning_products[o.learning_product_id as usize].capacity {
             // create learners
             
             let mut l: Learner = Faker.fake();
             
             let l_id = i as u32 * 1000 + p;
             l.id = l_id;
-
-            println!("generate learner {}", l_id);
             
             // create registration
             let mut r = Registration::new(
@@ -429,9 +439,9 @@ fn main() {
 
             // create micro-eval for each module
 
-            for (n, module) in lp1.modules.iter().enumerate() {
+            for (n, module) in learning_products[o.learning_product_id as usize].modules.iter().enumerate() {
 
-                let me = MicroEvaluation::generate_micro_eval(
+                let mut me = MicroEvaluation::generate_micro_eval(
                     100 + n as u32,
                     &module, 
                     random_gen_quality(l.mock_learner_openness.to_owned()), 
@@ -441,9 +451,110 @@ fn main() {
                 // deal with potential uncompleted evaluation
                 let resp = &me.rapid_response.unwrap();
 
-                // Handle code here
+                // create physical evaluation if needed
 
+                // Add physical_eval
+                let mut pe_results: Vec<bool> = Vec::new();
+
+                if let Some(p_id) = module.physicial_infrastructure_id {
+
+                    let pi = physical_inf[p_id as usize].clone();
+                    
+                    let phys_qualities = [
+                        pi.mock_cleanliness,
+                        pi.mock_comfort,
+                        pi.mock_professional,
+                        pi.mock_pleasant,
+                        pi.mock_accessible,
+                    ];
+
+                    let new_p_eval = PhysicalEval::generate_response(
+                        &phys_qualities,
+                        l.mock_learner_openness,
+                    );
+
+                    pe_results.push(true); // There is a physical eval
+                    pe_results.push(new_p_eval.clean);
+                    pe_results.push(new_p_eval.comfortable);
+                    pe_results.push(new_p_eval.professional);
+                    pe_results.push(new_p_eval.pleasant);
+                    pe_results.push(new_p_eval.accessible);
+
+                    me.physical_eval = Some(new_p_eval);
+                }else {
+                    for _ in 0..7 {
+                        pe_results.push(false);
+                    };
+                };
+
+                // create digital evaluation if needed
+
+                let mut de_results: Vec<bool> = Vec::new();
+
+                if let Some(p_id) = module.digital_infrastructure_id {
+
+                    let pi =digi_inf[p_id as usize].clone();
+                    
+                    let digi_qualities = [
+                        pi.mock_smooth,
+                        pi.mock_professional,
+                        pi.mock_accessible,
+                    ];
+
+                    let new_digi_eval = DigitalEval::generate_response(
+                        &digi_qualities,
+                        l.mock_learner_openness,
+                    );
+
+                    de_results.push(true); // There is a digital eval
+                    de_results.push(new_digi_eval.smooth);
+                    de_results.push(new_digi_eval.professional);
+                    de_results.push(new_digi_eval.accessible);
+
+                    me.digital_eval = Some(new_digi_eval);
+                }else {
+                    for _ in 0..4 {
+                        de_results.push(false);
+                    };
+                };
+
+                // create personnel evaluation if needed
+
+                let mut pers_e_results: Vec<bool> = Vec::new();
+
+                if let Some(p_id) = &module.personnel_ids {
+
+                    let pi = personnel[p_id[0] as usize].clone();
+                    
+                    let personnel_qualities = [
+                        pi.mock_pleasant,
+                        pi.mock_helpful,
+                        pi.mock_professionalism,
+                        pi.mock_inclusive,
+                    ];
+
+                    let new_pers_eval = PersonnelEval::generate_response(
+                        &personnel_qualities,
+                        l.mock_learner_openness,
+                    );
+
+                    pers_e_results.push(true); // There is a digital eval
+                    pers_e_results.push(new_pers_eval.pleasant);
+                    pers_e_results.push(new_pers_eval.helpful);
+                    pers_e_results.push(new_pers_eval.professional);
+                    pers_e_results.push(new_pers_eval.inclusive);
+
+                    me.personnel_eval = Some(new_pers_eval);
+                } else {
+                    for _ in 0..5 {
+                        pers_e_results.push(false);
+                    };
+                };
+
+                // add micro-evaluation to evaluation
                 e.micro_evaluations.push(me.clone());
+
+                // determine learning objectives and benefit
 
                 benefit += resp.rating_1_10 as f64 / 10.0;
 
@@ -455,7 +566,9 @@ fn main() {
                     }
                 };
 
-                let eCSV = EvalCSV::new(
+
+                // create CSV
+                let e_csv = EvalCSV::new(
                     e.id,
                     l.id,
                     l.employment_status[0].audience.clone(),
@@ -469,9 +582,11 @@ fn main() {
                     l.demographics.person_with_disability,
                     r.id,
                     o.id,
-                    lp1.code.to_owned(),
+                    learning_products[o.learning_product_id as usize].code.to_owned(),
+                    learning_products[o.learning_product_id as usize].business_line.clone(),
                     me.module, 
                     me.date_stamp.to_owned(),
+                    e.objective.clone(),
                     e.current_skill as u32,
                     e.desired_skill as u32,
                     e.current_skill as u32 + benefit as u32,
@@ -489,10 +604,25 @@ fn main() {
                     resp.too_short, 
                     learning_obj_eval_results[0],
                     learning_obj_eval_results[1],
+                    pe_results[0],
+                    pe_results[1],
+                    pe_results[2],
+                    pe_results[3],
+                    pe_results[4],
+                    pe_results[5],
+                    de_results[0],
+                    de_results[1],
+                    de_results[2],
+                    de_results[3],
+                    pers_e_results[0],
+                    pers_e_results[1],
+                    pers_e_results[2],
+                    pers_e_results[3],
+                    pers_e_results[4],
                 );
 
                 // write to CSV
-                wtr.serialize(&eCSV).unwrap();
+                wtr.serialize(&e_csv).unwrap();
             };
 
             e.end_skill = (e.end_skill as f64 + benefit) as usize;
@@ -512,21 +642,20 @@ fn main() {
 
     // Save micro-evals to file for review
 
-    /*
-    
-    println!("Write JSON 2");
-    serde_json::to_writer(&File::create("data/offerings.json").unwrap(), &offerings).unwrap();
-    
-    println!("Write JSON 3");
-    serde_json::to_writer(&File::create("data/registrations.json").unwrap(), &registrations).unwrap();
-    
-    println!("Write JSON 4");
-    serde_json::to_writer(&File::create("data/evaluations.json").unwrap(), &evaluations).unwrap();
+    if GENERATE_DATA == true {
+        println!("Write JSON 2");
+        serde_json::to_writer(&File::create("data/offerings.json").unwrap(), &offerings).unwrap();
         
-    println!("Write JSON 1");
-    serde_json::to_writer(&File::create("data/learners.json").unwrap(), &learners).unwrap();
+        println!("Write JSON 3");
+        serde_json::to_writer(&File::create("data/registrations.json").unwrap(), &registrations).unwrap();
+        
+        println!("Write JSON 4");
+        //serde_json::to_writer(&File::create("data/evaluations.json").unwrap(), &evaluations).unwrap();
+            
+        println!("Write JSON 1");
+        //serde_json::to_writer(&File::create("data/learners.json").unwrap(), &learners).unwrap();
+    };
     
-    */
 
     // Plot results
     /*
@@ -559,8 +688,10 @@ pub struct EvalCSV {
     pub registration_id: u32,
     pub offering_id: u32,
     pub learning_product: String,
+    pub business_line: BusinessLine,
     pub module: usize, 
     pub date_stamp: String,
+    pub objective: Objective,
 
     // Skill
     pub current_skill: u32,
@@ -582,6 +713,27 @@ pub struct EvalCSV {
     pub short: bool, 
     pub lo_1: LearningObjectiveResponse, 
     pub lo_2: LearningObjectiveResponse,
+
+    // Physical Eval
+    pub physical_space: bool,
+    pub physical_clean: bool,
+    pub physical_comfortable: bool,
+    pub physical_professional: bool,
+    pub physical_pleasant: bool,
+    pub physical_accessible: bool,
+
+    // Digital Eval
+    pub digital_content: bool,
+    pub digital_smooth: bool,
+    pub digital_professional: bool,
+    pub digital_accessible: bool,
+
+    // Personnel Eval
+    pub personnel_present: bool,
+    pub personnel_pleasant: bool,
+    pub personnel_helpful: bool,
+    pub personnel_professional: bool,
+    pub personnel_inclusive: bool,
 }
 
 impl EvalCSV {
@@ -600,8 +752,10 @@ impl EvalCSV {
         registration_id: u32,
         offering_id: u32,
         learning_product: String,
+        business_line: BusinessLine,
         module: usize, 
         date_stamp: String,
+        objective: Objective,
         current_skill: u32,
         desired_skill: u32,
         final_skill: u32,
@@ -619,6 +773,26 @@ impl EvalCSV {
         short: bool, 
         lo_1: LearningObjectiveResponse, 
         lo_2: LearningObjectiveResponse,
+        // Physical Eval
+        physical_space: bool,
+        physical_clean: bool,
+        physical_comfortable: bool,
+        physical_professional: bool,
+        physical_pleasant: bool,
+        physical_accessible: bool,
+
+        // Digital Eval
+        digital_content: bool,
+        digital_smooth: bool,
+        digital_professional: bool,
+        digital_accessible: bool,
+
+        // Personnel Eval
+        personnel_present: bool,
+        personnel_pleasant: bool,
+        personnel_helpful: bool,
+        personnel_professional: bool,
+        personnel_inclusive: bool,
     ) -> Self {
         EvalCSV {
             eval_id: eval_id,
@@ -635,8 +809,10 @@ impl EvalCSV {
             registration_id: registration_id,
             offering_id: offering_id,
             learning_product: learning_product,
+            business_line: business_line,
             module: module, 
             date_stamp: date_stamp,
+            objective: objective,
             current_skill: current_skill,
             desired_skill: desired_skill,
             final_skill: final_skill,
@@ -654,6 +830,21 @@ impl EvalCSV {
             short: short, 
             lo_1: lo_1, 
             lo_2: lo_2,
+            physical_space: physical_space,
+            physical_clean: physical_clean,
+            physical_comfortable: physical_comfortable,
+            physical_professional: physical_professional,
+            physical_pleasant: physical_pleasant,
+            physical_accessible: physical_accessible,
+            digital_content: digital_content,
+            digital_smooth: digital_smooth,
+            digital_professional: digital_professional,
+            digital_accessible: digital_accessible,
+            personnel_present: personnel_present,
+            personnel_pleasant: personnel_pleasant,
+            personnel_helpful: personnel_helpful,
+            personnel_professional: personnel_professional,
+            personnel_inclusive: personnel_inclusive,
         }
     }
 }

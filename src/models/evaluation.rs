@@ -334,10 +334,11 @@ pub struct PersonnelEval {
     pub pleasant: bool,
     pub helpful: bool,
     pub professional: bool,
+    pub inclusive: bool,
 }
 
 impl PersonnelEval {
-    pub fn generate_response(module_qualities: &[f64; 3], learner_openness: f64) -> PersonnelEval {
+    pub fn generate_response(module_qualities: &[f64; 4], learner_openness: f64) -> PersonnelEval {
 
         let mut qual_responses: Vec<bool> = Vec::new();
 
@@ -359,6 +360,7 @@ impl PersonnelEval {
             pleasant: qual_responses[0],
             helpful: qual_responses[1],
             professional: qual_responses[2],
+            inclusive: qual_responses[3],
         }
     }
 }

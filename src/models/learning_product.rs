@@ -37,6 +37,8 @@ pub struct LearningProduct {
     pub web_page: WebPage,
     pub hashtag: String,
     pub business_line: BusinessLine,
+    pub capacity: u32,
+    pub number_of_offerings: u32,
     pub status: Status,
 
     pub created: TimeString,
@@ -61,6 +63,8 @@ impl Default for LearningProduct {
             web_page: Faker.fake(),
             hashtag: String::from("#DiscoverDigital"),
             business_line: BusinessLine::DigitalAcademy,
+            capacity: 24,
+            number_of_offerings: 9,
             status: Status::Pilot,
             created: Faker.fake(),
             updated: Vec::new(),
@@ -72,7 +76,7 @@ impl Default for LearningProduct {
 impl LearningProduct {
     pub fn new(
         id: u32, name: String, code: String, description: String, audience: Audience, community: Role,
-        hashtag: String, business_line: BusinessLine, status: Status
+        hashtag: String, business_line: BusinessLine, capacity: u32, number_of_offerings: u32, status: Status
     ) -> LearningProduct {
         LearningProduct {
             id: id,
@@ -86,6 +90,8 @@ impl LearningProduct {
             web_page: Faker.fake(),
             hashtag: hashtag,
             business_line: business_line,
+            capacity: capacity,
+            number_of_offerings: number_of_offerings,
             status: status,
             created: Faker.fake(),
             updated: Vec::new(),
