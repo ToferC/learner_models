@@ -1,5 +1,6 @@
 use chrono::prelude::*;
 use serde::{Serialize, Deserialize};
+use rand::{Rng};
 
 use super::{Experience, Image, Location, User, DemographicData};
 
@@ -38,7 +39,7 @@ pub struct Learner {
     /// attitude. A low openness represents a learner that will 
     /// not like anything, a high openness learner will like 
     /// almost any experience.
-    #[dummy(faker = "0.1..0.8")]
+    #[dummy(faker = "0.4..0.8")]
     pub mock_learner_openness: f64,
 
     #[dummy(faker = "(Faker, 4..10)")]
@@ -91,30 +92,63 @@ pub enum AccessRationale {
     UserDataRequest,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 /// Represents the employement and work status of an employee
 /// at a certain point in time. Part of a vector under the learner.
 pub struct EmploymentStatus {
-    pub date_stamp: NaiveDate,
+    pub date_stamp: String,
     pub role: Role,
-    
-    #[dummy(faker = "CatchPhase(EN)")]
     pub community: String,
-    
     pub audience: Audience,
-    
     pub group: Group,
-
-    #[dummy(faker = "1..7")]
     pub level: usize,
-
-
-
     pub organization: Organization,
     pub work_location: Location,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
+impl Dummy<Faker> for EmploymentStatus {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+
+        let mut group: Group;
+        let mut level: usize;
+        let organization: Organization = Faker.fake();
+        let work_location: Location = Faker.fake();
+
+        let mut audience: Audience = Faker.fake();
+
+        match audience {
+            Audience::Manager => {
+                level = 7;
+                group = Faker.fake();
+            },
+            Audience::Leader => {
+                group = Group::EX;
+                level = rng.gen_range(1, 4);
+            },
+            Audience::SeniorLeader => {
+                group = Group::EX;
+                level = rng.gen_range(4, 6);
+            },
+            _ => {
+                group = Faker.fake();
+                level = rng.gen_range(1, 6);
+            },
+        };
+
+        EmploymentStatus {
+            date_stamp: String::from("2020-04-01"),
+            role: Faker.fake(),
+            community: CatchPhase(EN).fake(),
+            audience: audience,
+            group: group,
+            level: level,
+            organization: organization,
+            work_location: work_location,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 /// Represents a Government of Canada pay group
 pub enum Group {
     EC,
@@ -124,10 +158,30 @@ pub enum Group {
     CR,
     PE,
     IS,
+    FI,
+    EX,
     LotsMore,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
+impl Dummy<Faker> for Group {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+        let i: u8 = (0..8).fake_with_rng(rng);
+        
+        match i {
+            0 => Group::EC,
+            1 => Group::AS,
+            2 => Group::PM,
+            3 => Group::FB,
+            4 => Group::CR,
+            5 => Group::PE,
+            6 => Group::IS,
+            7 => Group::FI,
+            _ => Group::PM,
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 /// Represents a target audience
 pub enum Audience {
     Employee,
@@ -135,6 +189,21 @@ pub enum Audience {
     Specialist,
     Leader,
     SeniorLeader,
+}
+
+impl Dummy<Faker> for Audience {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+        let i: f64 = (0.01..0.99).fake_with_rng(rng);
+        
+        match i {
+            x if x < 0.75 => Audience::Employee,
+            x if x < 0.85 => Audience::Manager,
+            x if x < 0.95 => Audience::Specialist,
+            x if x < 0.98 => Audience::Leader,
+            x if x < 0.99 => Audience::SeniorLeader,
+            _ => Audience::Employee,
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy, Clone)]

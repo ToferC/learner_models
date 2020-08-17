@@ -19,19 +19,22 @@ pub struct Personnel {
     pub last_name: String,
 
     /// simulates the effectiveness of the person on a scale of 1-10
-    #[dummy(faker = "0.1..0.99")]
+    #[dummy(faker = "0.4..0.99")]
     pub mock_quality: f64,
 
-    #[dummy(faker = "0.1..0.99")]
+    #[dummy(faker = "0.4..0.99")]
     pub mock_professionalism: f64,
 
-    #[dummy(faker = "0.1..0.99")]
+    #[dummy(faker = "0.4..0.99")]
     pub mock_pleasant: f64,
 
-    #[dummy(faker = "0.1..0.99")]
+    #[dummy(faker = "0.4..0.99")]
     pub mock_helpful: f64,
 
-    #[dummy(faker = "0.1..0.99")]
+    #[dummy(faker = "0.4..0.99")]
+    pub mock_knowledgeable: f64,
+
+    #[dummy(faker = "0.4..0.99")]
     pub mock_inclusive: f64,
 
     /// simulates the chance of personnel making a critical error
@@ -71,6 +74,7 @@ impl Default for Personnel {
             mock_pleasant: random_gen_quality(0.5),
             mock_helpful: random_gen_quality(0.5),
             mock_inclusive: random_gen_quality(0.5),
+            mock_knowledgeable: random_gen_quality(0.5),
             error_chance: random_gen_quality(0.5),
             role: DeliveryRole::Facilitator,
             group: Group::EC,
@@ -92,6 +96,7 @@ impl Personnel {
             mock_professionalism: random_gen_quality(quality),
             mock_pleasant: random_gen_quality(quality),
             mock_helpful: random_gen_quality(quality),
+            mock_knowledgeable: random_gen_quality(quality),
             mock_inclusive: random_gen_quality(quality),
             error_chance: random_gen_quality(quality),
             role: role,

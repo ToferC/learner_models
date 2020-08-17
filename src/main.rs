@@ -92,7 +92,7 @@ fn main() {
         String::from("Discover Data Discussion"),
         0.45,
         1000,
-        10_000,
+        100,
         0.5,
     );
 
@@ -112,7 +112,7 @@ fn main() {
     // Create vec of personnel
     let mut personnel = Vec::new();
 
-    let p1 = Personnel::new(100, String::from("Alpha"), String::from("Alka"), 0.55, DeliveryRole::Facilitator, Group::EC, 6, 90_000, 1);
+    let p1 = Personnel::new(100, String::from("Alice"), String::from("Alpha"), 0.55, DeliveryRole::Facilitator, Group::EC, 6, 90_000, 1);
     let p2 = Personnel::new(102, String::from("Beatrice"), String::from("Beta"), 0.78, DeliveryRole::Operations, Group::AS, 4, 60_000, 2);
     let p3 = Personnel::new(103, String::from("Dorothy"), String::from("Delta"), 0.90, DeliveryRole::Producer, Group::IS, 6, 95_000, 3);
 
@@ -531,6 +531,7 @@ fn main() {
                         pi.mock_helpful,
                         pi.mock_professionalism,
                         pi.mock_inclusive,
+                        pi.mock_knowledgeable,
                     ];
 
                     let new_pers_eval = PersonnelEval::generate_response(
@@ -543,10 +544,11 @@ fn main() {
                     pers_e_results.push(new_pers_eval.helpful);
                     pers_e_results.push(new_pers_eval.professional);
                     pers_e_results.push(new_pers_eval.inclusive);
+                    pers_e_results.push(new_pers_eval.knowledgeable);
 
                     me.personnel_eval = Some(new_pers_eval);
                 } else {
-                    for _ in 0..5 {
+                    for _ in 0..6 {
                         pers_e_results.push(false);
                     };
                 };
@@ -566,6 +568,8 @@ fn main() {
                     }
                 };
 
+                // mock percent of the module that were completed by the learner
+                let percent_completed = (random_gen_quality(module.mock_quality).min(1.0) * 10.0).round() / 10.0;
 
                 // create CSV
                 let e_csv = EvalCSV::new(
@@ -602,6 +606,7 @@ fn main() {
                     resp.too_difficult,
                     resp.too_long, 
                     resp.too_short, 
+                    percent_completed,
                     learning_obj_eval_results[0],
                     learning_obj_eval_results[1],
                     pe_results[0],
@@ -619,6 +624,7 @@ fn main() {
                     pers_e_results[2],
                     pers_e_results[3],
                     pers_e_results[4],
+                    pers_e_results[5],
                 );
 
                 // write to CSV
@@ -710,7 +716,8 @@ pub struct EvalCSV {
     pub easy: bool, 
     pub difficult: bool, 
     pub long: bool, 
-    pub short: bool, 
+    pub short: bool,
+    pub percent_completed: f64,
     pub lo_1: LearningObjectiveResponse, 
     pub lo_2: LearningObjectiveResponse,
 
@@ -734,6 +741,7 @@ pub struct EvalCSV {
     pub personnel_helpful: bool,
     pub personnel_professional: bool,
     pub personnel_inclusive: bool,
+    pub personnel_knowledgeable: bool,
 }
 
 impl EvalCSV {
@@ -771,6 +779,7 @@ impl EvalCSV {
         difficult: bool, 
         long: bool, 
         short: bool, 
+        percent_completed: f64,
         lo_1: LearningObjectiveResponse, 
         lo_2: LearningObjectiveResponse,
         // Physical Eval
@@ -793,6 +802,7 @@ impl EvalCSV {
         personnel_helpful: bool,
         personnel_professional: bool,
         personnel_inclusive: bool,
+        personnel_knowledgeable: bool,
     ) -> Self {
         EvalCSV {
             eval_id: eval_id,
@@ -827,7 +837,8 @@ impl EvalCSV {
             easy: easy, 
             difficult: difficult, 
             long: long, 
-            short: short, 
+            short: short,
+            percent_completed: percent_completed, 
             lo_1: lo_1, 
             lo_2: lo_2,
             physical_space: physical_space,
@@ -845,6 +856,7 @@ impl EvalCSV {
             personnel_helpful: personnel_helpful,
             personnel_professional: personnel_professional,
             personnel_inclusive: personnel_inclusive,
+            personnel_knowledgeable: personnel_knowledgeable,
         }
     }
 }
