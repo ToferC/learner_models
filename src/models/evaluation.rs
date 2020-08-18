@@ -181,7 +181,7 @@ impl MicroEvaluation {
             
             if n < target - 0.4 {
                 learning_obj.push((l.clone(), LearningObjectiveResponse::Exceeded));
-            } else if n < target {
+            } else if n > target - 0.4 && n < target + 0.2 {
                 learning_obj.push((l.clone(), LearningObjectiveResponse::Meet));
             } else {
                 learning_obj.push((l.clone(), LearningObjectiveResponse::NotMeet));
@@ -240,12 +240,16 @@ impl RapidResponse {
 
         let mut rng = rand::thread_rng();
 
+        let mut mean_quality: f64 = 0.0;
+
         for v in module_qualities {
             // learner openness determines the quality value that
             // the learner is willing to recognize
             let x = v * learner_openness;
 
             // could subtract THRESHOLD from x...
+            mean_quality += x;
+
 
             if rng.gen_range(0.01, 1.00) < x {
                 qual_responses.push(true)
@@ -254,15 +258,17 @@ impl RapidResponse {
             };
         };
 
+        mean_quality = mean_quality / module_qualities.len() as f64;
+
         // rating is based off overall quality, modified by learner openness + 3 with a max of 10
         // Assumption: people don't like giving bad reviews
-        let mut rating = random_gen_quality(&module_qualities[0] * learner_openness) * 10.0 + 1.0;
+        let mut rating = random_gen_quality(mean_quality * learner_openness) * 10.0 + 4.0;
         if rating > 10.0 {
             rating = 10.0;
         }
         let mut recommend: bool = false;
 
-        if rating > 6.0 {
+        if rating > 7.0 {
             recommend = true;
         };
 

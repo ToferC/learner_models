@@ -57,7 +57,7 @@ impl Dummy<Faker> for Learner {
         // Illustrative to address differences in opportunities
 
         if demographics.ethnicity != Ethnicity::Caucasian {
-            if rng.gen_range(0.01, 1.00) < 0.50 && audience == Audience::SeniorLeader {
+            if rng.gen_range(0.01, 1.00) < 0.80 && audience == Audience::SeniorLeader {
                 audience = Audience::Leader;
                 discrimination += 0.20;
             };

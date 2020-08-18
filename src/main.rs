@@ -101,7 +101,7 @@ fn main() {
         1000,
         100,
         0.5,
-        vec![DigiIssue::Smooth],
+        vec![DigiIssue::Professional],
     );
 
     let d3 = DigitalInfrastructure::new(
@@ -121,6 +121,7 @@ fn main() {
     // Create vec of personnel
     let mut personnel = Vec::new();
 
+    // Faculty for Discover Digital - module 102
     let p1 = Personnel::new(
         100, 
         String::from("Alice"), 
@@ -134,6 +135,7 @@ fn main() {
         vec![PersonnelIssue::Helpful],
     );
 
+    // Faculty for P901
     let p2 = Personnel::new(
         102, 
         String::from("Beatrice"), 
@@ -147,6 +149,7 @@ fn main() {
         vec![PersonnelIssue::Inclusive],
     );
 
+    // Faculty for E311
     let p3 = Personnel::new(
         103, 
         String::from("Dorothy"), 
@@ -681,6 +684,7 @@ fn main() {
                     l.demographics.sexuality.clone(),
                     l.demographics.ethnicity.clone(),
                     l.demographics.person_with_disability,
+                    l.mock_learner_openness,
                     l.mock_discrimination,
                     r.id,
                     o.id,
@@ -787,6 +791,7 @@ pub struct EvalCSV {
     pub sexuality: Sexuality,
     pub ethnicity: Ethnicity,
     pub person_with_disability: bool,
+    pub openness: f64,
     pub discrimination: f64,
 
     // Product
@@ -856,6 +861,7 @@ impl EvalCSV {
         sexuality: Sexuality,
         ethnicity: Ethnicity,
         person_with_disability: bool,
+        openness: f64,
         discrimination: f64,
         registration_id: u32,
         offering_id: u32,
@@ -916,6 +922,7 @@ impl EvalCSV {
             sexuality: sexuality,
             ethnicity: ethnicity,
             person_with_disability: person_with_disability,
+            openness: openness,
             discrimination: discrimination,
             registration_id: registration_id,
             offering_id: offering_id,

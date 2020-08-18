@@ -12,7 +12,7 @@ pub const THRESHOLD: f64 = 0.2;
 /// randomly generate floats based on a mean quality ranking
 pub fn random_gen_quality(quality: f64) -> f64 {
 
-    let normal = Normal::new(quality as f64, 0.20).unwrap();
+    let normal = Normal::new(quality as f64, 0.15).unwrap();
     let mut v = normal.sample(&mut rand::thread_rng());
 
     if v < 0.0 {
