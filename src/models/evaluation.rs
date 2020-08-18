@@ -339,9 +339,9 @@ impl PhysicalEval {
 
         PhysicalEval {
             clean: qual_responses[0],
-            pleasant: qual_responses[1],
-            comfortable: qual_responses[2],
-            professional: qual_responses[3],
+            comfortable: qual_responses[1],
+            professional: qual_responses[2],
+            pleasant: qual_responses[3],
             accessible: qual_responses[4],
         }
     }
@@ -416,8 +416,8 @@ impl DigitalEval {
 
         DigitalEval {
             smooth: qual_responses[0],
-            accessible: qual_responses[1],
-            professional: qual_responses[2],
+            professional: qual_responses[1],
+            accessible: qual_responses[2],
         }
     }
 }

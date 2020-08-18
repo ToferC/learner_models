@@ -520,7 +520,7 @@ fn main() {
                     ];
 
                     if l.demographics.person_with_disability {
-                        phys_qualities[2] = phys_qualities[2] - random_gen_quality(0.5) * l.mock_discrimination;
+                        phys_qualities[4] = phys_qualities[4] - random_gen_quality(0.5) * l.mock_discrimination;
                     };
 
                     // Modify for issues in Physical
