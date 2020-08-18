@@ -62,6 +62,15 @@ impl Default for PhysicalInfrastructure {
     }
 }
 
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
+pub enum PhysIssue {
+    Accessible,
+    Comfort,
+    Cleanliness,
+    Pleasant,
+    Professional,
+}
+
 impl PhysicalInfrastructure {
     pub fn new(id: u32, location_id: u32, name: String, capacity: u32, quality: f64) -> Self {
         PhysicalInfrastructure {
@@ -148,4 +157,11 @@ impl DigitalInfrastructure {
             },
         }
     }
+}
+
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
+pub enum DigiIssue {
+    Accessible,
+    Smooth,
+    Professional,
 }

@@ -107,3 +107,14 @@ impl Personnel {
         }
     }
 }
+
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
+pub enum PersonnelIssue {
+    Accessible,
+    Helpful,
+    Cleanliness,
+    Pleasant,
+    Professional,
+    Inclusive,
+    Knowledgeable,
+}

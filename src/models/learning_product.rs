@@ -279,6 +279,16 @@ impl LearningObjective {
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
+pub enum Issue {
+    Clear,
+    Entertaining,
+    Inclusive,
+    Relevant,
+    Useful,
+    Informative,
+}
+
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
 /// A learning objective of a module describing intended outcomes.
 /// Expressed as "A learner can {verb} {noun}."
 pub struct Statement {
