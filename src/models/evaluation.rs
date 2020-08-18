@@ -181,7 +181,7 @@ impl MicroEvaluation {
             
             if n < target - 0.4 {
                 learning_obj.push((l.clone(), LearningObjectiveResponse::Exceeded));
-            } else if n > target - 0.4 && n < target + 0.2 {
+            } else if n > target - 0.4 && n < target + 0.3 {
                 learning_obj.push((l.clone(), LearningObjectiveResponse::Meet));
             } else {
                 learning_obj.push((l.clone(), LearningObjectiveResponse::NotMeet));
