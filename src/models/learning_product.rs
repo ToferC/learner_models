@@ -175,6 +175,9 @@ pub struct Module {
     
     #[dummy(faker = "(Faker, 2..3)")]
     pub personnel_ids: Option<Vec<u32>>,
+
+    #[dummy(faker = "(Faker, 0..3)")]
+    pub issues: Vec<PersonnelIssue>,
     }
 
 impl Default for Module {
@@ -207,6 +210,7 @@ impl Default for Module {
             physicial_infrastructure_id: None,
             digital_infrastructure_id: None,
             personnel_ids: None,
+            issues: Vec::new(),
         }
     }
 }
@@ -248,6 +252,7 @@ impl Module {
             physicial_infrastructure_id: None,
             digital_infrastructure_id: None,
             personnel_ids: None,
+            issues: Vec::new(),
         }
     }
 }
