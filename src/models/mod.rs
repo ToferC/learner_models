@@ -26,11 +26,11 @@ pub use self::experience::{Experience, Stream, LearningStyle};
 pub use self::location::Location;
 pub use self::evaluation::{Evaluation, MicroEvaluation, Objective, LearningObjectiveResponse};
 pub use self::registration::{Registration, Offering, Referral};
-pub use self::personnel::{Personnel, DeliveryRole};
+pub use self::personnel::{Personnel, DeliveryRole, PersonnelIssue};
 pub use self::quiz::Quiz;
 pub use self::learning_product::{LearningProduct, Module, ContentType,
     BusinessLine, Status, LearningObjective, Statement, Verb};
-pub use self::infrastructure::{PhysicalInfrastructure, DigitalInfrastructure};
+pub use self::infrastructure::{PhysicalInfrastructure, DigitalInfrastructure, PhysIssue, DigiIssue};
 pub use self::web_page::WebPage;
 pub use self::content::{Image, TimeStringEarly, TimeStringLate, TimeString};
 pub use self::user::{User, UserRole};

@@ -37,6 +37,9 @@ pub struct PhysicalInfrastructure {
 
     pub cost_per_hour: f64,
     pub map_url: String,
+
+    #[dummy(faker = "(Faker, 0..3)")]
+    pub issues: Vec<PhysIssue>,
 }
 
 impl Default for PhysicalInfrastructure {
@@ -58,6 +61,7 @@ impl Default for PhysicalInfrastructure {
             mock_cleanliness: random_gen_quality(0.3),
             mock_pleasant: random_gen_quality(0.3),
             mock_professional: random_gen_quality(0.3),
+            issues: Vec::new(),
         }
     }
 }
@@ -90,6 +94,7 @@ impl PhysicalInfrastructure {
             mock_cleanliness: random_gen_quality(quality),
             mock_pleasant: random_gen_quality(quality),
             mock_professional: random_gen_quality(quality),
+            issues: Vec::new(),
         }
     }
 }
@@ -117,6 +122,9 @@ pub struct DigitalInfrastructure {
     pub cost_per_minute: f64,
     pub capacity: u32,
     pub web_page: WebPage,
+
+    #[dummy(faker = "(Faker, 0..3)")]
+    pub issues: Vec<DigiIssue>,
 }
 
 impl Default for DigitalInfrastructure {
@@ -135,6 +143,7 @@ impl Default for DigitalInfrastructure {
                 url: String::from("default_url"),
                 access_conversions: Faker.fake()
             },
+            issues: Vec::new(),
         }
     }
 }
@@ -155,6 +164,7 @@ impl DigitalInfrastructure {
                 url: String::from("default_url"),
                 access_conversions: Faker.fake()
             },
+            issues: Vec::new(),
         }
     }
 }

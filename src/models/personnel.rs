@@ -50,6 +50,9 @@ pub struct Personnel {
     pub salary: u32,
 
     pub work_location_id: u32,
+
+    #[dummy(faker = "(Faker, 0..3)")]
+    pub issues: Vec<PersonnelIssue>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
@@ -81,6 +84,7 @@ impl Default for Personnel {
             level: 06,
             salary: 100_000,
             work_location_id: 0,
+            issues: Vec::new(),
         }
     }
 }
@@ -104,6 +108,7 @@ impl Personnel {
             level: level,
             salary: salary,
             work_location_id: work_loc,
+            issues: Vec::new(),
         }
     }
 }
