@@ -31,7 +31,7 @@ pub struct DemographicData {
     pub transgender: bool,
     pub ethnicity: Ethnicity,
 
-    #[dummy(faker = "Boolean(5)")]
+    #[dummy(faker = "Boolean(10)")]
     pub person_with_disability: bool,
 }
 
