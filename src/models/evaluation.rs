@@ -140,7 +140,7 @@ impl MicroEvaluation {
         // If you've never been discriminated against, you probably don't see 
         // the problem
         if learner_discrimination > 0.2 {
-            module_qualities[6] = module_qualities[6] - random_gen_quality(0.5) * learner_discrimination;
+            module_qualities[6] = module_qualities[6] - learner_discrimination;
         };
 
         // set Rng

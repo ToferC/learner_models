@@ -46,7 +46,7 @@ pub enum Sexuality {
 
 impl Dummy<Faker> for Sexuality {
     fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
-        let i: f64 = (0.01..0.10).fake_with_rng(rng);
+        let i: f64 = (0.01..1.0).fake_with_rng(rng);
         
         match i {
             i if i < 0.05 => Sexuality::NoAnswer,

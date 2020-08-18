@@ -520,7 +520,7 @@ fn main() {
                     ];
 
                     if l.demographics.person_with_disability {
-                        phys_qualities[4] = phys_qualities[4] - random_gen_quality(0.5) * l.mock_discrimination;
+                        phys_qualities[4] = phys_qualities[4] - l.mock_discrimination;
                     };
 
                     // Modify for issues in Physical
@@ -569,7 +569,7 @@ fn main() {
                     ];
 
                     if l.demographics.person_with_disability {
-                        digi_qualities[2] = digi_qualities[2] - random_gen_quality(0.5) * l.mock_discrimination;
+                        digi_qualities[2] = digi_qualities[2] - l.mock_discrimination;
                     };
 
                     // Modify for issues in Physical
@@ -628,7 +628,7 @@ fn main() {
                     }
 
                     if l.mock_discrimination > 0.2 {
-                        personnel_qualities[3] = personnel_qualities[3] - random_gen_quality(0.5) * l.mock_discrimination;
+                        personnel_qualities[3] = personnel_qualities[3] - l.mock_discrimination;
                     };
 
                     let new_pers_eval = PersonnelEval::generate_response(
@@ -681,6 +681,7 @@ fn main() {
                     l.demographics.sexuality.clone(),
                     l.demographics.ethnicity.clone(),
                     l.demographics.person_with_disability,
+                    l.mock_discrimination,
                     r.id,
                     o.id,
                     learning_products[o.learning_product_id as usize].code.to_owned(),
@@ -786,6 +787,7 @@ pub struct EvalCSV {
     pub sexuality: Sexuality,
     pub ethnicity: Ethnicity,
     pub person_with_disability: bool,
+    pub discrimination: f64,
 
     // Product
     pub registration_id: u32,
@@ -854,6 +856,7 @@ impl EvalCSV {
         sexuality: Sexuality,
         ethnicity: Ethnicity,
         person_with_disability: bool,
+        discrimination: f64,
         registration_id: u32,
         offering_id: u32,
         learning_product: String,
@@ -913,6 +916,7 @@ impl EvalCSV {
             sexuality: sexuality,
             ethnicity: ethnicity,
             person_with_disability: person_with_disability,
+            discrimination: discrimination,
             registration_id: registration_id,
             offering_id: offering_id,
             learning_product: learning_product,
