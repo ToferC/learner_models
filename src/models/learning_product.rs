@@ -177,7 +177,7 @@ pub struct Module {
     pub personnel_ids: Option<Vec<u32>>,
 
     #[dummy(faker = "(Faker, 0..3)")]
-    pub issues: Vec<PersonnelIssue>,
+    pub issues: Vec<Issue>,
     }
 
 impl Default for Module {
