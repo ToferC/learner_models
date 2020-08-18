@@ -2,7 +2,8 @@ use chrono::prelude::*;
 use serde::{Serialize, Deserialize};
 use rand::{Rng};
 
-use super::{Experience, Image, Location, User, DemographicData};
+use super::{Experience, Image, Location, User, DemographicData, Ethnicity,
+    Sexuality, Pronouns};
 
 use fake::{Dummy, Fake, Faker};
 use fake::faker::name::raw::*;
@@ -12,7 +13,7 @@ use fake::faker::lorem::raw::*;
 use fake::faker::company::raw::*;
 use fake::locales::*;
 
-#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 /// Represents a user as learner. Much of this data should come from OCHRO.
 /// Learner data could be developed as part of a permission-based
 /// system that allowed the learner to have full control over their data
@@ -20,18 +21,10 @@ use fake::locales::*;
 /// use cases.
 pub struct Learner {
     pub id: u32,
-
     pub user: User,
-
-    #[dummy(faker = "(Faker, 3..5)")]
     pub badges: Vec<BadgeAssertion>,
-
     pub demographics: DemographicData,
-
-    #[dummy(faker = "(Faker, 3..5)")]
     pub employment_status: Vec<EmploymentStatus>,
-
-    #[dummy(faker = "(Faker, 3..5)")]
     pub experiences: Vec<Experience>,
 
     /// simulates the learner's openess and appreciation for the 
@@ -39,11 +32,154 @@ pub struct Learner {
     /// attitude. A low openness represents a learner that will 
     /// not like anything, a high openness learner will like 
     /// almost any experience.
-    #[dummy(faker = "0.4..0.8")]
     pub mock_learner_openness: f64,
 
-    #[dummy(faker = "(Faker, 4..10)")]
+    // Simulates the impact of exclusion, racism, sexism in the workplace
+    pub mock_discrimination: f64,
     pub data_access_log: Vec<DataAccessLog>,
+}
+
+impl Dummy<Faker> for Learner {
+    fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
+
+        let group: Group;
+        let level: usize;
+        let organization: Organization = Faker.fake();
+        let work_location: Location = Faker.fake();
+
+        let mut audience: Audience = Faker.fake();
+
+        let demographics: DemographicData = Faker.fake();
+
+        let mut discrimination: f64 = 0.0;
+
+        // Modify Employment Status based on Demographics
+        // Illustrative to address differences in opportunities
+
+        if demographics.ethnicity != Ethnicity::Caucasian {
+            if rng.gen_range(0.01, 1.00) < 0.50 && audience == Audience::SeniorLeader {
+                audience = Audience::Leader;
+                discrimination += 0.20;
+            };
+
+            if rng.gen_range(0.01, 1.00) < 0.50 && audience == Audience::Leader {
+                audience = Audience::Manager;
+                discrimination += 0.20;
+            };
+
+            if rng.gen_range(0.01, 1.00) < 0.150 && audience == Audience::Manager {
+                audience = Audience::Employee;
+                discrimination += 0.20;
+            };
+        };
+
+        if demographics.sexuality != Sexuality::Heterosexual {
+            if rng.gen_range(0.01, 1.00) < 0.15 && audience == Audience::SeniorLeader {
+                audience = Audience::Leader;
+                discrimination += 0.20;
+            };
+
+            if rng.gen_range(0.01, 1.00) < 0.10 && audience == Audience::Leader {
+                audience = Audience::Manager;
+                discrimination += 0.20;
+            };
+        };
+
+        if demographics.pronouns != Pronouns::HeHim {
+            if rng.gen_range(0.01, 1.00) < 0.30 && audience == Audience::SeniorLeader {
+                audience = Audience::Leader;
+                discrimination += 0.20;
+            };
+
+            if rng.gen_range(0.01, 1.00) < 0.15 && audience == Audience::Leader {
+                audience = Audience::Manager;
+                discrimination += 0.20;
+            };
+        };
+
+        if demographics.transgender == true {
+            if rng.gen_range(0.01, 1.00) < 0.9 && audience == Audience::SeniorLeader {
+                audience = Audience::Leader;
+                discrimination += 0.40;
+            };
+
+            if rng.gen_range(0.01, 1.00) < 0.8 && audience == Audience::Leader {
+                audience = Audience::Manager;
+                discrimination += 0.40;
+            };
+
+            if rng.gen_range(0.01, 1.00) < 0.6 && audience == Audience::Manager {
+                audience = Audience::Employee;
+                discrimination += 0.40;
+            };
+        }
+
+        if demographics.person_with_disability == true {
+            if rng.gen_range(0.01, 1.00) < 0.9 && audience == Audience::SeniorLeader {
+                audience = Audience::Leader;
+                discrimination += 0.40;
+            };
+
+            if rng.gen_range(0.01, 1.00) < 0.8 && audience == Audience::Leader {
+                audience = Audience::Manager;
+                discrimination += 0.40;
+            };
+
+            if rng.gen_range(0.01, 1.00) < 0.6 && audience == Audience::Manager {
+                audience = Audience::Employee;
+                discrimination += 0.40;
+            };
+        }
+       
+        // Modify Employment Status based on Audience
+        match audience {
+            Audience::Manager => {
+                level = 7;
+                group = Faker.fake();
+            },
+            Audience::Leader => {
+                group = Group::EX;
+                level = rng.gen_range(1, 4);
+            },
+            Audience::SeniorLeader => {
+                group = Group::EX;
+                level = rng.gen_range(4, 6);
+            },
+            _ => {
+                group = Faker.fake();
+                level = rng.gen_range(1, 6);
+            },
+        };
+
+        let es = EmploymentStatus {
+            date_stamp: String::from("2020-04-01"),
+            role: Faker.fake(),
+            community: CatchPhase(EN).fake(),
+            audience: audience,
+            group: group,
+            level: level,
+            organization: organization,
+            work_location: work_location,
+        };
+
+        let mut employment_vec: Vec<EmploymentStatus> = Vec::new();
+        
+        employment_vec.push(es);
+        employment_vec.push(Faker.fake());
+
+
+        Learner{
+            id: Faker.fake(),
+            user: Faker.fake(),
+            badges: fake::vec![BadgeAssertion; 2..4],
+            demographics: demographics,
+            employment_status: employment_vec,
+            experiences: fake::vec![Experience; 2..4],
+            mock_learner_openness: (0.4..0.8).fake(),
+            mock_discrimination: discrimination,
+            data_access_log: fake::vec![DataAccessLog; 2..4],
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
@@ -148,7 +284,7 @@ impl Dummy<Faker> for EmploymentStatus {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 /// Represents a Government of Canada pay group
 pub enum Group {
     EC,
@@ -181,7 +317,7 @@ impl Dummy<Faker> for Group {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 /// Represents a target audience
 pub enum Audience {
     Employee,
@@ -206,7 +342,7 @@ impl Dummy<Faker> for Audience {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone, PartialEq)]
 /// Represents the occupational role of a person
 pub enum Role {
     All,
@@ -224,7 +360,7 @@ pub enum Role {
     HumanResources,
 }
 
-#[derive(Serialize, Deserialize, Debug, Dummy, Clone)]
+#[derive(Serialize, Deserialize, Debug, Dummy, Clone, PartialEq)]
 /// Represents a GC department or agency. Could include PRI or other
 /// data if appropriately secured. Could also include data on org type
 /// (line, policy, granting, etc.)

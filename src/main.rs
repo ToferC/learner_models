@@ -18,6 +18,9 @@ use models::{Learner, Registration, Location,
     Objective, Organization};
 
 use models::evaluation::{DigitalEval, PhysicalEval, PersonnelEval};
+use models::learning_product::{Issue};
+use models::infrastructure::{PhysIssue, DigiIssue};
+use models::personnel::{PersonnelIssue};
 use models::demographic::{Pronouns, Sexuality, Ethnicity};
 
 const GENERATE_DATA: bool = false;
@@ -48,6 +51,7 @@ fn main() {
         String::from("Room 1"),
         24,
         0.3,
+        vec![PhysIssue::Comfort],
     );
 
     let room2 = PhysicalInfrastructure::new(
@@ -56,6 +60,7 @@ fn main() {
         String::from("Room 2"),
         24,
         0.6,
+        vec![PhysIssue::Cleanliness],
     );
 
     let room3 = PhysicalInfrastructure::new(
@@ -64,6 +69,7 @@ fn main() {
         String::from("Room 3"),
         100,
         0.8,
+        vec![PhysIssue::Accessible],
     );
 
     let mut physical_inf = Vec::new();
@@ -85,6 +91,7 @@ fn main() {
         1000,
         10_000,
         0.7,
+        vec![DigiIssue::Smooth],
     );
 
     let d2 = DigitalInfrastructure::new(
@@ -94,6 +101,7 @@ fn main() {
         1000,
         100,
         0.5,
+        vec![DigiIssue::Smooth],
     );
 
     let d3 = DigitalInfrastructure::new(
@@ -103,6 +111,7 @@ fn main() {
         1000,
         10_000,
         0.8,
+        vec![DigiIssue::Accessible],
     );
 
     digi_inf.push(d1);
@@ -112,9 +121,45 @@ fn main() {
     // Create vec of personnel
     let mut personnel = Vec::new();
 
-    let p1 = Personnel::new(100, String::from("Alice"), String::from("Alpha"), 0.55, DeliveryRole::Facilitator, Group::EC, 6, 90_000, 1);
-    let p2 = Personnel::new(102, String::from("Beatrice"), String::from("Beta"), 0.78, DeliveryRole::Operations, Group::AS, 4, 60_000, 2);
-    let p3 = Personnel::new(103, String::from("Dorothy"), String::from("Delta"), 0.90, DeliveryRole::Producer, Group::IS, 6, 95_000, 3);
+    let p1 = Personnel::new(
+        100, 
+        String::from("Alice"), 
+        String::from("Alpha"), 
+        0.55, 
+        DeliveryRole::Facilitator, 
+        Group::EC, 
+        6, 
+        90_000, 
+        1,
+        vec![PersonnelIssue::Helpful],
+    );
+
+    let p2 = Personnel::new(
+        102, 
+        String::from("Beatrice"), 
+        String::from("Beta"), 
+        0.78, 
+        DeliveryRole::Operations, 
+        Group::AS, 
+        4, 
+        60_000, 
+        2,
+        vec![PersonnelIssue::Inclusive],
+    );
+
+    let p3 = Personnel::new(
+        103, 
+        String::from("Dorothy"), 
+        String::from("Delta"), 
+        0.90, 
+        DeliveryRole::Speaker, 
+        Group::IS, 
+        6, 
+        95_000, 
+        3,
+        vec![PersonnelIssue::Professional],
+    );
+
 
     personnel.push(p1);
     personnel.push(p2);
@@ -163,6 +208,7 @@ fn main() {
             ], 
         90, 
         0.7,
+        vec![Issue::Clear],
     );
 
     
@@ -191,6 +237,7 @@ fn main() {
             ], 
             45, 
             0.8,
+            vec![Issue::Relevant],
         );
         
     // Add digital infrastructure index reference
@@ -245,6 +292,7 @@ fn main() {
             ], 
         90, 
         0.55,
+        vec![Issue::Entertaining]
     );
 
     let mut lp2_m2 = Module::new(
@@ -270,6 +318,7 @@ fn main() {
             ], 
         150, 
         0.9,
+        vec![Issue::Entertaining]
     );
 
     // Add physical infrastructure
@@ -324,6 +373,7 @@ fn main() {
             ], 
         60, 
         0.90,
+        Vec::new(),
     );
 
     
@@ -444,7 +494,8 @@ fn main() {
                 let mut me = MicroEvaluation::generate_micro_eval(
                     100 + n as u32,
                     &module, 
-                    random_gen_quality(l.mock_learner_openness.to_owned()), 
+                    l.mock_learner_openness.to_owned(),
+                    l.mock_discrimination.to_owned(),
                     String::from(format!("2020-06-0{}", i)),
                 );
     
@@ -460,13 +511,29 @@ fn main() {
 
                     let pi = physical_inf[p_id as usize].clone();
                     
-                    let phys_qualities = [
+                    let mut phys_qualities = [
                         pi.mock_cleanliness,
                         pi.mock_comfort,
                         pi.mock_professional,
                         pi.mock_pleasant,
                         pi.mock_accessible,
                     ];
+
+                    if l.demographics.person_with_disability {
+                        phys_qualities[2] = phys_qualities[2] - random_gen_quality(0.5) * l.mock_discrimination;
+                    };
+
+                    // Modify for issues in Physical
+                    for issue in &pi.issues {
+                        match issue {
+                            PhysIssue::Cleanliness => phys_qualities[0] -= 0.2,
+                            PhysIssue::Comfort => phys_qualities[1] -= 0.2,
+                            PhysIssue::Professional => phys_qualities[2] -= 0.2,
+                            PhysIssue::Pleasant => phys_qualities[3] -= 0.2,
+                            PhysIssue::Accessible => phys_qualities[4] -= 0.2,
+                            _ => (),
+                        }
+                    }
 
                     let new_p_eval = PhysicalEval::generate_response(
                         &phys_qualities,
@@ -495,11 +562,25 @@ fn main() {
 
                     let pi =digi_inf[p_id as usize].clone();
                     
-                    let digi_qualities = [
+                    let mut digi_qualities = [
                         pi.mock_smooth,
                         pi.mock_professional,
                         pi.mock_accessible,
                     ];
+
+                    if l.demographics.person_with_disability {
+                        digi_qualities[2] = digi_qualities[2] - random_gen_quality(0.5) * l.mock_discrimination;
+                    };
+
+                    // Modify for issues in Physical
+                    for issue in &pi.issues {
+                        match issue {
+                            DigiIssue::Smooth => digi_qualities[0] -= 0.2,
+                            DigiIssue::Professional => digi_qualities[1] -= 0.2,
+                            DigiIssue::Accessible => digi_qualities[2] -= 0.2,
+                            _ => (),
+                        }
+                    }
 
                     let new_digi_eval = DigitalEval::generate_response(
                         &digi_qualities,
@@ -526,13 +607,29 @@ fn main() {
 
                     let pi = personnel[p_id[0] as usize].clone();
                     
-                    let personnel_qualities = [
+                    let mut personnel_qualities = [
                         pi.mock_pleasant,
                         pi.mock_helpful,
                         pi.mock_professionalism,
                         pi.mock_inclusive,
                         pi.mock_knowledgeable,
                     ];
+
+                    // Modify for issues in Personnel
+                    for issue in &pi.issues {
+                        match issue {
+                            PersonnelIssue::Pleasant => personnel_qualities[0] -= 0.2,
+                            PersonnelIssue::Helpful => personnel_qualities[1] -= 0.2,
+                            PersonnelIssue::Professional => personnel_qualities[2] -= 0.2,
+                            PersonnelIssue::Inclusive => personnel_qualities[3] -= 0.2,
+                            PersonnelIssue::Knowledgeable => personnel_qualities[4] -= 0.2,
+                            _ => (),
+                        }
+                    }
+
+                    if l.mock_discrimination > 0.2 {
+                        personnel_qualities[3] = personnel_qualities[3] - random_gen_quality(0.5) * l.mock_discrimination;
+                    };
 
                     let new_pers_eval = PersonnelEval::generate_response(
                         &personnel_qualities,
@@ -582,7 +679,7 @@ fn main() {
                     l.employment_status[0].organization.clone(),
                     l.demographics.pronouns.clone(),
                     l.demographics.sexuality.clone(),
-                    l.demographics.ethnicicty.clone(),
+                    l.demographics.ethnicity.clone(),
                     l.demographics.person_with_disability,
                     r.id,
                     o.id,

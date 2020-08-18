@@ -210,7 +210,7 @@ impl Default for Module {
             physicial_infrastructure_id: None,
             digital_infrastructure_id: None,
             personnel_ids: None,
-            issues: Vec::new(),
+            issues: Faker.fake(),
         }
     }
 }
@@ -226,6 +226,7 @@ impl Module {
         learning_obj: Vec<LearningObjective>,
         duration: u32,
         quality: f64,
+        issues: Vec<Issue>,
     ) -> Self {
         Module {
             id: id,
@@ -252,7 +253,7 @@ impl Module {
             physicial_infrastructure_id: None,
             digital_infrastructure_id: None,
             personnel_ids: None,
-            issues: Vec::new(),
+            issues: issues,
         }
     }
 }

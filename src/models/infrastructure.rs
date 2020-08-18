@@ -76,7 +76,7 @@ pub enum PhysIssue {
 }
 
 impl PhysicalInfrastructure {
-    pub fn new(id: u32, location_id: u32, name: String, capacity: u32, quality: f64) -> Self {
+    pub fn new(id: u32, location_id: u32, name: String, capacity: u32, quality: f64, issues: Vec<PhysIssue>) -> Self {
         PhysicalInfrastructure {
             id: id,
             location_id: location_id,
@@ -94,7 +94,7 @@ impl PhysicalInfrastructure {
             mock_cleanliness: random_gen_quality(quality),
             mock_pleasant: random_gen_quality(quality),
             mock_professional: random_gen_quality(quality),
-            issues: Vec::new(),
+            issues: issues,
         }
     }
 }
@@ -149,7 +149,7 @@ impl Default for DigitalInfrastructure {
 }
 
 impl DigitalInfrastructure {
-    pub fn new(id: u32, name: String, cost: f64, capacity: u32, storage: u32, quality: f64) -> Self {
+    pub fn new(id: u32, name: String, cost: f64, capacity: u32, storage: u32, quality: f64, issues: Vec<DigiIssue>) -> Self {
         DigitalInfrastructure {
             id: id,
             name: name,
@@ -164,7 +164,7 @@ impl DigitalInfrastructure {
                 url: String::from("default_url"),
                 access_conversions: Faker.fake()
             },
-            issues: Vec::new(),
+            issues: issues,
         }
     }
 }

@@ -13,7 +13,7 @@ use fake::faker::company::raw::*;
 use fake::locales::*;
 
 use super::{LearningObjective, Module, PhysicalInfrastructure, DigitalInfrastructure, Personnel,
-    THRESHOLD, random_gen_quality, Statement};
+    THRESHOLD, random_gen_quality, Statement, Issue};
 
 use serde::{Serialize, Deserialize};
 
@@ -108,11 +108,11 @@ pub enum LearningObjectiveResponse {
 }
 
 impl MicroEvaluation {
-    pub fn generate_micro_eval(id: u32, module: &Module, learner_openness: f64, date_stamp: String) -> MicroEvaluation {
+    pub fn generate_micro_eval(id: u32, module: &Module, learner_openness: f64, learner_discrimination: f64, date_stamp: String) -> MicroEvaluation {
 
         // get mock module qualities
         
-        let module_qualities = [
+        let mut module_qualities = [
             module.mock_quality,
             module.mock_clear,
             module.mock_entertaining,
@@ -123,6 +123,25 @@ impl MicroEvaluation {
             module.mock_difficulty,
             module.mock_length,
         ];
+
+        // Modify for issues in module
+        for issue in &module.issues {
+            match issue {
+                Issue::Clear => module_qualities[1] -= 0.2,
+                Issue::Entertaining => module_qualities[2] -= 0.2,
+                Issue::Relevant => module_qualities[3] -= 0.2,
+                Issue::Informative => module_qualities[4] -= 0.2,
+                Issue::Useful => module_qualities[5] -= 0.2,
+                Issue::Inclusive => module_qualities[6] -= 0.2,
+            }
+        };
+
+        // Modify sense of inclusion based on mock_learner_discrimination
+        // If you've never been discriminated against, you probably don't see 
+        // the problem
+        if learner_discrimination > 0.2 {
+            module_qualities[6] = module_qualities[6] - random_gen_quality(0.5) * learner_discrimination;
+        };
 
         // set Rng
 
@@ -160,9 +179,9 @@ impl MicroEvaluation {
             
             let n = rng.gen_range(0.01, 1.0);
             
-            if n < target {
+            if n < target - 0.4 {
                 learning_obj.push((l.clone(), LearningObjectiveResponse::Exceeded));
-            } else if n < target + 0.2 {
+            } else if n < target {
                 learning_obj.push((l.clone(), LearningObjectiveResponse::Meet));
             } else {
                 learning_obj.push((l.clone(), LearningObjectiveResponse::NotMeet));
@@ -237,7 +256,7 @@ impl RapidResponse {
 
         // rating is based off overall quality, modified by learner openness + 3 with a max of 10
         // Assumption: people don't like giving bad reviews
-        let mut rating = random_gen_quality(&module_qualities[0] * learner_openness) * 10.0 + 3.0;
+        let mut rating = random_gen_quality(&module_qualities[0] * learner_openness) * 10.0 + 1.0;
         if rating > 10.0 {
             rating = 10.0;
         }

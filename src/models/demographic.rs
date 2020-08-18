@@ -29,13 +29,13 @@ pub struct DemographicData {
 
     #[dummy(faker = "Boolean(5)")]
     pub transgender: bool,
-    pub ethnicicty: Ethnicity,
+    pub ethnicity: Ethnicity,
 
     #[dummy(faker = "Boolean(5)")]
     pub person_with_disability: bool,
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 /// Represents the person's statement on their sexuality.
 pub enum Sexuality {
     Heterosexual,
@@ -46,23 +46,19 @@ pub enum Sexuality {
 
 impl Dummy<Faker> for Sexuality {
     fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
-        let i: u8 = (0..8).fake_with_rng(rng);
+        let i: f64 = (0.01..0.10).fake_with_rng(rng);
         
         match i {
-            0 => Sexuality::Heterosexual,
-            1 => Sexuality::Homosexual,
-            2 => Sexuality::Bisexual,
-            3 => Sexuality::NoAnswer,
-            4 => Sexuality::Heterosexual,
-            5 => Sexuality::Heterosexual,
-            6 => Sexuality::Heterosexual,
-            7 => Sexuality::Heterosexual,
+            i if i < 0.05 => Sexuality::NoAnswer,
+            i if i < 0.80 => Sexuality::Heterosexual,
+            i if i < 0.90 => Sexuality::Bisexual,
+            i if i < 1.00 => Sexuality::Homosexual,
             _ => Sexuality::NoAnswer,
         }
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 /// Represents the person's statement on their gender and
 /// pronoun preferences.
 pub enum Pronouns {
@@ -75,19 +71,19 @@ pub enum Pronouns {
 
 impl Dummy<Faker> for Pronouns {
     fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
-        let i: u8 = (0..4).fake_with_rng(rng);
+        let i: f64 = (0.01..1.00).fake_with_rng(rng);
         
         match i {
-            0 => Pronouns::HeHim,
-            1 => Pronouns::SheHer,
-            2 => Pronouns::TheyThem,
-            3 => Pronouns::NoAnswer,
+            i if i < 0.45 => Pronouns::HeHim,
+            i if i < 0.90 => Pronouns::SheHer,
+            i if i < 0.95 => Pronouns::TheyThem,
+            i if i < 1.00 => Pronouns::NoAnswer,
             _ => Pronouns::NoAnswer,
         }
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq)]
 /// Represents the person's ethnic identification.
 pub enum Ethnicity {
     Asian,
@@ -101,22 +97,21 @@ pub enum Ethnicity {
 
 impl Dummy<Faker> for Ethnicity {
     fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
-        let i: u8 = (0..7).fake_with_rng(rng);
+        let i: f64 = (0.01..1.00).fake_with_rng(rng);
         
         match i {
-            0 => Ethnicity::Asian,
-            1 => Ethnicity::Black,
-            2 => Ethnicity::Caucasian,
-            3 => Ethnicity::Caucasian,
-            4 => Ethnicity::Indigenous,
-            5 => Ethnicity::Other( String::from("Maui") ),
-            6 => Ethnicity::NoAnswer,
+            i if i < 0.05 => Ethnicity::NoAnswer,
+            i if i < 0.80 => Ethnicity::Caucasian,
+            i if i < 0.85 => Ethnicity::Asian,
+            i if i < 0.90 => Ethnicity::Black,
+            i if i < 0.95 => Ethnicity::HispanicLatinx,
+            i if i < 1.00 => Ethnicity::Indigenous,
             _ => Ethnicity::NoAnswer,
         }
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Copy, Clone)]
+#[derive(Serialize, Deserialize, Debug, Copy, Clone, PartialEq)]
 /// Represents a language.
 pub enum Language {
     English,
@@ -129,7 +124,7 @@ pub enum Language {
 
 impl Dummy<Faker> for Language {
     fn dummy_with_rng<R: Rng + ?Sized>(_: &Faker, rng: &mut R) -> Self {
-        let i: u8 = (0..7).fake_with_rng(rng);
+        let i: u8 = (0..2).fake_with_rng(rng);
         
         match i {
             0 => Language::French,

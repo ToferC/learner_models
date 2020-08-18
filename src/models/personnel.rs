@@ -91,7 +91,7 @@ impl Default for Personnel {
 
 impl Personnel {
     pub fn new(id: u32, fname: String, lname: String, quality: f64, role: DeliveryRole,
-    group: Group, level: usize, salary: u32, work_loc: u32) -> Self {
+    group: Group, level: usize, salary: u32, work_loc: u32, issues: Vec<PersonnelIssue>) -> Self {
         Personnel {
             id: id,
             first_name: fname,
@@ -108,7 +108,7 @@ impl Personnel {
             level: level,
             salary: salary,
             work_location_id: work_loc,
-            issues: Vec::new(),
+            issues: issues,
         }
     }
 }
