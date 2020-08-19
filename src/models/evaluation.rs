@@ -262,10 +262,12 @@ impl RapidResponse {
 
         // rating is based off overall quality, modified by learner openness + 3 with a max of 10
         // Assumption: people don't like giving bad reviews
-        let mut rating = random_gen_quality(mean_quality * learner_openness) * 10.0 + 4.0;
+        let mut rating = (mean_quality * 1.5) * learner_openness * 10.0 + 4.0;
+
         if rating > 10.0 {
             rating = 10.0;
         }
+        
         let mut recommend: bool = false;
 
         if rating > 7.0 {

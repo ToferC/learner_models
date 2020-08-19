@@ -430,7 +430,6 @@ fn main() {
                 false, 
                 true,
             );
-    
             offerings.push(o);
         }
     };
