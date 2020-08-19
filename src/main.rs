@@ -498,7 +498,7 @@ fn main() {
                     100 + n as u32,
                     &module, 
                     l.mock_learner_openness.to_owned(),
-                    l.mock_discrimination.to_owned(),
+                    l.mock_exclusion.to_owned(),
                     String::from(format!("2020-06-0{}", i)),
                 );
     
@@ -523,7 +523,7 @@ fn main() {
                     ];
 
                     if l.demographics.person_with_disability {
-                        phys_qualities[4] = phys_qualities[4] - l.mock_discrimination;
+                        phys_qualities[4] = phys_qualities[4] - l.mock_exclusion;
                     };
 
                     // Modify for issues in Physical
@@ -534,7 +534,6 @@ fn main() {
                             PhysIssue::Professional => phys_qualities[2] -= 0.2,
                             PhysIssue::Pleasant => phys_qualities[3] -= 0.2,
                             PhysIssue::Accessible => phys_qualities[4] -= 0.2,
-                            _ => (),
                         }
                     }
 
@@ -572,7 +571,7 @@ fn main() {
                     ];
 
                     if l.demographics.person_with_disability {
-                        digi_qualities[2] = digi_qualities[2] - l.mock_discrimination;
+                        digi_qualities[2] = digi_qualities[2] - l.mock_exclusion;
                     };
 
                     // Modify for issues in Physical
@@ -581,7 +580,6 @@ fn main() {
                             DigiIssue::Smooth => digi_qualities[0] -= 0.2,
                             DigiIssue::Professional => digi_qualities[1] -= 0.2,
                             DigiIssue::Accessible => digi_qualities[2] -= 0.2,
-                            _ => (),
                         }
                     }
 
@@ -630,8 +628,8 @@ fn main() {
                         }
                     }
 
-                    if l.mock_discrimination > 0.2 {
-                        personnel_qualities[3] = personnel_qualities[3] - l.mock_discrimination;
+                    if l.mock_exclusion > 0.2 {
+                        personnel_qualities[3] = personnel_qualities[3] - l.mock_exclusion;
                     };
 
                     let new_pers_eval = PersonnelEval::generate_response(
@@ -685,7 +683,7 @@ fn main() {
                     l.demographics.ethnicity.clone(),
                     l.demographics.person_with_disability,
                     l.mock_learner_openness,
-                    l.mock_discrimination,
+                    l.mock_exclusion,
                     r.id,
                     o.id,
                     learning_products[o.learning_product_id as usize].code.to_owned(),
@@ -792,7 +790,7 @@ pub struct EvalCSV {
     pub ethnicity: Ethnicity,
     pub person_with_disability: bool,
     pub openness: f64,
-    pub discrimination: f64,
+    pub exclusion: f64,
 
     // Product
     pub registration_id: u32,
@@ -862,7 +860,7 @@ impl EvalCSV {
         ethnicity: Ethnicity,
         person_with_disability: bool,
         openness: f64,
-        discrimination: f64,
+        exclusion: f64,
         registration_id: u32,
         offering_id: u32,
         learning_product: String,
@@ -923,7 +921,7 @@ impl EvalCSV {
             ethnicity: ethnicity,
             person_with_disability: person_with_disability,
             openness: openness,
-            discrimination: discrimination,
+            exclusion: exclusion,
             registration_id: registration_id,
             offering_id: offering_id,
             learning_product: learning_product,

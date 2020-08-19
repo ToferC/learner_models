@@ -108,7 +108,7 @@ pub enum LearningObjectiveResponse {
 }
 
 impl MicroEvaluation {
-    pub fn generate_micro_eval(id: u32, module: &Module, learner_openness: f64, learner_discrimination: f64, date_stamp: String) -> MicroEvaluation {
+    pub fn generate_micro_eval(id: u32, module: &Module, learner_openness: f64, learner_exclusion: f64, date_stamp: String) -> MicroEvaluation {
 
         // get mock module qualities
         
@@ -136,11 +136,11 @@ impl MicroEvaluation {
             }
         };
 
-        // Modify sense of inclusion based on mock_learner_discrimination
+        // Modify sense of inclusion based on mock_learner_exclusion
         // If you've never been discriminated against, you probably don't see 
         // the problem
-        if learner_discrimination > 0.2 {
-            module_qualities[6] = module_qualities[6] - learner_discrimination;
+        if learner_exclusion > 0.2 {
+            module_qualities[6] = module_qualities[6] - learner_exclusion;
         };
 
         // set Rng

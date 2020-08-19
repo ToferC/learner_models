@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 use rand::{Rng};
 
 use super::{Experience, Image, Location, User, DemographicData, Ethnicity,
-    Sexuality, Pronouns};
+    Sexuality, Pronouns, random_gen_quality};
 
 use fake::{Dummy, Fake, Faker};
 use fake::faker::name::raw::*;
@@ -35,7 +35,7 @@ pub struct Learner {
     pub mock_learner_openness: f64,
 
     // Simulates the impact of exclusion, racism, sexism in the workplace
-    pub mock_discrimination: f64,
+    pub mock_exclusion: f64,
     pub data_access_log: Vec<DataAccessLog>,
 }
 
@@ -51,83 +51,77 @@ impl Dummy<Faker> for Learner {
 
         let demographics: DemographicData = Faker.fake();
 
-        let mut discrimination: f64 = 0.0;
+        let mut exclusion: f64 = 0.0;
 
         // Modify Employment Status based on Demographics
         // Illustrative to address differences in opportunities
 
         if demographics.ethnicity != Ethnicity::Caucasian {
             if rng.gen_range(0.01, 1.00) < 0.80 && audience == Audience::SeniorLeader {
+                exclusion += 0.20;
                 audience = Audience::Leader;
-                discrimination += 0.20;
             };
 
             if rng.gen_range(0.01, 1.00) < 0.50 && audience == Audience::Leader {
                 audience = Audience::Manager;
-                discrimination += 0.20;
             };
 
             if rng.gen_range(0.01, 1.00) < 0.150 && audience == Audience::Manager {
                 audience = Audience::Employee;
-                discrimination += 0.20;
             };
         };
 
         if demographics.sexuality != Sexuality::Heterosexual {
-            if rng.gen_range(0.01, 1.00) < 0.15 && audience == Audience::SeniorLeader {
+            exclusion += 0.10;
+            if rng.gen_range(0.01, 1.00) < 0.10 && audience == Audience::SeniorLeader {
                 audience = Audience::Leader;
-                discrimination += 0.20;
             };
 
             if rng.gen_range(0.01, 1.00) < 0.10 && audience == Audience::Leader {
                 audience = Audience::Manager;
-                discrimination += 0.20;
             };
         };
 
         if demographics.pronouns != Pronouns::HeHim {
+            exclusion += 0.20;
             if rng.gen_range(0.01, 1.00) < 0.30 && audience == Audience::SeniorLeader {
                 audience = Audience::Leader;
-                discrimination += 0.20;
             };
 
             if rng.gen_range(0.01, 1.00) < 0.15 && audience == Audience::Leader {
                 audience = Audience::Manager;
-                discrimination += 0.20;
             };
         };
 
         if demographics.transgender == true {
+            exclusion += 0.40;
             if rng.gen_range(0.01, 1.00) < 0.9 && audience == Audience::SeniorLeader {
                 audience = Audience::Leader;
-                discrimination += 0.40;
             };
 
             if rng.gen_range(0.01, 1.00) < 0.8 && audience == Audience::Leader {
                 audience = Audience::Manager;
-                discrimination += 0.40;
             };
 
             if rng.gen_range(0.01, 1.00) < 0.6 && audience == Audience::Manager {
                 audience = Audience::Employee;
-                discrimination += 0.40;
             };
         }
 
         if demographics.person_with_disability == true {
             if rng.gen_range(0.01, 1.00) < 0.9 && audience == Audience::SeniorLeader {
                 audience = Audience::Leader;
-                discrimination += 0.40;
+                exclusion += 0.40;
             };
 
             if rng.gen_range(0.01, 1.00) < 0.8 && audience == Audience::Leader {
                 audience = Audience::Manager;
-                discrimination += 0.40;
+                exclusion += 0.40;
             };
 
             if rng.gen_range(0.01, 1.00) < 0.6 && audience == Audience::Manager {
                 audience = Audience::Employee;
-                discrimination += 0.40;
+                exclusion += 0.40;
             };
         }
        
@@ -175,8 +169,8 @@ impl Dummy<Faker> for Learner {
             demographics: demographics,
             employment_status: employment_vec,
             experiences: fake::vec![Experience; 2..4],
-            mock_learner_openness: (0.4..0.8).fake(),
-            mock_discrimination: discrimination,
+            mock_learner_openness: random_gen_quality(0.6).min(1.0),
+            mock_exclusion: exclusion,
             data_access_log: fake::vec![DataAccessLog; 2..4],
         }
     }
