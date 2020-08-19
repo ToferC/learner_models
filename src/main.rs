@@ -696,9 +696,10 @@ fn main() {
 
                 // mock percent of the module that were completed by the learner
                 let mut percent_completed = (random_gen_quality(module.mock_quality).min(1.0) * 10.0).round() / 10.0;
-                let mut threshold: u32 = 0;
+                let mut threshold: u32;
 
                 // reduct % completed depending on length of module and threshold
+                /*
                 match module.content {
                     ContentType::Asyncronous => threshold = 30,
                     ContentType::Conference => threshold = 90,
@@ -712,9 +713,12 @@ fn main() {
                     ContentType::Podcast => threshold = 10,
                 }
 
+                let too_long_mod = (((module.duration_minutes - threshold) as f64 / (threshold as f64 / 10.0)) * 10.0).round() / 10.0;
+
                 if module.duration_minutes > threshold {
-                    percent_completed -= 0.05 * ((module.duration_minutes - threshold) as f64 / (threshold as f64 / 10.0));
+                    percent_completed -= too_long_mod;
                 }
+                */
 
                 // create CSV
                 let e_csv = EvalCSV::new(
