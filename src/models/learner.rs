@@ -57,8 +57,8 @@ impl Dummy<Faker> for Learner {
         // Illustrative to address differences in opportunities
 
         if demographics.ethnicity != Ethnicity::Caucasian {
+            exclusion += 0.20;
             if rng.gen_range(0.01, 1.00) < 0.80 && audience == Audience::SeniorLeader {
-                exclusion += 0.20;
                 audience = Audience::Leader;
             };
 
@@ -109,19 +109,17 @@ impl Dummy<Faker> for Learner {
         }
 
         if demographics.person_with_disability == true {
+            exclusion += 0.40;
             if rng.gen_range(0.01, 1.00) < 0.9 && audience == Audience::SeniorLeader {
                 audience = Audience::Leader;
-                exclusion += 0.40;
             };
 
             if rng.gen_range(0.01, 1.00) < 0.8 && audience == Audience::Leader {
                 audience = Audience::Manager;
-                exclusion += 0.40;
             };
 
             if rng.gen_range(0.01, 1.00) < 0.6 && audience == Audience::Manager {
                 audience = Audience::Employee;
-                exclusion += 0.40;
             };
         }
        

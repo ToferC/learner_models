@@ -142,6 +142,8 @@ pub struct Module {
     #[dummy(faker = "(Faker, 1..3)")]
     pub learning_objectives: Vec<LearningObjective>,
 
+    pub fit: Vec<Audience>,
+
     pub duration_minutes: u32,
     pub experience: ExperienceTemplate,
     pub quiz: Option<Quiz>,
@@ -189,6 +191,7 @@ impl Default for Module {
             description: String::from("Data is transforming our world..."),
             image: Faker.fake(),
             learning_styles: vec![LearningStyle::Study,],
+            fit: vec![Audience::Employee],
             content: ContentType::OnlineFacilitated,
             learning_objectives: Faker.fake(),
             duration_minutes: 90,
@@ -222,6 +225,7 @@ impl Module {
         name: String,
         description: String,
         learning_styles: Vec<LearningStyle>,
+        fit: Vec<Audience>,
         content: ContentType,
         learning_obj: Vec<LearningObjective>,
         duration: u32,
@@ -235,6 +239,7 @@ impl Module {
             description: description,
             image: Faker.fake(),
             learning_styles: learning_styles,
+            fit: fit,
             content: content,
             learning_objectives: learning_obj,
             duration_minutes: duration,

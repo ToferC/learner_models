@@ -13,7 +13,7 @@ use fake::faker::company::raw::*;
 use fake::locales::*;
 
 use super::{LearningObjective, Module, PhysicalInfrastructure, DigitalInfrastructure, Personnel,
-    THRESHOLD, random_gen_quality, Statement, Issue};
+    THRESHOLD, random_gen_quality, Statement, Issue, Audience};
 
 use serde::{Serialize, Deserialize};
 
@@ -108,7 +108,12 @@ pub enum LearningObjectiveResponse {
 }
 
 impl MicroEvaluation {
-    pub fn generate_micro_eval(id: u32, module: &Module, learner_openness: f64, learner_exclusion: f64, date_stamp: String) -> MicroEvaluation {
+    pub fn generate_micro_eval(id: u32, 
+        module: &Module, 
+        learner_openness: f64, 
+        learner_exclusion: f64, 
+        learner_audience: Audience, 
+        date_stamp: String) -> MicroEvaluation {
 
         // get mock module qualities
         
@@ -135,6 +140,16 @@ impl MicroEvaluation {
                 Issue::Inclusive => module_qualities[6] -= 0.2,
             }
         };
+
+        // Update qualities based on Audience Fit
+        for a in &module.fit {
+            if learner_audience == *a {
+                for q in module_qualities.iter_mut() {
+                    *q += 0.10;
+                }
+            };
+        };
+        
 
         // Modify sense of inclusion based on mock_learner_exclusion
         // If you've never been discriminated against, you probably don't see 
@@ -163,6 +178,9 @@ impl MicroEvaluation {
             completed = false;
         };
         */
+
+        // Update qualities based on Audience Fit
+
 
         let mut rr: Option<RapidResponse> = None;
         
@@ -263,6 +281,8 @@ impl RapidResponse {
         // rating is based off overall quality, modified by learner openness + 3 with a max of 10
         // Assumption: people don't like giving bad reviews
         let mut rating = (mean_quality * 1.5) * learner_openness * 10.0 + 4.0;
+
+        
 
         if rating > 10.0 {
             rating = 10.0;

@@ -121,7 +121,7 @@ fn main() {
     // Create vec of personnel
     let mut personnel = Vec::new();
 
-    // Faculty for Discover Digital - module 102
+    // Faculty for P901
     let p1 = Personnel::new(
         100, 
         String::from("Alice"), 
@@ -134,8 +134,8 @@ fn main() {
         1,
         vec![PersonnelIssue::Helpful],
     );
-
-    // Faculty for P901
+    
+    // Faculty for Discover Digital - module 102
     let p2 = Personnel::new(
         102, 
         String::from("Beatrice"), 
@@ -195,7 +195,10 @@ fn main() {
         String::from("Data is the lifeblood of any organization..."), 
         vec![
             LearningStyle::Watch,
-            ], 
+            ],
+        vec![
+            Audience::Employee,
+        ],
         ContentType::Asyncronous, 
         vec![
             LearningObjective::new(0.5, Statement::new(
@@ -224,24 +227,27 @@ fn main() {
         String::from("Each department has its own strengths and..."), 
         vec![
             LearningStyle::Discuss,
-            ], 
-            ContentType::OnlineFacilitated, 
-            vec![
-            LearningObjective::new(0.5, Statement::new(
-                Verb::Describe,
-                String::from("Examples of the digital standards in use"),
-                0.3)
-            ),
-            LearningObjective::new(0.5, Statement::new(
-                Verb::Explain,
-                String::from("Why applications of the standards make things better."),
-                0.3)
-            ),
-            ], 
-            45, 
-            0.8,
-            vec![Issue::Relevant],
-        );
+            ],
+        vec![
+            Audience::Employee,
+        ],
+        ContentType::OnlineFacilitated, 
+        vec![
+        LearningObjective::new(0.5, Statement::new(
+            Verb::Describe,
+            String::from("Examples of the digital standards in use"),
+            0.3)
+        ),
+        LearningObjective::new(0.5, Statement::new(
+            Verb::Explain,
+            String::from("Why applications of the standards make things better."),
+            0.3)
+        ),
+        ], 
+        45, 
+        0.8,
+        vec![Issue::Relevant],
+    );
         
     // Add digital infrastructure index reference
     lp1_m2.digital_infrastructure_id = Some(1);
@@ -279,7 +285,10 @@ fn main() {
         String::from("A solid understanding of the GC policy frame..."), 
         vec![
             LearningStyle::Classroom,
-            ], 
+            ],
+        vec![
+            Audience::Specialist,
+        ],
         ContentType::InPersonFacilitated, 
         vec![
             LearningObjective::new(0.5, Statement::new(
@@ -305,7 +314,10 @@ fn main() {
         String::from("Security is critical in the office env..."), 
         vec![
             LearningStyle::Classroom,
-            ], 
+            ],
+        vec![
+            Audience::Specialist,
+        ],
         ContentType::InPersonFacilitated, 
         vec![
             LearningObjective::new(0.5, Statement::new(
@@ -321,7 +333,7 @@ fn main() {
             ], 
         150, 
         0.9,
-        vec![Issue::Entertaining]
+        vec![Issue::Useful]
     );
 
     // Add physical infrastructure
@@ -360,7 +372,10 @@ fn main() {
         String::from("Returning to work in the age of COVID-19..."), 
         vec![
             LearningStyle::Watch,
-            ], 
+        ],
+        vec![
+            Audience::Leader,
+        ], 
         ContentType::Event, 
         vec![
             LearningObjective::new(0.5, Statement::new(
@@ -422,11 +437,18 @@ fn main() {
     // Create offerings
     for (index, lp) in learning_products.iter().enumerate() {
 
+        let mut date = chrono::NaiveDate::parse_from_str("2020-06-01", "%Y-%m-%d").unwrap();
+
         for i in 0..lp.number_of_offerings {
+
+            date = date.checked_add_signed(chrono::Duration::days(i as i64)).unwrap();
+
+            let date_string = date.format("%Y-%m-%d");
+
             let o = Offering::new(
                 777 + lp.id + i as u32,
                 index as u32, // would normally be lp.id, but we are looking for an index here
-                String::from(format!("2020-06-0{}", i)),
+                date_string.to_string(),
                 false, 
                 true,
             );
@@ -498,6 +520,7 @@ fn main() {
                     &module, 
                     l.mock_learner_openness.to_owned(),
                     l.mock_exclusion.to_owned(),
+                    l.employment_status[0].audience.clone(),
                     String::from(format!("2020-06-0{}", i)),
                 );
     
@@ -522,7 +545,10 @@ fn main() {
                     ];
 
                     if l.demographics.person_with_disability {
-                        phys_qualities[4] = phys_qualities[4] - l.mock_exclusion;
+                        phys_qualities[4] = phys_qualities[4] - (l.mock_exclusion * 2.0);
+                    } else {
+                        // people just unaware of issues
+                        phys_qualities[4] += 0.20;
                     };
 
                     // Modify for issues in Physical
@@ -570,7 +596,10 @@ fn main() {
                     ];
 
                     if l.demographics.person_with_disability {
-                        digi_qualities[2] = digi_qualities[2] - l.mock_exclusion;
+                        digi_qualities[2] = digi_qualities[2] - (l.mock_exclusion * 2.0);
+                    } else {
+                        // people just unaware of issues
+                        digi_qualities[2] += 0.20;
                     };
 
                     // Modify for issues in Physical
@@ -666,7 +695,26 @@ fn main() {
                 };
 
                 // mock percent of the module that were completed by the learner
-                let percent_completed = (random_gen_quality(module.mock_quality).min(1.0) * 10.0).round() / 10.0;
+                let mut percent_completed = (random_gen_quality(module.mock_quality).min(1.0) * 10.0).round() / 10.0;
+                let mut threshold: u32 = 0;
+
+                // reduct % completed depending on length of module and threshold
+                match module.content {
+                    ContentType::Asyncronous => threshold = 30,
+                    ContentType::Conference => threshold = 90,
+                    ContentType::InPersonFacilitated => threshold = 45,
+                    ContentType::InPersonUnfacilitated => threshold = 45,
+                    ContentType::LearningAid => threshold = 5,
+                    ContentType::OnlineFacilitated => threshold = 45,
+                    ContentType::Event => threshold = 60,
+                    ContentType::Video => threshold = 3,
+                    ContentType::Conference => threshold = 60,
+                    ContentType::Podcast => threshold = 10,
+                }
+
+                if module.duration_minutes > threshold {
+                    percent_completed -= 0.05 * ((module.duration_minutes - threshold) as f64 / (threshold as f64 / 10.0));
+                }
 
                 // create CSV
                 let e_csv = EvalCSV::new(
