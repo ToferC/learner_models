@@ -21,7 +21,7 @@ use models::evaluation::{DigitalEval, PhysicalEval, PersonnelEval};
 use models::learning_product::{Issue};
 use models::infrastructure::{PhysIssue, DigiIssue};
 use models::personnel::{PersonnelIssue};
-use models::demographic::{Pronouns, Sexuality, Ethnicity};
+use models::demographic::{Pronouns, Sexuality, Ethnicity, Language};
 
 const GENERATE_DATA: bool = false;
 
@@ -695,11 +695,11 @@ fn main() {
                 };
 
                 // mock percent of the module that were completed by the learner
-                let mut percent_completed = (random_gen_quality(module.mock_quality).min(1.0) * 10.0).round() / 10.0;
+                let mut percent_completed = round((random_gen_quality(module.mock_quality).min(1.0) * 100.0) as u32, 10) as f64 / 100.0;
                 let mut threshold: u32;
 
                 // reduct % completed depending on length of module and threshold
-                /*
+                
                 match module.content {
                     ContentType::Asyncronous => threshold = 30,
                     ContentType::Conference => threshold = 90,
@@ -713,12 +713,14 @@ fn main() {
                     ContentType::Podcast => threshold = 10,
                 }
 
-                let too_long_mod = (((module.duration_minutes - threshold) as f64 / (threshold as f64 / 10.0)) * 10.0).round() / 10.0;
-
                 if module.duration_minutes > threshold {
-                    percent_completed -= too_long_mod;
-                }
-                */
+                    // example: 60 - 45 = 15 / 4.5 = 3 * 5 = 15 / 100.0 = 0.15
+                    let too_long_mod = round(((module.duration_minutes - threshold) as f64 / (module.duration_minutes as f64 / 10.0)) as u32 * 5, 5) as f64 / 100.0;
+    
+                    if module.duration_minutes > threshold {
+                        percent_completed = round(((percent_completed * (1.0 - too_long_mod.min(0.3))) * 100.0) as u32, 10) as f64 / 100.0;
+                    }
+                };
 
                 // create CSV
                 let e_csv = EvalCSV::new(
@@ -732,6 +734,7 @@ fn main() {
                     l.demographics.pronouns.clone(),
                     l.demographics.sexuality.clone(),
                     l.demographics.ethnicity.clone(),
+                    l.demographics.primary_official_language.clone(),
                     l.demographics.person_with_disability,
                     l.mock_learner_openness,
                     l.mock_exclusion,
@@ -739,6 +742,8 @@ fn main() {
                     o.id,
                     learning_products[o.learning_product_id as usize].code.to_owned(),
                     learning_products[o.learning_product_id as usize].business_line.clone(),
+                    module.content.to_owned(),
+                    module.duration_minutes,
                     me.module, 
                     me.date_stamp.to_owned(),
                     e.objective.clone(),
@@ -839,6 +844,7 @@ pub struct EvalCSV {
     pub pronouns: Pronouns,
     pub sexuality: Sexuality,
     pub ethnicity: Ethnicity,
+    pub language: Language,
     pub person_with_disability: bool,
     pub openness: f64,
     pub exclusion: f64,
@@ -848,6 +854,8 @@ pub struct EvalCSV {
     pub offering_id: u32,
     pub learning_product: String,
     pub business_line: BusinessLine,
+    pub content: ContentType,
+    pub duration: u32,
     pub module: usize, 
     pub date_stamp: String,
     pub objective: Objective,
@@ -909,6 +917,7 @@ impl EvalCSV {
         pronouns: Pronouns,
         sexuality: Sexuality,
         ethnicity: Ethnicity,
+        language: Language,
         person_with_disability: bool,
         openness: f64,
         exclusion: f64,
@@ -916,6 +925,8 @@ impl EvalCSV {
         offering_id: u32,
         learning_product: String,
         business_line: BusinessLine,
+        content: ContentType,
+        duration: u32,
         module: usize, 
         date_stamp: String,
         objective: Objective,
@@ -970,6 +981,7 @@ impl EvalCSV {
             pronouns: pronouns,
             sexuality: sexuality,
             ethnicity: ethnicity,
+            language: language,
             person_with_disability: person_with_disability,
             openness: openness,
             exclusion: exclusion,
@@ -977,6 +989,8 @@ impl EvalCSV {
             offering_id: offering_id,
             learning_product: learning_product,
             business_line: business_line,
+            content: content,
+            duration: duration,
             module: module, 
             date_stamp: date_stamp,
             objective: objective,
@@ -1016,4 +1030,10 @@ impl EvalCSV {
             personnel_knowledgeable: personnel_knowledgeable,
         }
     }
+}
+
+fn round(i: u32, v: u32) -> u32 {
+    let r = (i as f64/v as f64).floor() * v as f64;
+
+    r as u32
 }
