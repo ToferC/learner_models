@@ -41,6 +41,11 @@ pub struct LearningProduct {
     pub number_of_offerings: u32,
     pub status: Status,
 
+    #[dummy(faker = "0.01..0.50")]
+    pub awareness: f64,
+    #[dummy(faker = "0.01..0.50")]
+    pub marketing: f64,
+
     pub created: TimeString,
 
     pub updated: Vec<TimeStringEarly>,
@@ -66,6 +71,8 @@ impl Default for LearningProduct {
             capacity: 24,
             number_of_offerings: 9,
             status: Status::Pilot,
+            awareness: 0.25,
+            marketing: 0.10,
             created: Faker.fake(),
             updated: Vec::new(),
             shut_down: None,
@@ -75,8 +82,19 @@ impl Default for LearningProduct {
 
 impl LearningProduct {
     pub fn new(
-        id: u32, name: String, code: String, description: String, audience: Audience, community: Role,
-        hashtag: String, business_line: BusinessLine, capacity: u32, number_of_offerings: u32, status: Status
+        id: u32, 
+        name: String, 
+        code: String, 
+        description: String, 
+        audience: Audience, 
+        community: Role,
+        hashtag: String, 
+        business_line: BusinessLine, 
+        capacity: u32, 
+        number_of_offerings: u32,
+        status: Status,
+        awareness: f64,
+        marketing: f64,
     ) -> LearningProduct {
         LearningProduct {
             id: id,
@@ -93,6 +111,8 @@ impl LearningProduct {
             capacity: capacity,
             number_of_offerings: number_of_offerings,
             status: status,
+            awareness: awareness,
+            marketing: marketing,
             created: Faker.fake(),
             updated: Vec::new(),
             shut_down: None,
