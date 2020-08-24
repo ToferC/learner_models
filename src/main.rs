@@ -20,19 +20,13 @@ const GENERATE_DATA: bool = false;
 
 fn main() {
 
-    // Create vec of potential locations
-
     let physical_inf = generate_physical_inf();
 
     let digi_inf = generate_digi_inf();
 
     let personnel = generate_personnel();
 
-    // Create Learning Products
-
-    let mut learning_products = generate_learning_products(&physical_inf, &digi_inf, &personnel);
-
-    // Create learner creation and registration loop
+    let learning_products = generate_learning_products(&physical_inf, &digi_inf, &personnel);
 
     // ID schema
 
@@ -49,15 +43,5 @@ fn main() {
     let offerings = generate_offerings(&learning_products);
 
     // Run core simulation
-    run_simulation(learning_products, offerings, physical_inf, digi_inf, personnel, GENERATE_DATA);    
-
-    // Plot results
-    /*
-    let p = test_plot();
-    
-    let p = match p {
-        Ok(_plot) => println!("Plot complete"),
-        Err(error) => panic!("Problem plotting: {:}", error),
-    };
-    */
+    run_simulation(learning_products, offerings, physical_inf, digi_inf, personnel, GENERATE_DATA);
 }

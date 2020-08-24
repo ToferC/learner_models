@@ -12,6 +12,7 @@ pub mod content;
 pub mod user;
 pub mod demographic;
 pub mod utilities;
+pub mod inclusive_lens;
 
 pub use self::learner::{
     Learner,
@@ -41,3 +42,4 @@ pub use self::demographic::{
     Ethnicity,
     };
 pub use self::utilities::{random_gen_quality, test_plot, THRESHOLD};
+pub use self::inclusive_lens::{Lens, LivedStatement};

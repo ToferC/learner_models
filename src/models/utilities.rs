@@ -33,6 +33,16 @@ fn parse_time(t: &str) -> Date<Local> {
 }
 
 pub fn test_plot_2() -> Result<(), Box<dyn std::error::Error>> {
+    // Plot results
+    /*
+    let p = test_plot();
+    
+    let p = match p {
+        Ok(_plot) => println!("Plot complete"),
+        Err(error) => panic!("Problem plotting: {:}", error),
+    };
+    */
+    
     let data: Vec<_> = {
         let norm_dist = Normal::new(500.0, 100.0).unwrap();
         let mut x_rand = XorShiftRng::from_seed(*b"MyFragileSeed123");
