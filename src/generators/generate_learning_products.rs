@@ -139,12 +139,12 @@ pub fn generate_learning_products(
         vec![
             LearningObjective::new(0.5, Statement::new(
                 Verb::Describe,
-                String::from("The GC policy framwork around security"),
+                String::from("The GC policy framework around security"),
                 0.3)
             ),
             LearningObjective::new(0.5, Statement::new(
-                Verb::Understand,
-                String::from("Roles and responsibilities on security"),
+                Verb::Describe,
+                String::from("Roles organizational and responsibilities on security"),
                 0.3)
             ),
             ], 
@@ -200,7 +200,7 @@ pub fn generate_learning_products(
         String::from("Returning to Work: What you need to know"),
         String::from("E311"),
         String::from("Many people have questions..."), 
-        Audience::Employee, 
+        Audience::Leader, 
         Role::All, 
         String::from("#ReturnToWork"), 
         BusinessLine::RespectfulInclusiveWorkplace, 
